@@ -41,13 +41,13 @@ export default function Steppers() {
         return <Schedule />;
       case 3:
         return <JobDocs />
-      default:
-        return 'Unknown step';
+    //   default:
+    //     return 'Unknown step';
     }
   }
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: '100%'}}>
       <Stepper activeStep={activeStep} alternativeLabel>
         {steps.map((label) => (
           <Step key={label}>
@@ -69,13 +69,13 @@ export default function Steppers() {
           Previous
         </Button>
         <Box sx={{ flex: '1 1 auto' }} />
-        {activeStep === steps.length - 1 ? (
+        {/* {activeStep === steps.length - 1 ? (
           <Button onClick={handleReset} variant='contained'>Reset</Button>
-        ) : (
+        ) : ( */}
           <Button onClick={handleNext} variant='contained'>
-            {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+            {activeStep === steps.length - 1 ? 'Submit' : 'Next'}
           </Button>
-        )}
+        {/* )} */}
       </Box>
     </Box>
   );

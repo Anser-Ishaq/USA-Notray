@@ -92,9 +92,9 @@ export const titleCompanyOptions = [
 
 export const closingTypeOptions = [
     { id: 0, value: '', label: '-- Select Closing Type --', disabled: true },
-    { id: 1, value: 'Title Closing Buyers Side', label: 'Title Closing Buyers Side', dataPrice: 105 },
-    { id: 2, value: 'Title Closing Buyers Side With Loans', label: 'Title Closing Buyers Side With Loans', dataPrice: 125 },
-    { id: 3, value: 'Title Closing Seller Side', label: 'Title Closing Seller Side', dataPrice: 105 },
+    { id: 1, value: 'Title Closing Buyers Side', label: 'Title Closing Buyers Side', dataPrice: 120 },
+    { id: 2, value: 'Title Closing Buyers Side With Loans', label: 'Title Closing Buyers Side With Loans', dataPrice: 140 },
+    { id: 3, value: 'Title Closing Seller Side', label: 'Title Closing Seller Side', dataPrice: 100 },
     { id: 4, value: 'Single Document', label: 'Single Document', dataPrice: 30 },
 ]
 

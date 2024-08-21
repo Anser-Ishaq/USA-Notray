@@ -46,7 +46,7 @@ const Schedule = () => {
     }
 
     return (
-        <div style={{ padding: 16 }}>
+        <div style={{ padding: 16, marginTop: "40px" }}>
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={4}>
                     <Typography variant="h6" gutterBottom>

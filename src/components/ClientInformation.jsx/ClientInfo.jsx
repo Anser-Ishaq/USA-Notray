@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Grid, TextField, MenuItem, Select, InputLabel, FormControl } from '@mui/material'
 import { titleCompanyOptions, closingTypeOptions } from '../../Data/OptionValues'
 import Switch from '../Switch/Switch'
+import useStore from '../../stores/useStore'
 
 const ClientInfo = () => {
     const [titleCompany, setTitleCompany] = useState()
@@ -14,7 +15,23 @@ const ClientInfo = () => {
     const [propertyZipCode, setPropertyZipCode] = useState('')
     const [zipCodeError, setZipCodeError] = useState('')
 
+    const setPrice = useStore((state) => state.setPrice)
+
     const zipCodePattern = /^\d{5}(-\d{4})?$/
+
+    const updatePrice = (closingType) => {
+        const selectedOption = closingTypeOptions.find((option) => option.value === closingType)
+        console.log(selectedOption)
+
+        if (selectedOption) {
+            setPrice(selectedOption.dataPrice)
+        }
+    }
+
+    const closing = (value) => {
+        setClosingType(value || '')
+        updatePrice(value)
+    }
 
     const handleChange = (event) => {
         const { id, value } = event.target
@@ -23,7 +40,7 @@ const ClientInfo = () => {
                 setTitleCompany(value)
                 break
             case 'closing-type':
-                setClosingType(value)
+                closing();
                 break
             case 'internal-reference':
                 setInternalReference(value)
@@ -50,12 +67,12 @@ const ClientInfo = () => {
                 break
             default:
                 break
-        }        
+        }
     }
 
     return (
         <>
-            <Grid container spacing={2}>
+            <Grid container spacing={2} style={{ marginTop: '40px' }}>
                 <Grid item xs={12} sm={3}>
                     <FormControl fullWidth variant="outlined">
                         <InputLabel id="title-company-label">Title Company</InputLabel>
@@ -83,8 +100,8 @@ const ClientInfo = () => {
                             labelId="closing-type-label"
                             id="closing-type"
                             label="Closing Type"
-                            value={closingType}
-                            onChange={handleChange}
+                            value={closingType || ''}
+                            onChange={(e)=>closing(e.target.value)}
                             required
                         >
                             {closingTypeOptions.map((option) => (
