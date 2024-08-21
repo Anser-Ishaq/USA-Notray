@@ -1,10 +1,13 @@
 import React from 'react'
-import LoginPage from '../pages/login'
+import LoginPage from '../pages/auth/login/index.jsx'
 import MyAccount from '../pages/myAccount';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import DashboardLayout from '../layout/dashboardLayout';
 import ProtectedRoute from './ProtectedRoute.js';
 import RedirectToDashboard from './RedirectToDashboard.js';
+import NotarizeDocument from '../pages/notarizeDocument/index.js';
+import CreateJob from '../pages/createJob/index.js';
+import Jobs from '../pages/jobs/index.js';
 
 const AppRouter = () => {
   return (
@@ -26,6 +29,9 @@ const AppRouter = () => {
           <Route path="" element={<div>Dashboard</div>} />
           <Route path="dashboard" element={<div>Dashboard</div>} />
           <Route path="job-management" element={<div>Job Management</div>} />
+          <Route path="jobs-list" element={<Jobs />} />
+          <Route path="create-job" element={<CreateJob />} />
+          <Route path="notarize-a-document" element={<NotarizeDocument />} />
           <Route path="title-company" element={<div>Title Company</div>} />
           <Route path="notary-management" element={<div>Notary Management</div>} />
           <Route path="user-management" element={<div>User Management</div>} />

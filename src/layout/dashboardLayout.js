@@ -93,25 +93,28 @@ const Layout = () => {
         </Toolbar>
         
         <List>
-          <ListItem button component={NavLink} to="/dashboard" sx={linkStyle(theme, drawerOpen)}>
+          <ListItem  component={NavLink} to="/dashboard" sx={linkStyle(theme, drawerOpen)}>
             <ListItemText primary="Dashboard" sx={{ display: drawerOpen ? 'block' : 'none' }} />
           </ListItem>
-          <ListItem button onClick={handleJobManagementClick} sx={linkStyle(theme, drawerOpen)}>
+          <ListItem  onClick={handleJobManagementClick} sx={linkStyle(theme, drawerOpen)}>
             <ListItemText primary="Job Management" sx={{ display: drawerOpen ? 'block' : 'none' }} />
             {drawerOpen && (openJobManagement ? <ExpandLess /> : <ExpandMore />)}
           </ListItem>
           <Collapse in={openJobManagement && drawerOpen} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItem button sx={nestedLinkStyle(theme)} component={NavLink} to="/notarize-a-document">
-                <ListItemText primary="Notarize A Document" />
+              <ListItem  sx={nestedLinkStyle(theme)} component={NavLink} to="/create-job">
+                <ListItemText primary="Create Job" />
               </ListItem>
-              <ListItem button sx={nestedLinkStyle(theme)} component={NavLink} to="/jobs-list">
+              <ListItem  sx={nestedLinkStyle(theme)} component={NavLink} to="/jobs-list">
                 <ListItemText primary="Jobs List" />
+              </ListItem>
+              <ListItem  sx={nestedLinkStyle(theme)} component={NavLink} to="/notarize-a-document">
+                <ListItemText primary="Notarize A Document" />
               </ListItem>
             </List>
           </Collapse>
           {['Title Company', 'Notary Management', 'User Management', 'Services', 'Client Management', 'Menu Management', 'Notarization Logs', 'My Account'].map((text) => (
-            <ListItem button key={text} component={NavLink} to={`/${text.toLowerCase().replace(/\s+/g, '-')}`} sx={linkStyle(theme, drawerOpen)}>
+            <ListItem key={text} component={NavLink} to={`/${text.toLowerCase().replace(/\s+/g, '-')}`} sx={linkStyle(theme, drawerOpen)}>
               <ListItemText primary={text} sx={{ display: drawerOpen ? 'block' : 'none' }} />
             </ListItem>
           ))}

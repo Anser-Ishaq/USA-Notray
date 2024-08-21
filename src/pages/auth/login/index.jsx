@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { TextField, Button, Box, Typography, Link } from '@mui/material';
 import { styled } from '@mui/system';
-import UsaLogo from '../../assets/usalogo.png'
+import UsaLogo from '../../../assets/usalogo.png'
 import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
