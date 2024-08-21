@@ -39,7 +39,7 @@ const Layout = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh' }}>
+    <Box sx={{ display: 'flex', minHeight: '100vh'}}>
       <CssBaseline />
       <AppBar
         position="fixed"
