@@ -64,14 +64,15 @@ export default function Steppers() {
           disabled={activeStep === 0}
           onClick={handleBack}
           sx={{ mr: 1 }}
+          variant='outlined'
         >
           Previous
         </Button>
         <Box sx={{ flex: '1 1 auto' }} />
         {activeStep === steps.length - 1 ? (
-          <Button onClick={handleReset}>Reset</Button>
+          <Button onClick={handleReset} variant='contained'>Reset</Button>
         ) : (
-          <Button onClick={handleNext}>
+          <Button onClick={handleNext} variant='contained'>
             {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
           </Button>
         )}

@@ -4,8 +4,8 @@ import { titleCompanyOptions, closingTypeOptions } from '../../Data/OptionValues
 import Switch from '../Switch/Switch'
 
 const ClientInfo = () => {
-    const [titleCompany, setTitleCompany] = useState('')
-    const [closingType, setClosingType] = useState('')
+    const [titleCompany, setTitleCompany] = useState()
+    const [closingType, setClosingType] = useState()
     const [internalReference, setInternalReference] = useState('')
     const [propertyAddressOne, setPropertyAddressOne] = useState('')
     const [propertyAddressTwo, setPropertyAddressTwo] = useState('')
@@ -50,7 +50,7 @@ const ClientInfo = () => {
                 break
             default:
                 break
-        }
+        }        
     }
 
     return (
@@ -68,8 +68,8 @@ const ClientInfo = () => {
                             required
                         >
                             {titleCompanyOptions.map((option) => (
-                                <MenuItem key={option.value} value={option.value}>
-                                    {option.label}
+                                <MenuItem key={option.id} value={option.value}>
+                                    {option.value}
                                 </MenuItem>
                             ))}
                         </Select>
@@ -89,12 +89,11 @@ const ClientInfo = () => {
                         >
                             {closingTypeOptions.map((option) => (
                                 <MenuItem
-                                    key={option.value}
+                                    key={option.id}
                                     value={option.value}
                                     data-price={option.dataPrice}
-                                    disabled={option.disabled}
                                 >
-                                    {option.label}
+                                    {option.value}
                                 </MenuItem>
                             ))}
                         </Select>
