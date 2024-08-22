@@ -8,7 +8,7 @@ import ScheduleAndDoc from './NotarizeDocComp/ScheduleAndDoc/ScheduleAndDoc'
 import Billing from './NotarizeDocComp/Billing/Billing'
 
 const NotarizeDocument = () => {
-    const price = useStore((state) => state.price)
+    const price = 25 || useStore((state) => state.price);
     const steps = [
         'Client Information',
         "Participant's Information",
