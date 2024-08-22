@@ -3,7 +3,7 @@ import {
   Box, Typography, Button, Grid
 } from '@mui/material';
 import AddSignerModal from '../SignerInformation/singerModal/singerModalForm';
-import DynamicTable from '../../../../components/dynamicTable/dynamicTable';
+import DynamicTable from '../../../../components/dynamicTable/dynamicTable'; 
 
 const SignerInfo = () => {
   const [open, setOpen] = useState(false);
