@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, Grid, Typography } from '@mui/material'
 import { timeSlots } from '../../Data/OptionValues'
 import useStore from '../../stores/useStore'
 
 const JobTime = () => {
-    const [selectedTime, setSelectedTime] = React.useState('')
+    const [selectedTime, setSelectedTime] = useState('')
 
     const isDate = useStore((state) => state.selectedDate)
 

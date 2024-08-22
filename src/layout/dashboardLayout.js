@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Outlet, NavLink } from 'react-router-dom';
 import {
   Box,
@@ -27,8 +27,8 @@ const collapsedDrawerWidth = 60; // Width when the drawer is collapsed
 
 const Layout = () => {
   const theme = useTheme();
-  const [openJobManagement, setOpenJobManagement] = React.useState(false);
-  const [drawerOpen, setDrawerOpen] = React.useState(true);
+  const [openJobManagement, setOpenJobManagement] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(true);
 
   const handleJobManagementClick = () => {
     setOpenJobManagement(!openJobManagement);

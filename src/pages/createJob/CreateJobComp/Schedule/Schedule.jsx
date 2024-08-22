@@ -1,4 +1,3 @@
-import * as React from 'react'
 import {
     Grid,
     Typography,
@@ -13,10 +12,11 @@ import {
 import { specificNotary } from '../../../../Data/OptionValues'
 import DatePickerComp from '../../../../components/DatePicker/DatePicker'
 import JobTime from '../../../../components/JobTime/JobTime'
+import { useState } from 'react'
 
 const Schedule = () => {
-    const [notaryOption, setNotaryOption] = React.useState('preferred')
-    const [selectedNotary, setSelectedNotary] = React.useState()
+    const [notaryOption, setNotaryOption] = useState('preferred')
+    const [selectedNotary, setSelectedNotary] = useState()
 
     const handleNotaryOptionChange = (event) => {
         setNotaryOption(event.target.value)
