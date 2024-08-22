@@ -5,7 +5,7 @@ import Switch from '../../../../components/Switch/Switch'
 
 const ParticipantInfo = () => {
     return (
-        <div>
+        <div style={{ marginTop: '40px' }}>
             <Grid container spacing={1}>
                 <Grid
                     item

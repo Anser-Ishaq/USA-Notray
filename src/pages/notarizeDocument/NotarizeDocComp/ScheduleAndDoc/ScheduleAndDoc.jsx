@@ -6,7 +6,7 @@ import JobDocs from '../../../../components/JobDocs/JobDocs'
 
 const ScheduleAndDoc = () => {
     return (
-        <div>
+        <div style={{ marginTop: '40px' }}>
             <Grid item xs={12} sm={4}>
                 <Typography variant="h6" gutterBottom>
                     Schedule

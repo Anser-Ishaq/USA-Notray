@@ -16,7 +16,7 @@ import JobTime from '../../../../components/JobTime/JobTime'
 
 const Schedule = () => {
     const [notaryOption, setNotaryOption] = React.useState('preferred')
-    const [selectedNotary, setSelectedNotary] = React.useState() 
+    const [selectedNotary, setSelectedNotary] = React.useState()
 
     const handleNotaryOptionChange = (event) => {
         setNotaryOption(event.target.value)
@@ -27,9 +27,15 @@ const Schedule = () => {
     }
 
     return (
-        <div style={{ padding: 16, marginTop: "40px" }}>
+        <div style={{ padding: 16, marginTop: '40px' }}>
             <Grid container spacing={2}>
-                <DatePickerComp />
+                <Grid item xs={12} sm={4}>
+                    <Typography variant="h6" gutterBottom>
+                        Schedule
+                    </Typography>
+                    <DatePickerComp />
+                </Grid>
+
                 <Grid item xs={12} sm={4}>
                     <FormControl component="fieldset">
                         <Typography variant="h6" gutterBottom>
@@ -54,7 +60,7 @@ const Schedule = () => {
                         </RadioGroup>
                     </FormControl>
                     {notaryOption === 'specific' && (
-                        <Grid item xs={12}> 
+                        <Grid item xs={12}>
                             <FormControl fullWidth variant="outlined">
                                 <InputLabel id="specific-notary-label">Specific Notary</InputLabel>
                                 <Select
@@ -62,7 +68,7 @@ const Schedule = () => {
                                     id="specific-notary"
                                     label="Specific Notary"
                                     value={selectedNotary}
-                                    onChange={handleNotaryChange} 
+                                    onChange={handleNotaryChange}
                                 >
                                     {specificNotary.map((option) => (
                                         <MenuItem

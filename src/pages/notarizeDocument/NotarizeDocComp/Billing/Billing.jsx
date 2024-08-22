@@ -18,9 +18,9 @@ const Billing = () => {
         { label: 'Document Pricing', price: '0' },
     ]
     const total = Billing2.reduce((sum, item) => sum + parseFloat(item.price), 0)
-    
+
     return (
-        <>
+        <div style={{ marginTop: '40px' }}>
             <BillingDetails heading={'Billing Details'} items={Billing1} />
             <BillingDetails
                 heading={'Billing Summary'}
@@ -63,7 +63,7 @@ const Billing = () => {
                     </Grid>
                 </Grid>
             </Box>
-        </>
+        </div>
     )
 }
 

@@ -29,7 +29,7 @@ const SignerInfo = () => {
   };
 
   return (
-    <Grid container justifyContent="center">
+    <Grid container justifyContent="center" style={{ marginTop: '40px' }}>
       <Grid item xs={12}>
         <Box>
           <Box

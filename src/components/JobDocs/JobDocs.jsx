@@ -14,7 +14,7 @@ const JobDocs = () => {
   };
 
   return (
-    <Grid container justifyContent="center" sx={{ width: '100%' }}>
+    <Grid container justifyContent="center" sx={{ width: '100%' }} style={{ marginTop: '40px' }}>
       <Grid item xs={12}>
         <Box width="100%">
           <Box
