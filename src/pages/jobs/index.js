@@ -49,7 +49,6 @@ const Jobs = () => {
     setSearchTerm(event.target.value);
   };
 
-  // Filter jobs by ID only
   const filteredJobs = jobsData
     .filter((job) =>
       selectedFilter === 'All' || job.status === selectedFilter
@@ -74,10 +73,12 @@ const Jobs = () => {
               All Jobs List
             </Typography>
 
-            <JobFilterButtons
-              selectedFilter={selectedFilter}
-              onSelectFilter={handleFilterChange}
-            />
+            <Box display="flex" alignItems="center">
+              <JobFilterButtons
+                selectedFilter={selectedFilter}
+                onSelectFilter={handleFilterChange}
+              />
+            </Box>
           </Box>
           
           <Box mt={2} display={'flex'} justifyContent={'flex-end'}>
