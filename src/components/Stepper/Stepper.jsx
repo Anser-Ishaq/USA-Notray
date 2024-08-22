@@ -4,19 +4,8 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
-import ClientInfo from '../ClientInformation.jsx/ClientInfo';
-import SignerInfo from '../SignerInformation/SignerInfo';
-import Schedule  from '../Schedule/Schedule';
-import JobDocs from '../JobDocs/JobDocs';
 
-const steps = [
-  'Client Information',
-  'Signer Information',
-  'Schedule Date/Time',
-  'Job Documents',
-];
-
-export default function Steppers() {
+const Steppers = ({steps, Step1, Step2, Step3, Step4})=> {
   const [activeStep, setActiveStep] = React.useState(0);
 
   const handleNext = () => {
@@ -27,20 +16,16 @@ export default function Steppers() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleReset = () => {
-    setActiveStep(0);
-  };
-
   function getStepContent(step) {
     switch (step) {
       case 0:
-        return <ClientInfo />;
+        return Step1;
       case 1:
-        return <SignerInfo />;
+        return Step2;
       case 2:
-        return <Schedule />;
+        return Step3;
       case 3:
-        return <JobDocs />
+        return Step4;
     //   default:
     //     return 'Unknown step';
     }
@@ -69,14 +54,12 @@ export default function Steppers() {
           Previous
         </Button>
         <Box sx={{ flex: '1 1 auto' }} />
-        {/* {activeStep === steps.length - 1 ? (
-          <Button onClick={handleReset} variant='contained'>Reset</Button>
-        ) : ( */}
           <Button onClick={handleNext} variant='contained'>
             {activeStep === steps.length - 1 ? 'Submit' : 'Next'}
           </Button>
-        {/* )} */}
       </Box>
     </Box>
   );
 }
+
+export default Steppers;

@@ -14,8 +14,8 @@ import {
 } from '@mui/material'
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import { specificNotary } from '../../Data/OptionValues'
-import { timeSlots } from '../../Data/OptionValues'
+import { specificNotary } from '../../../../Data/OptionValues'
+import { timeSlots } from '../../../../Data/OptionValues'
 
 const Schedule = () => {
     const [selectedDate, setSelectedDate] = React.useState(null)

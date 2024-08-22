@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Grid, TextField, MenuItem, Select, InputLabel, FormControl } from '@mui/material'
-import { titleCompanyOptions, closingTypeOptions } from '../../Data/OptionValues'
-import Switch from '../Switch/Switch'
-import useStore from '../../stores/useStore'
+import { titleCompanyOptions, closingTypeOptions } from '../../../../Data/OptionValues'
+import Switch from '../../../../components/Switch/Switch'
+import useStore from '../../../../stores/useStore'
 
 const ClientInfo = () => {
     const [titleCompany, setTitleCompany] = useState()
