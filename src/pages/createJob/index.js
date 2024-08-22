@@ -2,10 +2,10 @@ import React from 'react'
 import Steppers from '../../components/Stepper/Stepper'
 import { Typography } from '@mui/material'
 import useStore from '../../stores/useStore'
-import ClientInfo from './NotarizeADocumentSteps/ClientInformation/ClientInfo'
-import SignerInfo from './NotarizeADocumentSteps/SignerInformation/SignerInfo'
-import Schedule from './NotarizeADocumentSteps/Schedule/Schedule'
-import JobDocs from './NotarizeADocumentSteps/JobDocs/JobDocs'
+import ClientInfo from '../../components/ClientInformation/ClientInfo'
+import SignerInfo from './CreateJobComp/SignerInformation/SignerInfo'
+import Schedule from './CreateJobComp/Schedule/Schedule'
+import JobDocs from '../../components/JobDocs/JobDocs'
 
 const createJob = () => {
     const price = useStore((state) => state.price)
@@ -26,7 +26,7 @@ const createJob = () => {
             <div style={{ boxShadow: '3px 3px 20px #E6EFFF', padding: '60px' }}>
                 <Steppers
                     steps={steps}
-                    Step1={<ClientInfo />}
+                    Step1={<ClientInfo isClientInfo={true} isSwitch={true}/>}
                     Step2={<SignerInfo />}
                     Step3={<Schedule />}
                     Step4={<JobDocs />}

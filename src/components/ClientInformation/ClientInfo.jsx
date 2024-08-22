@@ -1,10 +1,19 @@
 import React, { useState } from 'react'
-import { Grid, TextField, MenuItem, Select, InputLabel, FormControl } from '@mui/material'
-import { titleCompanyOptions, closingTypeOptions } from '../../../../Data/OptionValues'
-import Switch from '../../../../components/Switch/Switch'
-import useStore from '../../../../stores/useStore'
+import {
+    Grid,
+    TextField,
+    MenuItem,
+    Select,
+    InputLabel,
+    FormControl,
+    Typography,
+    Box,
+} from '@mui/material'
+import { titleCompanyOptions, closingTypeOptions } from '../../Data/OptionValues'
+import Switch from '../../components/Switch/Switch'
+import useStore from '../../stores/useStore'
 
-const ClientInfo = () => {
+const ClientInfo = ({ isClientInfo, isSwitch }) => {
     const [titleCompany, setTitleCompany] = useState()
     const [closingType, setClosingType] = useState()
     const [internalReference, setInternalReference] = useState('')
@@ -40,7 +49,7 @@ const ClientInfo = () => {
                 setTitleCompany(value)
                 break
             case 'closing-type':
-                closing();
+                closing()
                 break
             case 'internal-reference':
                 setInternalReference(value)
@@ -73,27 +82,29 @@ const ClientInfo = () => {
     return (
         <>
             <Grid container spacing={2} style={{ marginTop: '40px' }}>
-                <Grid item xs={12} sm={3}>
-                    <FormControl fullWidth variant="outlined">
-                        <InputLabel id="title-company-label">Title Company</InputLabel>
-                        <Select
-                            labelId="title-company-label"
-                            id="title-company"
-                            label="Title Company"
-                            value={titleCompany}
-                            onChange={handleChange}
-                            required
-                        >
-                            {titleCompanyOptions.map((option) => (
-                                <MenuItem key={option.id} value={option.value}>
-                                    {option.value}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </Grid>
+                {isClientInfo && (
+                    <Grid item xs={12} sm={3}>
+                        <FormControl fullWidth variant="outlined">
+                            <InputLabel id="title-company-label">Title Company</InputLabel>
+                            <Select
+                                labelId="title-company-label"
+                                id="title-company"
+                                label="Title Company"
+                                value={titleCompany}
+                                onChange={handleChange}
+                                required
+                            >
+                                {titleCompanyOptions.map((option) => (
+                                    <MenuItem key={option.id} value={option.value}>
+                                        {option.value}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                )}
 
-                <Grid item xs={12} sm={3}>
+                <Grid item xs={12} sm={isClientInfo && isSwitch ? 3 : 6}>
                     <FormControl fullWidth variant="outlined">
                         <InputLabel id="closing-type-label">Closing Type</InputLabel>
                         <Select
@@ -101,7 +112,7 @@ const ClientInfo = () => {
                             id="closing-type"
                             label="Closing Type"
                             value={closingType || ''}
-                            onChange={(e)=>closing(e.target.value)}
+                            onChange={(e) => closing(e.target.value)}
                             required
                         >
                             {closingTypeOptions.map((option) => (
@@ -117,7 +128,7 @@ const ClientInfo = () => {
                     </FormControl>
                 </Grid>
 
-                <Grid item xs={12} sm={3}>
+                <Grid item xs={12} sm={isClientInfo && isSwitch ? 3 : 6}>
                     <TextField
                         fullWidth
                         id="internal-reference"
@@ -129,9 +140,16 @@ const ClientInfo = () => {
                     />
                 </Grid>
 
-                <Grid item xs={12} sm={3}>
-                    <Switch />
-                </Grid>
+                {isSwitch && (
+                    <Grid item xs={12} sm={3}>
+                        <Box display="flex" alignItems="center">
+                            <span style={{ marginRight: '8px', fontSize: '1rem' }}>
+                                is KBA Required?
+                            </span>
+                            <Switch />
+                        </Box>
+                    </Grid>
+                )}
 
                 <Grid item xs={12} sm={6}>
                     <TextField
