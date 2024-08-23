@@ -1,20 +1,21 @@
-import React, { useState } from 'react';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
-import { titleCompany } from '../../../Data/OptionValues';
-import DynamicTable from '../../../components/dynamicTable/dynamicTable';
-import CreateOrUpdate from '../CreateOrUpdate/CreateOrUpdate';
-import { Button } from '@mui/material';
+import React, { useState } from 'react'
+import TextField from '@mui/material/TextField'
+import Autocomplete from '@mui/material/Autocomplete'
+import { titleCompany } from '../../../Data/OptionValues'
+import DynamicTable from '../../../components/dynamicTable/dynamicTable'
+import CreateOrUpdate from '../CreateOrUpdate/CreateOrUpdate'
+import { Button } from '@mui/material'
+import { AddParticipant } from '../../../components/DynamicButton/DynamicButton'
 
 const TitleCompanies = () => {
-    const [editIndex, setEditIndex] = useState(null);
-    const [showTable, setShowTable] = useState(true);
+    const [editIndex, setEditIndex] = useState(null)
+    const [showTable, setShowTable] = useState(true)
     const [editData, setEditData] = useState({
         serviceName: '',
         price: '',
         status: '',
-        dateCreated: '', 
-    });
+        dateCreated: '',
+    })
     const [jobsData, setJobsData] = useState([
         {
             serviceName: 'Title Closing Seller Side',
@@ -40,7 +41,7 @@ const TitleCompanies = () => {
             dateCreated: '05 Dec 23 - 03:23 PM',
             status: 'Active',
         },
-    ]);
+    ])
 
     const columns = [
         { id: 'serviceName', label: 'Service Name' },
@@ -48,59 +49,63 @@ const TitleCompanies = () => {
         { id: 'status', label: 'Status' },
         { id: 'dateCreated', label: 'Date Created' },
         { id: 'actions', label: 'Action' },
-    ];
+    ]
 
     const handleRemove = (index) => {
-        setJobsData(jobsData.filter((_, i) => i !== index));
-    };
+        setJobsData(jobsData.filter((_, i) => i !== index))
+    }
 
     const handleUpdate = (index) => {
-        setEditIndex(index);
-        setEditData(jobsData[index]);
-        setShowTable(false);
-    };
+        setEditIndex(index)
+        setEditData(jobsData[index])
+        setShowTable(false)
+    }
 
     const handleCreate = () => {
-        setEditIndex(null);
+        setEditIndex(null)
         setEditData({
             serviceName: '',
             price: '',
             status: '',
             dateCreated: '',
-        });
-        setShowTable(false);
-    };
+        })
+        setShowTable(false)
+    }
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        const { name, value } = e.target
         setEditData({
             ...editData,
             [name]: value,
-        });
-    };
+        })
+    }
 
     const handleSave = () => {
-        const updatedJobsData = [...jobsData];
+        const updatedJobsData = [...jobsData]
         if (editIndex !== null) {
-            updatedJobsData[editIndex] = { ...editData, price: parseFloat(editData.price) };
+            updatedJobsData[editIndex] = { ...editData, price: parseFloat(editData.price) }
         } else {
-            updatedJobsData.push({ ...editData, price: parseFloat(editData.price), dateCreated: new Date().toLocaleString() });
+            updatedJobsData.push({
+                ...editData,
+                price: parseFloat(editData.price),
+                dateCreated: new Date().toLocaleString(),
+            })
         }
-        setJobsData(updatedJobsData);
-        setEditIndex(null);
+        setJobsData(updatedJobsData)
+        setEditIndex(null)
         setEditData({
             serviceName: '',
             price: '',
             status: '',
             dateCreated: '',
-        });
-        setShowTable(true);
-    };
+        })
+        setShowTable(true)
+    }
 
     const handleCancel = () => {
-        setEditIndex(null);
-        setShowTable(true);
-    };
+        setEditIndex(null)
+        setShowTable(true)
+    }
 
     const renderActionButton = (row, index) => (
         <>
@@ -112,15 +117,11 @@ const TitleCompanies = () => {
             >
                 Update
             </Button>
-            <Button
-                variant="outlined"
-                color="error"
-                onClick={() => handleRemove(index)}
-            >
+            <Button variant="outlined" color="error" onClick={() => handleRemove(index)}>
                 Delete
             </Button>
         </>
-    );
+    )
 
     return (
         <div>
@@ -131,6 +132,10 @@ const TitleCompanies = () => {
                 sx={{ width: 400 }}
                 renderInput={(params) => <TextField {...params} label="Title Company" />}
             />
+            <div style={{ marginTop: '20px', marginBottom: "30px" }} onClick={handleCreate}>
+                <AddParticipant children={'Add new service'} />
+            </div>
+
             {showTable && (
                 <DynamicTable actionButton={renderActionButton} columns={columns} data={jobsData} />
             )}
@@ -143,16 +148,8 @@ const TitleCompanies = () => {
                     isEditMode={editIndex !== null}
                 />
             )}
-            <Button
-                variant="contained"
-                color="primary"
-                onClick={handleCreate}
-                sx={{ mt: 2 }}
-            >
-                Create New Entry
-            </Button>
         </div>
-    );
-};
+    )
+}
 
-export default TitleCompanies;
+export default TitleCompanies
