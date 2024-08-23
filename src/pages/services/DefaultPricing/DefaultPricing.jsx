@@ -15,7 +15,7 @@ const DefaultPricing = () => {
     })
     const [jobsData, setJobsData] = useState([
         {
-            serviceName: 'Title Closing Seller Side',
+            serviceName: 'Title Closing Seller Side', 
             price: 25,
             dateCreated: '05 Dec 23 - 03:23 PM',
             status: 'Active',
