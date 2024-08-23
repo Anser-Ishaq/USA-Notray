@@ -1,10 +1,10 @@
 import React from 'react';
 import {
   Table, TableBody, TableCell, TableContainer,
-  TableHead, TableRow, Paper, Button
+  TableHead, TableRow, Paper
 } from '@mui/material';
 
-const DynamicTable = ({ columns, data, onRemove }) => {
+const DynamicTable = ({ columns, data, actionButton }) => {
   return (
     <TableContainer component={Paper} sx={{ mt: 2, width: '100%' }}>
       <Table>
@@ -21,13 +21,7 @@ const DynamicTable = ({ columns, data, onRemove }) => {
               {columns.map((column) => (
                 <TableCell key={column.id}>
                   {column.id === 'actions' ? (
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      onClick={() => onRemove(index)}
-                    >
-                      Remove
-                    </Button>
+                    actionButton ? actionButton(row, index) : null
                   ) : (
                     row[column.id] || 'N/A'
                   )}
@@ -42,3 +36,6 @@ const DynamicTable = ({ columns, data, onRemove }) => {
 };
 
 export default DynamicTable;
+
+
+

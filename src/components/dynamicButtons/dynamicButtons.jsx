@@ -1,12 +1,6 @@
 import React from 'react';
 import { Button, ButtonGroup } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import LockOpenIcon from '@mui/icons-material/LockOpen';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CancelIcon from '@mui/icons-material/Cancel';
-import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
 
 const useStyles = makeStyles({
   button: {
@@ -51,18 +45,8 @@ const useStyles = makeStyles({
   },
 });
 
-const icons = {
-  All: <FilterListIcon />,
-  Open: <LockOpenIcon />,
-  Pending: <AccessTimeIcon />,
-  Completed: <CheckCircleIcon />,
-  Cancelled: <CancelIcon />,
-  Expired: <HourglassEmptyIcon />,
-};
-
-const JobFilterButtons = ({ selectedFilter, onSelectFilter }) => {
+const JobFilterButtons = ({ selectedFilter, onSelectFilter, filters, icons }) => {
   const classes = useStyles();
-  const filters = ['All', 'Open', 'Pending', 'Completed', 'Cancelled', 'Expired'];
 
   return (
     <ButtonGroup variant="outlined">
@@ -79,5 +63,7 @@ const JobFilterButtons = ({ selectedFilter, onSelectFilter }) => {
     </ButtonGroup>
   );
 };
+
+
 
 export default JobFilterButtons;

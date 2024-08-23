@@ -29,7 +29,7 @@ const Billing = () => {
                 totalPrice={total}
             />
             <Box
-                sx={{
+                sx={{ 
                     padding: 5,
                     border: '1px solid #e0e0e0',
                     borderRadius: 2,

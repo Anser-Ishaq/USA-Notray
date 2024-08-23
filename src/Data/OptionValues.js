@@ -15,7 +15,11 @@ export const titleCompanyOptions = [
     { id: 13, value: 'Enterprise Title Agency', label: 'Enterprise Title Agency' },
     { id: 14, value: 'Rocket Title', label: 'Rocket Title' },
     { id: 15, value: 'GU Title - GU Title, Ltd.', label: 'GU Title - GU Title, Ltd.' },
-    { id: 16, value: 'Locklin, Saba, Locklin and Jones', label: 'Locklin, Saba, Locklin and Jones' },
+    {
+        id: 16,
+        value: 'Locklin, Saba, Locklin and Jones',
+        label: 'Locklin, Saba, Locklin and Jones',
+    },
     { id: 17, value: 'Evasco and Rountree', label: 'Evasco and Rountree' },
     { id: 18, value: 'First Milford Title', label: 'First Milford Title' },
     { id: 19, value: 'State Street Title', label: 'State Street Title' },
@@ -40,7 +44,11 @@ export const titleCompanyOptions = [
     { id: 38, value: 'JDM Title LLC', label: 'JDM Title LLC' },
     { id: 39, value: 'Golm Law Firm', label: 'Golm Law Firm' },
     { id: 40, value: 'True Title', label: 'True Title' },
-    { id: 41, value: 'Norton, Hammersley, Lopez and Skokes, PA', label: 'Norton, Hammersley, Lopez and Skokes, PA' },
+    {
+        id: 41,
+        value: 'Norton, Hammersley, Lopez and Skokes, PA',
+        label: 'Norton, Hammersley, Lopez and Skokes, PA',
+    },
     { id: 42, value: 'Florida Legacy Title', label: 'Florida Legacy Title' },
     { id: 43, value: 'Sonoran Title Company LLC', label: 'Sonoran Title Company LLC' },
     { id: 44, value: 'Florida Title Pros', label: 'Florida Title Pros' },
@@ -49,7 +57,11 @@ export const titleCompanyOptions = [
     { id: 47, value: 'Full Circle Title', label: 'Full Circle Title' },
     { id: 48, value: 'Modern Title Company', label: 'Modern Title Company' },
     { id: 49, value: 'Stewart Law', label: 'Stewart Law' },
-    { id: 50, value: 'Junction City Abstract and Title Co., Inc.', label: 'Junction City Abstract and Title Co., Inc.' },
+    {
+        id: 50,
+        value: 'Junction City Abstract and Title Co., Inc.',
+        label: 'Junction City Abstract and Title Co., Inc.',
+    },
     { id: 51, value: 'Atlantic Title Company', label: 'Atlantic Title Company' },
     { id: 52, value: 'arock title', label: 'arock title' },
     { id: 53, value: 'Wesley Title', label: 'Wesley Title' },
@@ -59,14 +71,26 @@ export const titleCompanyOptions = [
     { id: 57, value: 'Korey Sweet McKinnon & Simpson', label: 'Korey Sweet McKinnon & Simpson' },
     { id: 58, value: 'Title Boutique', label: 'Title Boutique' },
     { id: 59, value: 'Integrity Star Title', label: 'Integrity Star Title' },
-    { id: 60, value: 'Suncoast One Title & Closings, Inc.', label: 'Suncoast One Title & Closings, Inc.' },
+    {
+        id: 60,
+        value: 'Suncoast One Title & Closings, Inc.',
+        label: 'Suncoast One Title & Closings, Inc.',
+    },
     { id: 61, value: 'West Nevada Title', label: 'West Nevada Title' },
     { id: 62, value: 'Oliveira Setup', label: 'Oliveira Setup' },
     { id: 63, value: 'Colonial Title Group, Inc.', label: 'Colonial Title Group, Inc.' },
     { id: 64, value: 'Anderson Land Title Agency, Ltd', label: 'Anderson Land Title Agency, Ltd' },
-    { id: 65, value: 'Title Partners & Associates, LLC', label: 'Title Partners & Associates, LLC' },
+    {
+        id: 65,
+        value: 'Title Partners & Associates, LLC',
+        label: 'Title Partners & Associates, LLC',
+    },
     { id: 66, value: 'Wallace Law', label: 'Wallace Law' },
-    { id: 67, value: 'Law Offices of Michael Newman, PLLC', label: 'Law Offices of Michael Newman, PLLC' },
+    {
+        id: 67,
+        value: 'Law Offices of Michael Newman, PLLC',
+        label: 'Law Offices of Michael Newman, PLLC',
+    },
     { id: 68, value: 'Notary Robin R. Fulghum', label: 'Notary Robin R. Fulghum' },
     { id: 69, value: 'Pat Arnaiz Title Company', label: 'Pat Arnaiz Title Company' },
     { id: 70, value: 'Chacon & Asocaites', label: 'Chacon & Asocaites' },
@@ -77,8 +101,16 @@ export const titleCompanyOptions = [
     { id: 75, value: 'Peninsula Title Company', label: 'Peninsula Title Company' },
     { id: 76, value: 'Albanese & Associates PC', label: 'Albanese & Associates PC' },
     { id: 77, value: 'Anderson Land Title Agency', label: 'Anderson Land Title Agency' },
-    { id: 78, value: 'Dandridge - Colonial Title Group', label: 'Dandridge - Colonial Title Group' },
-    { id: 79, value: 'Jefferson City - Colonial Title Group', label: 'Jefferson City - Colonial Title Group' },
+    {
+        id: 78,
+        value: 'Dandridge - Colonial Title Group',
+        label: 'Dandridge - Colonial Title Group',
+    },
+    {
+        id: 79,
+        value: 'Jefferson City - Colonial Title Group',
+        label: 'Jefferson City - Colonial Title Group',
+    },
     { id: 80, value: 'Performance Title and Escrow', label: 'Performance Title and Escrow' },
     { id: 81, value: 'Full Circle Title Solutions LLC', label: 'Full Circle Title Solutions LLC' },
     { id: 82, value: 'Law Offices of Sasha Katz, PL', label: 'Law Offices of Sasha Katz, PL' },
@@ -87,33 +119,51 @@ export const titleCompanyOptions = [
     { id: 85, value: 'TEST TITLE', label: 'TEST TITLE' },
     { id: 86, value: 'First Rate Escrow', label: 'First Rate Escrow' },
     { id: 87, value: 'Showshinski Title', label: 'Showshinski Title' },
-    { id: 88, value: 'Elite Home Title, LLC', label: 'Elite Home Title, LLC' }
+    { id: 88, value: 'Elite Home Title, LLC', label: 'Elite Home Title, LLC' },
 ]
 
 export const closingTypeOptions = [
     { id: 0, value: '', label: '-- Select Closing Type --', disabled: true },
-    { id: 1, value: 'Title Closing Buyers Side', label: 'Title Closing Buyers Side', dataPrice: 120 },
-    { id: 2, value: 'Title Closing Buyers Side With Loans', label: 'Title Closing Buyers Side With Loans', dataPrice: 140 },
-    { id: 3, value: 'Title Closing Seller Side', label: 'Title Closing Seller Side', dataPrice: 100 },
+    {
+        id: 1,
+        value: 'Title Closing Buyers Side',
+        label: 'Title Closing Buyers Side',
+        dataPrice: 120,
+    },
+    {
+        id: 2,
+        value: 'Title Closing Buyers Side With Loans',
+        label: 'Title Closing Buyers Side With Loans',
+        dataPrice: 140,
+    },
+    {
+        id: 3,
+        value: 'Title Closing Seller Side',
+        label: 'Title Closing Seller Side',
+        dataPrice: 100,
+    },
     { id: 4, value: 'Single Document', label: 'Single Document', dataPrice: 30 },
 ]
 
 export const specificNotary = [
-    { id: 0, value: "", label: "-- Select Specific Notary --", disabled: true },
-    { id: 1, value: "Andrew Ray Yon (N-1-a5d26)", label: "Andrew Ray Yon (N-1-a5d26)" },
-    { id: 2, value: "Muhammad Umer (N-1-a5d25)", label: "Muhammad Umer (N-1-a5d25)" },
-    { id: 3, value: "Robin Rene Fulghum (N03003)", label: "Robin Rene Fulghum (N03003)" },
-    { id: 4, value: "Vanessa McCarsky (MCCVAN04)", label: "Vanessa McCarsky (MCCVAN04)" },
-    { id: 5, value: "Dalarrian Featherston (FEADAL05)", label: "Dalarrian Featherston (FEADAL05)" },
-    { id: 6, value: "Susan Karen Oliveira (KARSUS07)", label: "Susan Karen Oliveira (KARSUS07)" },
-    { id: 7, value: "Patricia Arnaiz Chipoco (ARNPAT08)", label: "Patricia Arnaiz Chipoco (ARNPAT08)" },
-    { id: 8, value: "Brian Lehman (LEHBRI10)", label: "Brian Lehman (LEHBRI10)" },
-    { id: 9, value: "Peta-Gaye Anderson (ANDPET01)", label: "Peta-Gaye Anderson (ANDPET01)" },
-    { id: 10, value: "Christopher Yon (YONCHR01)", label: "Christopher Yon (YONCHR01)" },
-    { id: 11, value: "Umer Notary (NOTUME01)", label: "Umer Notary (NOTUME01)" },
-    { id: 12, value: "Umer Testing Notary (TESUME01)", label: "Umer Testing Notary (TESUME01)" }
+    { id: 0, value: '', label: '-- Select Specific Notary --', disabled: true },
+    { id: 1, value: 'Andrew Ray Yon (N-1-a5d26)', label: 'Andrew Ray Yon (N-1-a5d26)' },
+    { id: 2, value: 'Muhammad Umer (N-1-a5d25)', label: 'Muhammad Umer (N-1-a5d25)' },
+    { id: 3, value: 'Robin Rene Fulghum (N03003)', label: 'Robin Rene Fulghum (N03003)' },
+    { id: 4, value: 'Vanessa McCarsky (MCCVAN04)', label: 'Vanessa McCarsky (MCCVAN04)' },
+    { id: 5, value: 'Dalarrian Featherston (FEADAL05)', label: 'Dalarrian Featherston (FEADAL05)' },
+    { id: 6, value: 'Susan Karen Oliveira (KARSUS07)', label: 'Susan Karen Oliveira (KARSUS07)' },
+    {
+        id: 7,
+        value: 'Patricia Arnaiz Chipoco (ARNPAT08)',
+        label: 'Patricia Arnaiz Chipoco (ARNPAT08)',
+    },
+    { id: 8, value: 'Brian Lehman (LEHBRI10)', label: 'Brian Lehman (LEHBRI10)' },
+    { id: 9, value: 'Peta-Gaye Anderson (ANDPET01)', label: 'Peta-Gaye Anderson (ANDPET01)' },
+    { id: 10, value: 'Christopher Yon (YONCHR01)', label: 'Christopher Yon (YONCHR01)' },
+    { id: 11, value: 'Umer Notary (NOTUME01)', label: 'Umer Notary (NOTUME01)' },
+    { id: 12, value: 'Umer Testing Notary (TESUME01)', label: 'Umer Testing Notary (TESUME01)' },
 ]
-
 
 export const timeSlots = {
     morning: [
@@ -153,5 +203,52 @@ export const timeSlots = {
         { label: '10:30pm - 11:00pm', value: '22:30-23:00' },
         { label: '11:00pm - 11:30pm', value: '23:00-23:30' },
         { label: '11:30pm - 12:00am', value: '23:30-00:00' },
-    ]
-  }
+    ],
+}
+
+export const titleCompany = [
+    {
+        label: 'Deer Creek Title',
+        year: 'select2-title_company-result-qrw2-4',
+    },
+    {
+        label: 'Test Title 3',
+        year: 'select2-title_company-result-zkgc-5',
+    },
+    {
+        label: 'Test Title Company 4',
+        year: 'select2-title_company-result-vvlz-6',
+    },
+    {
+        label: 'Dennison Matthews, PLLC',
+        year: 'select2-title_company-result-5hes-7',
+    },
+    {
+        label: 'National Title Services',
+        year: 'select2-title_company-result-oux9-8',
+    },
+    {
+        label: 'Eagle Gate Title',
+        year: 'select2-title_company-result-b019-9',
+    },
+    {
+        label: 'Sample Title',
+        year: 'select2-title_company-result-9fio-10',
+    },
+    {
+        label: 'Signature Property Closings',
+        year: 'select2-title_company-result-uar2-11',
+    },
+    {
+        label: 'Apex Settlement',
+        year: 'select2-title_company-result-plqg-12',
+    },
+    {
+        label: 'Eastern Title and Settlement',
+        year: 'select2-title_company-result-nupx-13',
+    },
+    {
+        label: 'Republic Title',
+        year: 'select2-title_company-result-g43d-14',
+    },
+]
