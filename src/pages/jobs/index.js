@@ -185,7 +185,7 @@ const Jobs = () => {
                                                 )}
                                             </TableCell>
                                         ))}
-                                    </TableRow>
+                                    </TableRow> 
                                 ))}
                             </TableBody>
                         </Table>
