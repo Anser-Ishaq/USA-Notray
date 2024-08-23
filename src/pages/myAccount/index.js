@@ -20,7 +20,7 @@ const MyAccount = () => {
           <TextField fullWidth label="Current Password" type="password" margin="normal" />
           <TextField fullWidth label="New Password" type="password" margin="normal" />
           <TextField fullWidth label="Confirm Password" type="password" margin="normal" />
-          <Button variant="contained" color="primary">Change Password</Button>
+          <Button margin="10px" variant="contained" color="primary">Change Password</Button>
         </Grid>
       </Grid>
     </div>

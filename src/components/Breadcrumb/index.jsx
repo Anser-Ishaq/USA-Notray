@@ -11,7 +11,7 @@ const BreadCrumb = () => {
     <Box sx={{ backgroundColor: '#f0f7ff', padding: '16px 16px', borderRadius: 5, marginBottom: '30px' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <Typography variant="h6">{pathnames?.[0]?.charAt(0)?.toUpperCase() + pathnames?.[0]?.slice(1)}</Typography>
+          <Typography variant="h6">{pathnames?.[0]?.charAt(0)?.toUpperCase()?.replace('-', '') + pathnames?.[0]?.slice(1)?.replace('-', ' ')}</Typography>
           <Breadcrumbs aria-label="breadcrumb">
             <Link component={RouterLink} to="/" underline="hover" color="inherit">
               Home
@@ -22,11 +22,11 @@ const BreadCrumb = () => {
 
               return last ? (
                 <Typography color="textPrimary" key={to}>
-                  {value.charAt(0).toUpperCase() + value.slice(1)}
+                  {value.charAt(0).toUpperCase() + value.slice(1)?.replace('-', ' ')}
                 </Typography>
               ) : (
                 <Link component={RouterLink} to={to} key={to} underline="hover" color="inherit">
-                  {value.charAt(0).toUpperCase() + value.slice(1)}
+                  {value.charAt(0).toUpperCase() + value.slice(1)?.replace('-', ' ')}
                 </Link>
               );
             })}

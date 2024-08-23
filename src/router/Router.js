@@ -26,9 +26,8 @@ const AppRouter = () => {
             </ProtectedRoute>
           }
         >
-          <Route path="" element={<div>Dashboard</div>} />
-          <Route path="dashboard" element={<div>Dashboard</div>} />
-          <Route path="job-management" element={<div>Job Management</div>} />
+          <Route path="" element={<Jobs />} />
+          <Route path="dashboard" element={<Jobs />} />
           <Route path="jobs-list" element={<Jobs />} />
           <Route path="create-job" element={<CreateJob />} />
           <Route path="notarize-a-document" element={<NotarizeDocument />} />
