@@ -20,4 +20,32 @@ const DynamicButton = ({ selected, onClick, icon: Icon, children }) => {
     );
 };
 
+const StyledAddParticipant = styled(Button)(({ theme }) => ({
+    textTransform: 'none',
+    backgroundColor: '#E6F0FF',
+    color: '#49beff',
+    borderRadius: '5px',
+    height: '25px',
+    width: 'auto',
+    padding: '0 10px',
+    fontSize: '14px',
+    border: 'none',
+    '&:hover': {
+        backgroundColor: 'white',
+        color: '#49beff',
+    },
+}));
+
+export const AddParticipant = ({ icon: Icon, onClick, children }) => {
+    return (
+        <StyledAddParticipant 
+            variant="contained" 
+            onClick={onClick}
+            startIcon={Icon && <Icon />}
+        >
+            {children}
+        </StyledAddParticipant>
+    );
+};
+
 export default DynamicButton;

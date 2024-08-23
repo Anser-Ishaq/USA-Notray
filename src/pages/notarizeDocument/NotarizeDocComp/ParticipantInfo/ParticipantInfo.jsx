@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import QuantityInput from '../../../../components/NumberInput/NumberInput';
 import { Grid, Paper, Button, Box, Typography, TextField, RadioGroup, FormControlLabel, Radio, IconButton, Select, MenuItem } from '@mui/material';
 import { Add as AddIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import AddParticipant from '../../../../components/DynamicButton/DynamicButton'
 
 const columns = [
     { id: 'Name', label: 'Name', xs: 1.5 },
@@ -181,24 +182,12 @@ const ParticipantInfo = () => {
                             </Grid>
                         </Grid>
                     ))}
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        startIcon={<AddIcon />}
-                        onClick={handleAddRow}
-                        sx={{
-                            textTransform: 'none',
-                            bgcolor: '#E6F0FF',
-                            color: '#49beff',
-                            '&:hover': {
-                                bgcolor: 'white',
-                                color: '#49beff',
-                            },
-                            marginTop: '10px'
-                        }}
-                    >
-                        Add Participant
-                    </Button>
+                    <AddParticipant
+                    icon={AddIcon}
+                    onClick={handleAddRow}
+                >
+                    Add Participant
+                </AddParticipant>
                 </Paper>
             </Box>
         </div>

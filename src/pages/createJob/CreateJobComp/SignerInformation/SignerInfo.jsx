@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import {
-  Box, Typography, Button, Grid
+  Box, Typography, Grid
 } from '@mui/material';
 import AddSignerModal from '../SignerInformation/singerModal/singerModalForm';
 import DynamicTable from '../../../../components/dynamicTable/dynamicTable'; 
+import { AddParticipant } from '../../../../components/DynamicButton/DynamicButton';
+import AddIcon from '@mui/icons-material/Add'; // Import the icon for the button
 
 const SignerInfo = () => {
   const [open, setOpen] = useState(false);
@@ -17,14 +19,23 @@ const SignerInfo = () => {
     { id: 'actions', label: 'Action' }
   ];
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleOpen = () => {
+    console.log('Modal Opened'); // Debugging statement
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    console.log('Modal Closed'); // Debugging statement
+    setOpen(false);
+  };
 
   const handleAddSigner = (signer) => {
+    console.log('Signer Added:', signer); // Debugging statement
     setSigners([...signers, signer]);
   };
 
   const handleRemoveSigner = (index) => {
+    console.log('Remove Signer at index:', index); // Debugging statement
     setSigners(signers.filter((_, i) => i !== index));
   };
 
@@ -44,25 +55,10 @@ const SignerInfo = () => {
             <Typography variant="h6" color="white" mb={{ xs: 1, sm: 0 }}>
               Participant's Information
             </Typography>
-            <Button
-              variant="contained"
-              color="primary"
-              style={{ height: '25px', borderRadius: '5px', color: "#49beff"  }}
-              startIcon={<span>+</span>}
-              onClick={handleOpen}
-              sx={{
-                textTransform: 'none',
-                bgcolor: 'white',
-                color: '#ecf2ff',
-                width: { xs: '100%', sm: 'auto' },
-                '&:hover': {
-                  bgcolor: 'white', 
-                  color: '#49beff',
-                },
-              }}
-            >
+            
+            <AddParticipant icon={AddIcon} onClick={handleOpen}>
               Add Participant
-            </Button>
+            </AddParticipant>
           </Box>
 
           <AddSignerModal open={open} handleClose={handleClose} onAddSigner={handleAddSigner} />
