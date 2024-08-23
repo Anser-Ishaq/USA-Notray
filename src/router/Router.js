@@ -10,6 +10,7 @@ import CreateJob from '../pages/createJob/index.js';
 import Jobs from '../pages/jobs/index.js';
 import TitleCompany from '../pages/titleCompany/titleCompany.jsx';
 import Services from '../pages/services/services.jsx';
+import NotaryManagement from '../pages/notaryManagement/notaryManagement.jsx';
 
 const AppRouter = () => {
   return (
@@ -34,7 +35,7 @@ const AppRouter = () => {
           <Route path="create-job" element={<CreateJob />} />
           <Route path="notarize-a-document" element={<NotarizeDocument />} />
           <Route path="title-company" element={<TitleCompany />} />
-          <Route path="notary-management" element={<div>Notary Management</div>} />
+          <Route path="notary-management" element={<NotaryManagement />} />
           <Route path="user-management" element={<div>User Management</div>} />
           <Route path="services" element={<Services />} />
           <Route path="client-management" element={<div>Client Management</div>} />
