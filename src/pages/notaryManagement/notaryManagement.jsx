@@ -18,6 +18,7 @@ import {
     Paper,
 } from '@mui/material'
 import { AddParticipant } from '../../components/DynamicButton/DynamicButton'
+import NotaryInformation from './notaryInformation/notaryInformation'
 
 const NotaryManagement = () => {
     const [notaryData, setNotaryData] = useState([
@@ -138,76 +139,79 @@ const NotaryManagement = () => {
                         </Select>
                     </FormControl>
                 </Box>
-                
+
                 <div style={{ marginTop: '20px', marginBottom: '30px' }}>
                     <AddParticipant children={'Create'} />
                 </div>
                 <Box sx={{ overflowX: 'auto', mt: 3 }}>
-                <TableContainer component={Paper} sx={{ mt: 2, width: '100%' }}>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>ID</TableCell>
-                                <TableCell>Full Name</TableCell>
-                                <TableCell>Email</TableCell>
-                                <TableCell>City</TableCell>
-                                <TableCell>Certified Signing Agent</TableCell>
-                                <TableCell>Status</TableCell>
-                                <TableCell>Actions</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {notaryData.map((row, index) => (
-                                <TableRow key={row.id}>
-                                    <TableCell>{row.id}</TableCell>
-                                    <TableCell>{row.fullName}</TableCell>
-                                    <TableCell>{row.email}</TableCell>
-                                    <TableCell>{row.city}</TableCell>
-                                    <TableCell>
-                                        <Chip
-                                            label={row.certified ? 'Certified' : 'Not Certified'}
-                                            sx={{
-                                                backgroundColor: row.certified
-                                                    ? '#E6FFFA'
-                                                    : '#FA896B',
-                                                color: row.certified ? '#5DEAD0' : 'white',
-                                                fontWeight: 'bold',
-                                            }}
-                                        />
-                                    </TableCell>
-                                    <TableCell>
-                                        <Chip
-                                            label={row.status}
-                                            sx={{
-                                                backgroundColor:
-                                                    row.status === 'Enabled'
-                                                        ? '#13DEB9'
-                                                        : '#FA896B',
-                                                color: 'white',
-                                            }}
-                                        />
-                                    </TableCell>
-                                    <TableCell>
-                                        <Box sx={{ display: 'flex', gap: 1 }}>
-                                            {actionButtons.map((action, btnIndex) => (
-                                                <Button
-                                                    key={btnIndex}
-                                                    variant="outlined"
-                                                    color={action.color}
-                                                    onClick={() => action.onClick(row.id)}
-                                                >
-                                                    {action.label}
-                                                </Button>
-                                            ))}
-                                        </Box>
-                                    </TableCell>
+                    <TableContainer component={Paper} sx={{ mt: 2, width: '100%' }}>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>ID</TableCell>
+                                    <TableCell>Full Name</TableCell>
+                                    <TableCell>Email</TableCell>
+                                    <TableCell>City</TableCell>
+                                    <TableCell>Certified Signing Agent</TableCell>
+                                    <TableCell>Status</TableCell>
+                                    <TableCell>Actions</TableCell>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+                            </TableHead>
+                            <TableBody>
+                                {notaryData.map((row, index) => (
+                                    <TableRow key={row.id}>
+                                        <TableCell>{row.id}</TableCell>
+                                        <TableCell>{row.fullName}</TableCell>
+                                        <TableCell>{row.email}</TableCell>
+                                        <TableCell>{row.city}</TableCell>
+                                        <TableCell>
+                                            <Chip
+                                                label={
+                                                    row.certified ? 'Certified' : 'Not Certified'
+                                                }
+                                                sx={{
+                                                    backgroundColor: row.certified
+                                                        ? '#E6FFFA'
+                                                        : '#FA896B',
+                                                    color: row.certified ? '#5DEAD0' : 'white',
+                                                    fontWeight: 'bold',
+                                                }}
+                                            />
+                                        </TableCell>
+                                        <TableCell>
+                                            <Chip
+                                                label={row.status}
+                                                sx={{
+                                                    backgroundColor:
+                                                        row.status === 'Enabled'
+                                                            ? '#13DEB9'
+                                                            : '#FA896B',
+                                                    color: 'white',
+                                                }}
+                                            />
+                                        </TableCell>
+                                        <TableCell>
+                                            <Box sx={{ display: 'flex', gap: 1 }}>
+                                                {actionButtons.map((action, btnIndex) => (
+                                                    <Button
+                                                        key={btnIndex}
+                                                        variant="outlined"
+                                                        color={action.color}
+                                                        onClick={() => action.onClick(row.id)}
+                                                    >
+                                                        {action.label}
+                                                    </Button>
+                                                ))}
+                                            </Box>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
                     </TableContainer>
                 </Box>
             </Box>
+            <NotaryInformation />
         </div>
     )
 }
