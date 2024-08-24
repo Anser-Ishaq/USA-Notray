@@ -10,17 +10,35 @@ import {
     Typography,
     Divider,
     TextareaAutosize,
+    Chip,
 } from '@mui/material'
 import DatePickerComp from '../../../components/DatePicker/DatePicker'
 import Upload from '../../../components/Upload/Upload'
+import Switch from '../../../components/Switch/Switch'
 
-const NotaryInformation = () => {
-
+const NotaryInformation = ({ handleBack }) => {
     return (
         <div style={{ padding: '20px' }}>
-            <Typography variant="h4" gutterBottom>
-                Notary Information
-            </Typography>
+            <Grid
+                display={'flex'}
+                justifyContent={'flex-start'}
+                alignItems={'baseline'}
+                flexDirection={'row'}
+            >
+                <Chip
+                    onClick={handleBack}
+                    label="Back"
+                    sx={{
+                        backgroundColor: '#5D87FF',
+                        color: 'white',
+                        marginRight: '20px',
+                        cursor: 'pointer',
+                    }}
+                />
+                <Typography variant="h5" gutterBottom style={{ marginBottom: '40px' }}>
+                    Notary Information
+                </Typography>
+            </Grid>
             <form>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
@@ -78,26 +96,19 @@ const NotaryInformation = () => {
                 <Divider style={{ margin: '20px 0' }} />
 
                 <Grid container spacing={2}>
-                    <Grid
-                        item
-                        xs={12}
-                        flexDirection={'row'}
-                        display={'flex'}
-                        alignItems={'center'}
-                        justifyContent={'space-between'}
-                    >
-                        <Grid item xs={3.5}>
+                    <Grid item xs={12} container spacing={2} justifyContent="space-between">
+                        <Grid item xs={12} md={3.5}>
                             <Upload label="Signature JPG" />
                         </Grid>
-                        <Grid item xs={3.5}>
+                        <Grid item xs={12} md={3.5}>
                             <Upload label="Initials JPG" />
                         </Grid>
-                        <Grid item xs={3.5}>
+                        <Grid item xs={12} md={3.5}>
                             <Upload label="Seal" />
                         </Grid>
                     </Grid>
 
-                    <Grid item xs={12} md={12}>
+                    <Grid item xs={12}>
                         <TextareaAutosize
                             minRows={3}
                             placeholder="Disclosure"
@@ -129,12 +140,135 @@ const NotaryInformation = () => {
                         </FormControl>
                     </Grid>
 
-                    <Grid item xs={12} md={6}>
-                        <Upload label={'Commission Expiration Date '} />
+                    <Grid item xs={12} md={9}>
+                        <Upload label={'Commission Certificate'} />
                     </Grid>
 
-                    <Grid item xs={12} md={6} marginTop={'35px'}>
+                    <Grid item xs={12} md={3} marginTop={'5px'}>
+                        <Typography variant="body1" gutterBottom>
+                            Commission Expiration Date
+                        </Typography>
                         <DatePickerComp />
+                    </Grid>
+                </Grid>
+
+                <Divider style={{ margin: '20px 0' }} />
+
+                <Grid container spacing={3}>
+                    <Grid item xs={12} md={4}>
+                        <Upload label={'Identrust Digital Certificate (File) '} />
+                    </Grid>
+                    <Grid item xs={12} md={4} marginTop={'5px'}>
+                        <Typography variant="body1" gutterBottom>
+                            Identrust Digital Certificate Expiration Date
+                        </Typography>
+                        <DatePickerComp />
+                    </Grid>
+                    <Grid item xs={12} md={4} marginTop={'33px'}>
+                        <TextField
+                            fullWidth
+                            label="Identrust Digital Certificate Passphrase "
+                            variant="outlined"
+                        />
+                    </Grid>
+                </Grid>
+
+                <Grid container spacing={3}>
+                    <Grid item xs={12} md={4}>
+                        <Upload label={'E&O Certificate '} />
+                    </Grid>
+                    <Grid item xs={12} md={4} marginTop={'5px'}>
+                        <Typography variant="body1" gutterBottom>
+                            E&O Expiration Date
+                        </Typography>
+                        <DatePickerComp />
+                    </Grid>
+                    <Grid item xs={12} md={4} marginTop={'33px'}>
+                        <TextField
+                            fullWidth
+                            label="Errors and Omissions Insurance Amount "
+                            variant="outlined"
+                        />
+                    </Grid>
+                </Grid>
+
+                <Grid container spacing={3}>
+                    <Grid item xs={12} md={4}>
+                        <Upload label={'Bond Certificate'} />
+                    </Grid>
+                    <Grid item xs={12} md={4} marginTop={'5px'}>
+                        <Typography variant="body1" gutterBottom>
+                            Bond Expiration Date
+                        </Typography>
+                        <DatePickerComp />
+                    </Grid>
+                    <Grid item xs={12} md={4} marginTop={'33px'}>
+                        <TextField fullWidth label="Bond Amount" variant="outlined" />
+                    </Grid>
+                </Grid>
+
+                <Divider style={{ margin: '20px 0' }} />
+
+                <Grid container spacing={3}>
+                    <Grid item xs={12} md={4}>
+                        <Typography variant="body1" gutterBottom>
+                            Are you a Certified Notary Signing Agent?
+                        </Typography>
+                        <Switch />
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                        <Typography variant="body1" gutterBottom>
+                            Can you speak in Chinese?
+                        </Typography>
+                        <Switch />
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                        <TextField fullWidth label="Enter your title" variant="outlined" />
+                    </Grid>
+                </Grid>
+
+                <Grid container spacing={3} style={{ marginTop: '5px' }}>
+                    <Grid item xs={12} md={4}>
+                        <Typography variant="body1" gutterBottom>
+                            Can you speak in German?
+                        </Typography>
+                        <Switch />
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                        <Typography variant="body1" gutterBottom>
+                            Can you speak in Portuguese?
+                        </Typography>
+                        <Switch />
+                    </Grid>
+                </Grid>
+
+                <Grid container spacing={3} style={{ marginTop: '5px' }}>
+                    <Grid item xs={12} md={4}>
+                        <Typography variant="body1" gutterBottom>
+                            Can you speak in Spanish?
+                        </Typography>
+                        <Switch />
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                        <Typography variant="body1" gutterBottom>
+                            Can you speak in French?
+                        </Typography>
+                        <Switch />
+                    </Grid>
+                </Grid>
+
+                <Grid container spacing={3} style={{ marginTop: '5px' }}>
+                    <Grid item xs={12} md={4}>
+                        <Typography variant="body1" gutterBottom>
+                            Can you speak in Russian?
+                        </Typography>
+                        <Switch />
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                        <Typography variant="body1" gutterBottom>
+                            Can you speak in Italian?
+                        </Typography>
+                        <Switch />
                     </Grid>
                 </Grid>
 
