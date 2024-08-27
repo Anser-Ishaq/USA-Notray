@@ -16,16 +16,18 @@ import {
     Grid,
     TableContainer,
     Paper,
+    TextField,
 } from '@mui/material'
 import { AddParticipant } from '../../components/DynamicButton/DynamicButton'
 import NotaryInformation from './notaryInformation/notaryInformation'
 import FileModal from './fileModal/fileModal'
 
 const NotaryManagement = () => {
-    const [showTable, setShowTable] = useState(true);
-    const [openFileModal, setOpenFileModal] = useState(false); 
-    const [selectedNotaryId, setSelectedNotaryId] = useState(null);
-
+    const [showTable, setShowTable] = useState(true)
+    const [openFileModal, setOpenFileModal] = useState(false)
+    const [selectedNotaryId, setSelectedNotaryId] = useState(null)
+    const [selectedFilter, setSelectedFilter] = useState('All Notaries')
+    const [searchQuery, setSearchQuery] = useState('')
     const [notaryData, setNotaryData] = useState([
         {
             id: 'ANDPET01',
@@ -92,14 +94,35 @@ const NotaryManagement = () => {
     }
 
     const handleOpenFileModal = (id) => {
-        setSelectedNotaryId(id); 
-        setOpenFileModal(true);   
-    };
+        setSelectedNotaryId(id)
+        setOpenFileModal(true)
+    }
 
     const handleCloseFileModal = () => {
-        setOpenFileModal(false); 
-        setSelectedNotaryId(null); 
-    };
+        setOpenFileModal(false)
+        setSelectedNotaryId(null)
+    }
+
+    const handleFilterChange = (event) => {
+        setSelectedFilter(event.target.value)
+    }
+
+    const handleSearchChange = (event) => {
+        setSearchQuery(event.target.value)
+    }
+
+    const filteredNotaryData = notaryData.filter((notary) => {
+        const matchesFilter = (selectedFilter === 'All Notaries') ||
+            (selectedFilter === 'Enabled Notaries' && notary.status === 'Enabled') ||
+            (selectedFilter === 'Disabled Notaries' && notary.status === 'Disabled') ||
+            (selectedFilter === 'Pending Notaries' && notary.status === 'Pending');
+
+        const matchesSearch = notary.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            notary.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            notary.city.toLowerCase().includes(searchQuery.toLowerCase());
+
+        return matchesFilter && matchesSearch;
+    })
 
     const actionButtons = [
         {
@@ -142,31 +165,58 @@ const NotaryManagement = () => {
                         sx={{
                             display: 'flex',
                             alignItems: 'center',
-                            justifyContent: 'space-between',
+                            justifyContent: 'center',
+                            flexDirection: 'column',
+                            width: '100%',
                         }}
                     >
-                        <Typography variant="h6" component="div">
-                            All Notaries
-                        </Typography>
-                        <FormControl variant="outlined" sx={{ minWidth: 150 }}>
-                            <InputLabel id="notary-select-label">Notaries</InputLabel>
-                            <Select
-                                labelId="notary-select-label"
-                                id="notary-select"
-                                label="Notaries"
-                            >
-                                {notaries.map((notary, index) => (
-                                    <MenuItem key={index} value={notary}>
-                                        {notary}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
+                        <div
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                flexDirection: 'row',
+                                width: '100%',
+                            }}
+                        >
+                            <Typography variant="h6" component="div">
+                                All Notaries
+                            </Typography>
+                            <FormControl variant="outlined" sx={{ minWidth: 150 }}>
+                                <InputLabel id="notary-select-label">All Notaries</InputLabel>
+                                <Select
+                                    labelId="notary-select-label"
+                                    id="notary-select"
+                                    label="Notaries"
+                                    onChange={handleFilterChange}
+                                >
+                                    {notaries.map((notary, index) => (
+                                        <MenuItem key={index} value={notary}>
+                                            {notary}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </div>
+                        <div
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                flexDirection: 'row',
+                                width: '100%',
+                                marginTop: '20px',
+                            }}
+                        >
+                            <AddParticipant
+                                children={'Create'}
+                                onClick={() => setShowTable(false)}
+                            />
+
+                            <TextField size="small" placeholder="Search" onChange={handleSearchChange}/>
+                        </div>
                     </Box>
 
-                    <div style={{ marginTop: '20px', marginBottom: '30px' }}>
-                        <AddParticipant children={'Create'} onClick={() => setShowTable(false)} />
-                    </div>
                     <Box sx={{ overflowX: 'auto', mt: 3 }}>
                         <TableContainer component={Paper} sx={{ mt: 2, width: '100%' }}>
                             <Table>
@@ -182,7 +232,7 @@ const NotaryManagement = () => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {notaryData.map((row, index) => (
+                                    {filteredNotaryData.map((row, index) => (
                                         <TableRow key={row.id}>
                                             <TableCell>{row.id}</TableCell>
                                             <TableCell>{row.fullName}</TableCell>
