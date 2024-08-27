@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   Button, TextField, MenuItem, Typography, Box, Select, FormControl, InputLabel, Pagination, Paper,
 } from '@mui/material';
-
 import Swal from 'sweetalert2';
 import DynamicTable from '../../components/dynamicTable/dynamicTable';
 import UserForm from './form.jsx';
@@ -64,19 +63,26 @@ const UserManagement = () => {
     role: '',
     privileges: [],
   });
+  const [page, setPage] = useState(1);
+  const rowsPerPage = 5;
 
   const roleFilters = ['All Users', ...roles];
  
   const icons = [
-   "All Users",
-   "Admin Users",
-   "Notary Users",
-   "Title Company Users",
-   "Client Users"
+    "All Users",
+    "Admin Users",
+    "Notary Users",
+    "Title Company Users",
+    "Client Users"
   ];
 
   const handleFilterChange = (event) => {
     setSelectedFilter(event.target.value);
+    setPage(1);
+  };
+
+  const handlePageChange = (event, value) => {
+    setPage(value);
   };
 
   const handleDelete = (username) => {
@@ -129,6 +135,13 @@ const UserManagement = () => {
 
   const filteredUsers = users.filter((user) => selectedFilter === 'All Users' || user.role === selectedFilter);
 
+  const totalEntries = filteredUsers.length;
+  const startIndex = (page - 1) * rowsPerPage + 1;
+  const endIndex = Math.min(page * rowsPerPage, totalEntries);
+  const totalPages = Math.ceil(totalEntries / rowsPerPage);
+
+  const paginatedUsers = filteredUsers.slice((page - 1) * rowsPerPage, page * rowsPerPage);
+
   const columns = [
     { id: 'username', label: 'User Name' },
     { id: 'email', label: 'Email' },
@@ -139,9 +152,8 @@ const UserManagement = () => {
   ];
 
   const actionButton = (row) => (
-    <Box display="flex" justifyContent="flex-end" >
-
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', }}>
+    <Box display="flex" justifyContent="flex-end">
+      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         {!showForm && (
           <Button variant="outlined" color="primary" onClick={handleCreate} size="small" sx={{ marginRight: 1 }}>
             Update
@@ -161,31 +173,27 @@ const UserManagement = () => {
 
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         {!showForm && (
-          <Button variant="contained" color="primary" onClick={handleCreate} style={{marginTop:'20px',marginLeft:'20px'}}>
+          <Button variant="contained" color="primary" onClick={handleCreate} style={{ marginTop: '20px', marginLeft: '20px' }}>
             Create
           </Button>
         )}
       </Box>
 
-  
-
-
       {!showForm ? (
         <>
-          <Typography variant="h6" color="textPrimary"  sx={{ marginLeft: '20px', marginTop:'20px' }}>
+          <Typography variant="h6" color="textPrimary" sx={{ marginLeft: '20px', marginTop: '20px' }}>
             User Management
           </Typography>
 
-          <div>
-          <Box display="flex" flexDirection="column" alignItems="flex-end" mr={3} >
+          <Box display="flex" flexDirection="column" alignItems="flex-end" mr={3}>
             <FormControl variant="outlined" size="small" sx={{ width: '200px', mb: 1 }}>
               <InputLabel id="role-filter-label"></InputLabel>
               <Select
                 value={selectedFilter}
                 onChange={handleFilterChange}
-                style={{backgroundColor:'#6393e6', color:'white'}}
+                style={{ backgroundColor: '#6393e6', color: 'white' }}
               >
                 {roleFilters.map((filter) => (
                   <MenuItem key={filter} value={filter}>
@@ -196,13 +204,20 @@ const UserManagement = () => {
             </FormControl>
             <TextField variant="outlined" size="small" placeholder="Search" sx={{ width: '200px' }} />
           </Box>
-        </div>
 
-          <DynamicTable columns={columns} data={filteredUsers} actionButton={actionButton} />
+          <DynamicTable columns={columns} data={paginatedUsers} actionButton={actionButton} />
 
           <Box sx={{ padding: '16px', display: 'flex', justifyContent: 'space-between' }}>
-            <Typography>Showing 1 to 10 of 144 entries</Typography>
-            <Pagination count={15} variant="outlined" shape="rounded" />
+            <Typography>
+              Showing {startIndex} to {endIndex} of {totalEntries} entries
+            </Typography>
+            <Pagination
+              count={totalPages}
+              page={page}
+              onChange={handlePageChange}
+              variant="outlined"
+              shape="rounded"
+            />
           </Box>
         </>
       ) : (

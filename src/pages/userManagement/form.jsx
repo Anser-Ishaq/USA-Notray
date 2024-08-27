@@ -167,7 +167,18 @@ const UserForm = ({ formData, setFormData, roles, privileges, handleSubmit, hand
 
         <Divider sx={{ mt: 2, mb: 2 }} />
 
-        <Typography variant="h6">The Company</Typography>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={formData.privileges.includes('Title Company')}
+              onChange={() => handleCheckboxChange('Title Company')}
+            />
+          }
+          label="Title Company"
+          sx={{ display: 'block' }} 
+        />
+
+
         <FormControlLabel
           control={
             <Checkbox
@@ -188,6 +199,16 @@ const UserForm = ({ formData, setFormData, roles, privileges, handleSubmit, hand
           label="User Management"
           sx={{ display: 'block' }} 
         />
+         <FormControlLabel
+          control={
+            <Checkbox
+              checked={formData.privileges.includes('Services')}
+              onChange={() => handleCheckboxChange('Services')}
+            />
+          }
+          label="Services"
+          sx={{ display: 'block' }} 
+        />
         <FormControlLabel
           control={
             <Checkbox
@@ -198,7 +219,30 @@ const UserForm = ({ formData, setFormData, roles, privileges, handleSubmit, hand
           label="Client Management"
           sx={{ display: 'block' }} 
         />
+
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={formData.privileges.includes('Menu Management')}
+              onChange={() => handleCheckboxChange('Menu Management')}
+            />
+          }
+          label="Menu Management"
+          sx={{ display: 'block' }} 
+        />
+         <FormControlLabel
+          control={
+            <Checkbox
+              checked={formData.privileges.includes('Notarization Logs')}
+              onChange={() => handleCheckboxChange('Notarization Logs')}
+            />
+          }
+          label="Notarization Logs"
+          sx={{ display: 'block' }} 
+        />
+          
       </FormGroup>
+
 
       <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
         <Button variant="contained" color="primary" type="submit">
