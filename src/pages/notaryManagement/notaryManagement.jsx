@@ -19,9 +19,12 @@ import {
 } from '@mui/material'
 import { AddParticipant } from '../../components/DynamicButton/DynamicButton'
 import NotaryInformation from './notaryInformation/notaryInformation'
+import FileModal from './fileModal/fileModal'
 
 const NotaryManagement = () => {
-    const [showTable, setShowTable] = useState(true)
+    const [showTable, setShowTable] = useState(true);
+    const [openFileModal, setOpenFileModal] = useState(false); 
+    const [selectedNotaryId, setSelectedNotaryId] = useState(null);
 
     const [notaryData, setNotaryData] = useState([
         {
@@ -88,11 +91,21 @@ const NotaryManagement = () => {
         setNotaryData(notaryData.filter((notary) => notary.id !== id))
     }
 
+    const handleOpenFileModal = (id) => {
+        setSelectedNotaryId(id); 
+        setOpenFileModal(true);   
+    };
+
+    const handleCloseFileModal = () => {
+        setOpenFileModal(false); 
+        setSelectedNotaryId(null); 
+    };
+
     const actionButtons = [
         {
             label: 'Files',
             color: 'primary',
-            onClick: (id) => alert(`Files clicked for ${id}`),
+            onClick: (id) => handleOpenFileModal(id),
         },
         {
             label: 'Update',
@@ -120,7 +133,7 @@ const NotaryManagement = () => {
                         border: '1px solid #e0e0e0',
                         borderRadius: 2,
                         boxShadow: 2,
-                        // maxWidth: 1100,
+                        width: 900,
                         margin: 'auto',
                         marginTop: '20px',
                     }}
@@ -226,6 +239,8 @@ const NotaryManagement = () => {
                 </Box>
             )}
             {!showTable && <NotaryInformation handleBack={() => setShowTable(true)} />}
+
+            <FileModal open={openFileModal} handleClose={handleCloseFileModal} />
         </div>
     )
 }
