@@ -13,6 +13,7 @@ import Services from '../pages/services/services.jsx';
 import NotaryManagement from '../pages/notaryManagement/notaryManagement.jsx';
 import UserManagement from '../pages/userManagement/index.js';
 import NotarizationLogsTable from '../pages/notarizationLogs/index.js';
+import MenuManagement from '../pages/menuManagement/menuManagement.jsx';
 
 const AppRouter = () => {
   return (
@@ -38,12 +39,10 @@ const AppRouter = () => {
           <Route path="notarize-a-document" element={<NotarizeDocument />} />
           <Route path="title-company" element={<TitleCompany />} />
           <Route path="notary-management" element={<NotaryManagement />} />
-          <Route path="user-management" element={<div>User Management</div>} />
-          <Route path="notary-management" element={<div>Notary Management</div>} />
           <Route path="user-management" element={<UserManagement />} />
           <Route path="services" element={<Services />} />
           <Route path="client-management" element={<div>Client Management</div>} />
-          <Route path="menu-management" element={<div>Menu Management</div>} />
+          <Route path="menu-management" element={<MenuManagement />} />
           <Route path="notarization-logs" element={<NotarizationLogsTable />} />
           <Route path="my-account" element={<MyAccount />} />
         </Route>

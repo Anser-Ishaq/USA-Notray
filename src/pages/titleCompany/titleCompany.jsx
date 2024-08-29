@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import DynamicTable from '../../components/dynamicTable/dynamicTable';
-import CreateOrUpdate from '../services/CreateOrUpdate/CreateOrUpdate';
+import CreateOrUpdate from '../../components/CreateOrUpdate/CreateOrUpdate';
 import { Button } from '@mui/material';
 import DynamicButton from '../../components/DynamicButton/DynamicButton';
 import AddParticipant from '../../components/DynamicButton/DynamicButton';

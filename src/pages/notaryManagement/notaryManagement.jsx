@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import {
     Box,
     Typography,
@@ -6,28 +6,20 @@ import {
     MenuItem,
     FormControl,
     InputLabel,
-    Button,
     Chip,
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableRow,
-    Grid,
-    TableContainer,
-    Paper,
     TextField,
-} from '@mui/material'
-import { AddParticipant } from '../../components/DynamicButton/DynamicButton'
-import NotaryInformation from './notaryInformation/notaryInformation'
-import FileModal from './fileModal/fileModal'
+} from '@mui/material';
+import AddParticipant from '../../components/DynamicButton/DynamicButton';
+import NotaryInformation from './notaryInformation/notaryInformation';
+import FileModal from './fileModal/fileModal';
+import DynamicTable from '../../components/dynamicTable/dynamicTable2';
 
 const NotaryManagement = () => {
-    const [showTable, setShowTable] = useState(true)
-    const [openFileModal, setOpenFileModal] = useState(false)
-    const [selectedNotaryId, setSelectedNotaryId] = useState(null)
-    const [selectedFilter, setSelectedFilter] = useState('All Notaries')
-    const [searchQuery, setSearchQuery] = useState('')
+    const [showTable, setShowTable] = useState(true);
+    const [openFileModal, setOpenFileModal] = useState(false);
+    const [selectedNotaryId, setSelectedNotaryId] = useState(null);
+    const [selectedFilter, setSelectedFilter] = useState('All Notaries');
+    const [searchQuery, setSearchQuery] = useState('');
     const [notaryData, setNotaryData] = useState([
         {
             id: 'ANDPET01',
@@ -85,31 +77,31 @@ const NotaryManagement = () => {
             certified: false,
             status: 'Disabled',
         },
-    ])
+    ]);
 
-    const notaries = ['All Notaries', 'Enabled Notaries', 'Disabled Notaries', 'Pending Notaries']
+    const notaries = ['All Notaries', 'Enabled Notaries', 'Disabled Notaries', 'Pending Notaries'];
 
     const handleRemove = (id) => {
-        setNotaryData(notaryData.filter((notary) => notary.id !== id))
-    }
+        setNotaryData(notaryData.filter((notary) => notary.id !== id));
+    };
 
     const handleOpenFileModal = (id) => {
-        setSelectedNotaryId(id)
-        setOpenFileModal(true)
-    }
+        setSelectedNotaryId(id);
+        setOpenFileModal(true);
+    };
 
     const handleCloseFileModal = () => {
-        setOpenFileModal(false)
-        setSelectedNotaryId(null)
-    }
+        setOpenFileModal(false);
+        setSelectedNotaryId(null);
+    };
 
     const handleFilterChange = (event) => {
-        setSelectedFilter(event.target.value)
-    }
+        setSelectedFilter(event.target.value);
+    };
 
     const handleSearchChange = (event) => {
-        setSearchQuery(event.target.value)
-    }
+        setSearchQuery(event.target.value);
+    };
 
     const filteredNotaryData = notaryData.filter((notary) => {
         const matchesFilter = (selectedFilter === 'All Notaries') ||
@@ -122,30 +114,64 @@ const NotaryManagement = () => {
             notary.city.toLowerCase().includes(searchQuery.toLowerCase());
 
         return matchesFilter && matchesSearch;
-    })
+    });
+
+    const columns = [
+        { label: 'ID', field: 'id' },
+        { label: 'Full Name', field: 'fullName' },
+        { label: 'Email', field: 'email' },
+        { label: 'City', field: 'city' },
+        {
+            label: 'Certified Signing Agent',
+            field: 'certified',
+            render: (value) => (
+                <Chip
+                    label={value ? 'Certified' : 'Not Certified'}
+                    sx={{
+                        backgroundColor: value ? '#E6FFFA' : '#FA896B',
+                        color: value ? '#5DEAD0' : 'white',
+                        fontWeight: 'bold',
+                    }}
+                />
+            ),
+        },
+        {
+            label: 'Status',
+            field: 'status',
+            render: (value) => (
+                <Chip
+                    label={value}
+                    sx={{
+                        backgroundColor: value === 'Enabled' ? '#13DEB9' : '#FA896B',
+                        color: 'white',
+                    }}
+                />
+            ),
+        },
+    ];
 
     const actionButtons = [
         {
             label: 'Files',
             color: 'primary',
-            onClick: (id) => handleOpenFileModal(id),
+            onClick: handleOpenFileModal,
         },
         {
             label: 'Update',
             color: 'secondary',
-            onClick: (id) => setShowTable(false),
+            onClick: () => setShowTable(false),
         },
         {
             label: 'Delete',
             color: 'error',
-            onClick: (id) => handleRemove(id),
+            onClick: handleRemove,
         },
         {
             label: 'Disable',
             color: 'warning',
             onClick: (id) => alert(`Disable clicked for ${id}`),
         },
-    ]
+    ];
 
     return (
         <div>
@@ -217,82 +243,14 @@ const NotaryManagement = () => {
                         </div>
                     </Box>
 
-                    <Box sx={{ overflowX: 'auto', mt: 3 }}>
-                        <TableContainer component={Paper} sx={{ mt: 2, width: '100%' }}>
-                            <Table>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>ID</TableCell>
-                                        <TableCell>Full Name</TableCell>
-                                        <TableCell>Email</TableCell>
-                                        <TableCell>City</TableCell>
-                                        <TableCell>Certified Signing Agent</TableCell>
-                                        <TableCell>Status</TableCell>
-                                        <TableCell>Actions</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {filteredNotaryData.map((row, index) => (
-                                        <TableRow key={row.id}>
-                                            <TableCell>{row.id}</TableCell>
-                                            <TableCell>{row.fullName}</TableCell>
-                                            <TableCell>{row.email}</TableCell>
-                                            <TableCell>{row.city}</TableCell>
-                                            <TableCell>
-                                                <Chip
-                                                    label={
-                                                        row.certified
-                                                            ? 'Certified'
-                                                            : 'Not Certified'
-                                                    }
-                                                    sx={{
-                                                        backgroundColor: row.certified
-                                                            ? '#E6FFFA'
-                                                            : '#FA896B',
-                                                        color: row.certified ? '#5DEAD0' : 'white',
-                                                        fontWeight: 'bold',
-                                                    }}
-                                                />
-                                            </TableCell>
-                                            <TableCell>
-                                                <Chip
-                                                    label={row.status}
-                                                    sx={{
-                                                        backgroundColor:
-                                                            row.status === 'Enabled'
-                                                                ? '#13DEB9'
-                                                                : '#FA896B',
-                                                        color: 'white',
-                                                    }}
-                                                />
-                                            </TableCell>
-                                            <TableCell>
-                                                <Box sx={{ display: 'flex', gap: 1 }}>
-                                                    {actionButtons.map((action, btnIndex) => (
-                                                        <Button
-                                                            key={btnIndex}
-                                                            variant="outlined"
-                                                            color={action.color}
-                                                            onClick={() => action.onClick(row.id)}
-                                                        >
-                                                            {action.label}
-                                                        </Button>
-                                                    ))}
-                                                </Box>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </Box>
+                    <DynamicTable columns={columns} data={filteredNotaryData} actions={actionButtons} />
                 </Box>
             )}
             {!showTable && <NotaryInformation handleBack={() => setShowTable(true)} />}
 
             <FileModal open={openFileModal} handleClose={handleCloseFileModal} />
         </div>
-    )
-}
+    );
+};
 
-export default NotaryManagement
+export default NotaryManagement;

@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
-import { titleCompany } from '../../../Data/OptionValues'
-import DynamicTable from '../../../components/dynamicTable/dynamicTable'
-import CreateOrUpdate from '../CreateOrUpdate/CreateOrUpdate'
 import { Button } from '@mui/material'
 import { AddParticipant } from '../../../components/DynamicButton/DynamicButton'
+import { titleCompany } from '../../../Data/OptionValues'
+import DynamicTable from '../../../components/dynamicTable/dynamicTable'
+import CreateOrUpdate from '../../../components/CreateOrUpdate/CreateOrUpdate'
 
 const TitleCompanies = () => {
     const [editIndex, setEditIndex] = useState(null)
@@ -42,6 +42,20 @@ const TitleCompanies = () => {
             status: 'Active',
         },
     ])
+
+    const fields = [
+        { label: 'Enter Service Name', name: 'serviceName', required: true },
+        {
+            label: 'Status',
+            name: 'status',
+            type: 'select',
+            select: true,
+            options: [
+                { label: 'Active', value: 'Active' },
+                { label: 'Inactive', value: 'Inactive' },
+            ],
+        },
+    ]
 
     const columns = [
         { id: 'serviceName', label: 'Service Name' },
@@ -129,15 +143,21 @@ const TitleCompanies = () => {
                 disablePortal
                 id="combo-box-demo"
                 options={titleCompany}
-                sx={{ width: 400 }}
+                sx={{ width: 400, marginBottom: "20px" }}
                 renderInput={(params) => <TextField {...params} label="Title Company" />}
             />
-            <div style={{ marginTop: '20px', marginBottom: "30px" }} onClick={handleCreate}>
-                <AddParticipant children={'Add new service'} />
-            </div>
-
             {showTable && (
-                <DynamicTable actionButton={renderActionButton} columns={columns} data={jobsData} />
+                <>
+                    <div style={{ marginTop: '20px', marginBottom: '30px' }} onClick={handleCreate}>
+                        <AddParticipant children={'Add new service'} />
+                    </div>
+
+                    <DynamicTable
+                        actionButton={renderActionButton}
+                        columns={columns}
+                        data={jobsData}
+                    />
+                </>
             )}
             {!showTable && (
                 <CreateOrUpdate
@@ -146,6 +166,8 @@ const TitleCompanies = () => {
                     handleSave={handleSave}
                     handleCancel={handleCancel}
                     isEditMode={editIndex !== null}
+                    isPrice={true}
+                    fields={fields}
                 />
             )}
         </div>

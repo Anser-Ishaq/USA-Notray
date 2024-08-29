@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import DynamicTable from '../../../components/dynamicTable/dynamicTable'
-import CreateOrUpdate from '../CreateOrUpdate/CreateOrUpdate'
+import CreateOrUpdate from '../../../components/CreateOrUpdate/CreateOrUpdate'
 import { Button } from '@mui/material'
 import { AddParticipant } from '../../../components/DynamicButton/DynamicButton'
 
@@ -122,12 +122,15 @@ const DefaultPricing = () => {
 
     return (
         <div>
+            {showTable && (
+           <>
             <div style={{ marginBottom: "30px" }} onClick={handleCreate}>
                 <AddParticipant children={'Add new service'} />
             </div>
 
-            {showTable && (
+            
                 <DynamicTable actionButton={renderActionButton} columns={columns} data={jobsData} />
+           </>
             )}
             {!showTable && (
                 <CreateOrUpdate
@@ -136,6 +139,8 @@ const DefaultPricing = () => {
                     handleSave={handleSave}
                     handleCancel={handleCancel}
                     isEditMode={editIndex !== null}
+                    input1={'Enter Service Name'}
+                    isPrice={true}
                 />
             )}
         </div>
