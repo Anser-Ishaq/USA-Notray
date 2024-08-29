@@ -116,7 +116,7 @@ const TitleCompany = () => {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           style={{ width: '20%',  }}
-         
+         de
         />
 
 
@@ -159,3 +159,4 @@ const TitleCompany = () => {
 };
 
 export default TitleCompany;
+  

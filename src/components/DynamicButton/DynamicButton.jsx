@@ -49,4 +49,17 @@ export const AddParticipant = ({ icon: Icon, onClick, children }) => {
     );
 };
 
+export const BackButton = ({ onClick, text = "Back", sx = {} }) => {
+    return (
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={onClick}
+        sx={{ ...sx, textTransform: 'none', marginTop: '200px' }} 
+      >
+        {text}
+      </Button>
+    );
+};
+
 export default DynamicButton;

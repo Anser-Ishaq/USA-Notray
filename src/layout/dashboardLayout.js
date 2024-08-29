@@ -2,7 +2,7 @@ import  React, { useState}  from 'react';
 import { Outlet, NavLink } from 'react-router-dom';
 import { styled, useTheme } from '@mui/material/styles';
 import {Button, Avatar, Menu, MenuItem, Collapse } from '@mui/material';
-import { ExpandLess, ExpandMore } from '@mui/icons-material';
+import { ExpandLess, ExpandMore, HomeOutlined, FileCopyOutlined, BusinessOutlined, GroupOutlined, SettingsOutlined, ManageAccountsOutlined , AppRegistrationOutlined, MenuBookOutlined, PersonOutlined, BadgeOutlined} from '@mui/icons-material';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
@@ -25,6 +25,16 @@ import BreadCrumb from '../components/Breadcrumb';
 import UsaLogo from '../assets/usalogo.png'
 
 const drawerWidth = 300;
+const menuList = [
+  { title: 'Title Company', icon : <BusinessOutlined/>, },
+  { title: 'Notary Management', icon :  <BadgeOutlined/>, },
+  { title: 'User Management', icon :  <GroupOutlined/>, },
+  { title: 'Services', icon :  <SettingsOutlined/>, },
+  { title: 'Client Management', icon :  <ManageAccountsOutlined/>, },
+  { title: 'Menu Management', icon :  <AppRegistrationOutlined/>, },
+  { title: 'Notarization Logs', icon :  <MenuBookOutlined/>, },
+  { title: 'My Account', icon :  <PersonOutlined/>, },
+]
 
 const DashboardLayout = () => {
   const theme = useTheme();
@@ -147,7 +157,7 @@ const handleJobManagementClick = () => {
                     justifyContent: 'center',
                   }}
                 >
-                 {<MailIcon />}
+                 {<HomeOutlined />}
                 </ListItemIcon>
                 <ListItemText primary={'Dashboard'} sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
@@ -168,7 +178,7 @@ const handleJobManagementClick = () => {
                     justifyContent: 'center',
                   }}
                 >
-                 {<MailIcon />}
+                 {<FileCopyOutlined />}
                 </ListItemIcon>
                 
                 <ListItemText primary="Job Management" sx={{ opacity: open ? 1 : 0 }} />
@@ -191,8 +201,8 @@ const handleJobManagementClick = () => {
                </ListItem>
              </List>
            </Collapse>
-          {['Title Company', 'Notary Management', 'User Management', 'Services', 'Client Management', 'Menu Management', 'Notarization Logs', 'My Account'].map((text, index) => (
-            <ListItem key={text} component={NavLink} to={`/${text.toLowerCase().replace(/\s+/g, '-')}`} disablePadding sx={linkStyle(theme, open)}>
+          {menuList.map((menu, index) => (
+            <ListItem key={menu.title} component={NavLink} to={`/${menu.title.toLowerCase().replace(/\s+/g, '-')}`} disablePadding sx={linkStyle(theme, open)}>
               <ListItemButton
                 sx={{
                   minHeight: 48,
@@ -207,9 +217,9 @@ const handleJobManagementClick = () => {
                     justifyContent: 'center',
                   }}
                 >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  {menu?.icon}
                 </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                <ListItemText primary={menu.title} sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
           ))}
