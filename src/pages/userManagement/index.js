@@ -64,7 +64,7 @@ const UserManagement = () => {
     privileges: [],
   });
   const [page, setPage] = useState(1);
-  const rowsPerPage = 5;
+  const rowsPerPage = 10;
 
   const roleFilters = ['All Users', ...roles];
  
