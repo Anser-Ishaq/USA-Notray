@@ -15,6 +15,7 @@ import {
 import DatePickerComp from '../../../components/DatePicker/DatePicker'
 import Upload from '../../../components/Upload/Upload'
 import Switch from '../../../components/Switch/Switch'
+import { BackButton } from '../../../components/DynamicButton/DynamicButton'
 
 const NotaryInformation = ({ handleBack }) => {
     return (
@@ -25,16 +26,7 @@ const NotaryInformation = ({ handleBack }) => {
                 alignItems={'baseline'}
                 flexDirection={'row'}
             >
-                <Chip
-                    onClick={handleBack}
-                    label="Back"
-                    sx={{
-                        backgroundColor: '#5D87FF',
-                        color: 'white',
-                        marginRight: '20px',
-                        cursor: 'pointer',
-                    }}
-                />
+                <BackButton handleBack={handleBack}/>
                 <Typography variant="h5" gutterBottom style={{ marginBottom: '40px' }}>
                     Notary Information
                 </Typography>

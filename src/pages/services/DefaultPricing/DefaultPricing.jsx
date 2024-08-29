@@ -104,6 +104,20 @@ const DefaultPricing = () => {
         setShowTable(true)
     }
 
+    const fields = [
+        { label: 'Enter Service Name', name: 'serviceName', required: true },
+        {
+            label: 'Status',
+            name: 'status',
+            type: 'select',
+            select: true,
+            options: [
+                { label: 'Active', value: 'Active' },
+                { label: 'Inactive', value: 'Inactive' },
+            ],
+        },
+    ]
+
     const renderActionButton = (row, index) => (
         <>
             <Button
@@ -139,8 +153,9 @@ const DefaultPricing = () => {
                     handleSave={handleSave}
                     handleCancel={handleCancel}
                     isEditMode={editIndex !== null}
-                    input1={'Enter Service Name'}
+                    fields={fields}
                     isPrice={true}
+                    close={()=>setShowTable(true)}
                 />
             )}
         </div>

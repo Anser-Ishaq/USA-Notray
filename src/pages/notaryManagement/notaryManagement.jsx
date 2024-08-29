@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import {
     Box,
     Typography,
@@ -8,18 +8,18 @@ import {
     InputLabel,
     Chip,
     TextField,
-} from '@mui/material';
-import AddParticipant from '../../components/DynamicButton/DynamicButton';
-import NotaryInformation from './notaryInformation/notaryInformation';
-import FileModal from './fileModal/fileModal';
-import DynamicTable from '../../components/dynamicTable/dynamicTable2';
+} from '@mui/material'
+import AddParticipant from '../../components/DynamicButton/DynamicButton'
+import NotaryInformation from './notaryInformation/notaryInformation'
+import FileModal from './fileModal/fileModal'
+import DynamicTable from '../../components/dynamicTable/dynamicTable2'
 
 const NotaryManagement = () => {
-    const [showTable, setShowTable] = useState(true);
-    const [openFileModal, setOpenFileModal] = useState(false);
-    const [selectedNotaryId, setSelectedNotaryId] = useState(null);
-    const [selectedFilter, setSelectedFilter] = useState('All Notaries');
-    const [searchQuery, setSearchQuery] = useState('');
+    const [showTable, setShowTable] = useState(true)
+    const [openFileModal, setOpenFileModal] = useState(false)
+    const [selectedNotaryId, setSelectedNotaryId] = useState(null)
+    const [selectedFilter, setSelectedFilter] = useState('All Notaries')
+    const [searchQuery, setSearchQuery] = useState('')
     const [notaryData, setNotaryData] = useState([
         {
             id: 'ANDPET01',
@@ -77,44 +77,46 @@ const NotaryManagement = () => {
             certified: false,
             status: 'Disabled',
         },
-    ]);
+    ])
 
-    const notaries = ['All Notaries', 'Enabled Notaries', 'Disabled Notaries', 'Pending Notaries'];
+    const notaries = ['All Notaries', 'Enabled Notaries', 'Disabled Notaries', 'Pending Notaries']
 
     const handleRemove = (id) => {
-        setNotaryData(notaryData.filter((notary) => notary.id !== id));
-    };
+        setNotaryData(notaryData.filter((notary) => notary.id !== id))
+    }
 
     const handleOpenFileModal = (id) => {
-        setSelectedNotaryId(id);
-        setOpenFileModal(true);
-    };
+        setSelectedNotaryId(id)
+        setOpenFileModal(true)
+    }
 
     const handleCloseFileModal = () => {
-        setOpenFileModal(false);
-        setSelectedNotaryId(null);
-    };
+        setOpenFileModal(false)
+        setSelectedNotaryId(null)
+    }
 
     const handleFilterChange = (event) => {
-        setSelectedFilter(event.target.value);
-    };
+        setSelectedFilter(event.target.value)
+    }
 
     const handleSearchChange = (event) => {
-        setSearchQuery(event.target.value);
-    };
+        setSearchQuery(event.target.value)
+    }
 
     const filteredNotaryData = notaryData.filter((notary) => {
-        const matchesFilter = (selectedFilter === 'All Notaries') ||
+        const matchesFilter =
+            selectedFilter === 'All Notaries' ||
             (selectedFilter === 'Enabled Notaries' && notary.status === 'Enabled') ||
             (selectedFilter === 'Disabled Notaries' && notary.status === 'Disabled') ||
-            (selectedFilter === 'Pending Notaries' && notary.status === 'Pending');
+            (selectedFilter === 'Pending Notaries' && notary.status === 'Pending')
 
-        const matchesSearch = notary.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        const matchesSearch =
+            notary.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
             notary.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            notary.city.toLowerCase().includes(searchQuery.toLowerCase());
+            notary.city.toLowerCase().includes(searchQuery.toLowerCase())
 
-        return matchesFilter && matchesSearch;
-    });
+        return matchesFilter && matchesSearch
+    })
 
     const columns = [
         { label: 'ID', field: 'id' },
@@ -148,7 +150,7 @@ const NotaryManagement = () => {
                 />
             ),
         },
-    ];
+    ]
 
     const actionButtons = [
         {
@@ -171,7 +173,7 @@ const NotaryManagement = () => {
             color: 'warning',
             onClick: (id) => alert(`Disable clicked for ${id}`),
         },
-    ];
+    ]
 
     return (
         <div>
@@ -208,12 +210,14 @@ const NotaryManagement = () => {
                             <Typography variant="h6" component="div">
                                 All Notaries
                             </Typography>
-                            <FormControl variant="outlined" sx={{ minWidth: 150 }}>
-                                <InputLabel id="notary-select-label">All Notaries</InputLabel>
+                            <FormControl
+                                variant="outlined"
+                                size="small"
+                                sx={{ width: '200px', mb: 1 }}
+                            >
+                                <InputLabel id="notary-filter-label"></InputLabel>
                                 <Select
-                                    labelId="notary-select-label"
-                                    id="notary-select"
-                                    label="Notaries"
+                                    style={{ backgroundColor: '#6393e6', color: 'white' }}
                                     onChange={handleFilterChange}
                                 >
                                     {notaries.map((notary, index) => (
@@ -239,18 +243,26 @@ const NotaryManagement = () => {
                                 onClick={() => setShowTable(false)}
                             />
 
-                            <TextField size="small" placeholder="Search" onChange={handleSearchChange}/>
+                            <TextField
+                                size="small"
+                                placeholder="Search"
+                                onChange={handleSearchChange}
+                            />
                         </div>
                     </Box>
 
-                    <DynamicTable columns={columns} data={filteredNotaryData} actions={actionButtons} />
+                    <DynamicTable
+                        columns={columns}
+                        data={filteredNotaryData}
+                        actions={actionButtons}
+                    />
                 </Box>
             )}
             {!showTable && <NotaryInformation handleBack={() => setShowTable(true)} />}
 
             <FileModal open={openFileModal} handleClose={handleCloseFileModal} />
         </div>
-    );
-};
+    )
+}
 
-export default NotaryManagement;
+export default NotaryManagement

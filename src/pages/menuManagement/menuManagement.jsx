@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Box, Typography, Chip, TextField } from '@mui/material'
-import AddParticipant from '../../components/DynamicButton/DynamicButton'
+import AddParticipant, { BackButton } from '../../components/DynamicButton/DynamicButton'
 import DynamicTable from '../../components/dynamicTable/dynamicTable2'
 import CreateOrUpdate from '../../components/CreateOrUpdate/CreateOrUpdate'
 import FileModal from './Modal/Modal'
@@ -192,17 +192,15 @@ const MenuManagement = () => {
 
     const handleSave = () => {
         if (editIndex === null) {
-            // Creating new menu
             setNotaryData([
                 ...notaryData,
                 {
                     ...editData,
-                    id: notaryData.length + 1, // Assigning new ID
+                    id: notaryData.length + 1,
                     order: notaryData.length + 1,
                 },
             ])
         } else {
-            // Updating existing menu
             setNotaryData(
                 notaryData.map((item) =>
                     item.id === editIndex ? { ...editData, id: editIndex } : item,
@@ -304,15 +302,19 @@ const MenuManagement = () => {
                     />
                 )}
                 {!showTable && (
-                    <CreateOrUpdate
-                        formData={editData}
-                        handleChange={handleChange}
-                        handleSave={handleSave}
-                        handleCancel={handleCancel}
-                        isEditMode={editIndex !== null}
-                        fields={fields}
-                        note={true}
-                    />
+                    <>
+
+                        <CreateOrUpdate
+                            formData={editData}
+                            handleChange={handleChange}
+                            handleSave={handleSave}
+                            handleCancel={handleCancel}
+                            isEditMode={editIndex !== null}
+                            fields={fields}
+                            note={true}
+                            close={()=>setShowTable(true)}
+                        />
+                    </>
                 )}
             </Box>
             <FileModal

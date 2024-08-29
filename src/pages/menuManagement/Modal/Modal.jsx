@@ -10,7 +10,7 @@ import {
 } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import DynamicTable2 from '../../../components/dynamicTable/dynamicTable2'
-import { AddParticipant } from '../../../components/DynamicButton/DynamicButton'
+import { AddParticipant, BackButton } from '../../../components/DynamicButton/DynamicButton'
 import CreateOrUpdate from '../../../components/CreateOrUpdate/CreateOrUpdate'
 
 const FileModal = ({ open, handleClose, notaryItem }) => {
@@ -243,6 +243,8 @@ const FileModal = ({ open, handleClose, notaryItem }) => {
                                 Create Menu
                             </Typography>
                         </div>
+                        {/* <BackButton handleBack={()=>setShowTable(true)} /> */}
+
                             <CreateOrUpdate
                                 formData={editData}
                                 handleChange={handleChange}
@@ -251,6 +253,7 @@ const FileModal = ({ open, handleClose, notaryItem }) => {
                                 isEditMode={editIndex !== null}
                                 fields={fields}
                                 submenu={true}
+                                close={()=>setShowTable(true)}
                             />
                             </>
                         )}

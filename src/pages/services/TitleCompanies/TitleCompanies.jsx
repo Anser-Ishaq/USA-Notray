@@ -168,6 +168,7 @@ const TitleCompanies = () => {
                     isEditMode={editIndex !== null}
                     isPrice={true}
                     fields={fields}
+                    close={()=>setShowTable(true)}
                 />
             )}
         </div>

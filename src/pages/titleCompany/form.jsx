@@ -3,6 +3,7 @@ import {
   Button, TextField, FormControl, InputLabel, Select, MenuItem, Typography, Box, Grid, Checkbox, FormGroup, FormControlLabel, Divider,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import { BackButton } from '../../components/DynamicButton/DynamicButton';
 
 const UserForm = ({ formData, setFormData, roles, privileges, handleSubmit, handleClose }) => {
   const theme = useTheme();
@@ -68,17 +69,6 @@ const UserForm = ({ formData, setFormData, roles, privileges, handleSubmit, hand
     "South Dakota", "Tennessee", "Texas", "Utah", "Vermont",
     "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"
   ];
-//   const handleCheckboxChange = (privilege) => {
-//     setFormData((prevData) => {
-//       const updatedPrivileges = prevData.privileges.includes(privilege)
-//         ? prevData.privileges.filter((item) => item !== privilege)
-//         : [...prevData.privileges, privilege];
-//       return {
-//         ...prevData,
-//         privileges: updatedPrivileges,
-//       };
-//     });
-//   };
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -104,9 +94,8 @@ const UserForm = ({ formData, setFormData, roles, privileges, handleSubmit, hand
     >
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <Button variant="contained" onClick={handleClose} sx={{ alignSelf: 'flex-start' }}>
-            Back
-          </Button>
+          <BackButton handleBack={handleClose}/>
+
         </Grid>
         <Grid item xs={12}>
           <Typography variant="h6">Title Company Information</Typography>

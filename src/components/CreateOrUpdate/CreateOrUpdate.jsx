@@ -12,6 +12,7 @@ import {
     Typography,
     Divider,
 } from '@mui/material'
+import { BackButton } from '../DynamicButton/DynamicButton'
 
 const CreateOrUpdate = ({
     formData,
@@ -23,7 +24,8 @@ const CreateOrUpdate = ({
     fields,
     isPrice,
     submenu,
-    note
+    note,
+    close
 }) => {
     return (
         <Box
@@ -39,6 +41,8 @@ const CreateOrUpdate = ({
                 }),
             }}
         >
+                                    <div style={{marginBottom: "10px"}}><BackButton handleBack={close} /></div>
+
             {submenu || note ? (
                 <div
                     style={{

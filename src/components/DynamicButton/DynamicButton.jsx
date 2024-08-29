@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
+import { Chip } from '@mui/material';
 
 const StyledButton = styled(Button)(({ theme }) => ({
     marginRight: theme.spacing(2),
@@ -49,16 +50,18 @@ export const AddParticipant = ({ icon: Icon, onClick, children }) => {
     );
 };
 
-export const BackButton = ({ onClick, text = "Back", sx = {} }) => {
+export const BackButton = ({ handleBack }) => {
     return (
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={onClick}
-        sx={{ ...sx, textTransform: 'none', marginTop: '200px' }} 
-      >
-        {text}
-      </Button>
+        <Chip
+        onClick={handleBack}
+        label="Back"
+        sx={{
+            backgroundColor: '#5D87FF',
+            color: 'white',
+            marginRight: '20px',
+            cursor: 'pointer',
+        }}
+    />
     );
 };
 

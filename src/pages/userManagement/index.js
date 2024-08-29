@@ -5,6 +5,7 @@ import {
 import Swal from 'sweetalert2';
 import DynamicTable from '../../components/dynamicTable/dynamicTable';
 import UserForm from './form.jsx';
+import FilterComponent from '../../components/FilterComponent/filterComponent.jsx';
 
 const initialUsers = [
   {
@@ -187,23 +188,12 @@ const UserManagement = () => {
             User Management
           </Typography>
 
-          <Box display="flex" flexDirection="column" alignItems="flex-end" mr={3}>
-            <FormControl variant="outlined" size="small" sx={{ width: '200px', mb: 1 }}>
-              <InputLabel id="role-filter-label"></InputLabel>
-              <Select
-                value={selectedFilter}
-                onChange={handleFilterChange}
-                style={{ backgroundColor: '#6393e6', color: 'white' }}
-              >
-                {roleFilters.map((filter) => (
-                  <MenuItem key={filter} value={filter}>
-                    {icons[filter]} {filter}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <TextField variant="outlined" size="small" placeholder="Search" sx={{ width: '200px' }} />
-          </Box>
+          <FilterComponent
+            selectedFilter={selectedFilter}
+            handleFilterChange={handleFilterChange}
+            roleFilters={roleFilters}
+            icons={icons}
+          />
 
           <DynamicTable columns={columns} data={paginatedUsers} actionButton={actionButton} />
 
