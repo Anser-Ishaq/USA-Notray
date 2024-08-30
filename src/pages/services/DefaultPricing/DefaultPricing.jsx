@@ -2,10 +2,11 @@ import React, { useState } from 'react'
 import DynamicTable from '../../../components/dynamicTable/dynamicTable'
 import CreateOrUpdate from '../../../components/CreateOrUpdate/CreateOrUpdate'
 import { Button } from '@mui/material'
-import { AddParticipant } from '../../../components/DynamicButton/DynamicButton'
+import AddParticipant from '../../../components/DynamicButton/DynamicButton'
 import defaultPricingData from './data'
 
 const DefaultPricing = () => {
+    // State hooks
     const [editIndex, setEditIndex] = useState(null)
     const [showTable, setShowTable] = useState(true)
     const [editData, setEditData] = useState({
@@ -16,6 +17,7 @@ const DefaultPricing = () => {
     })
     const [jobsData, setJobsData] = useState(defaultPricingData)
 
+    // Columns definition for the table
     const columns = [
         { id: 'serviceName', label: 'Service Name' },
         { id: 'price', label: 'Price' },
@@ -24,16 +26,19 @@ const DefaultPricing = () => {
         { id: 'actions', label: 'Action' },
     ]
 
+    // Remove a job from the list
     const handleRemove = (index) => {
         setJobsData(jobsData.filter((_, i) => i !== index))
     }
 
+    // Set up for updating a job entry
     const handleUpdate = (index) => {
         setEditIndex(index)
         setEditData(jobsData[index])
         setShowTable(false)
     }
 
+    // Set up for creating a new job entry
     const handleCreate = () => {
         setEditIndex(null)
         setEditData({
@@ -45,6 +50,7 @@ const DefaultPricing = () => {
         setShowTable(false)
     }
 
+    // Handle changes in form fields
     const handleChange = (e) => {
         const { name, value } = e.target
         setEditData({
@@ -53,10 +59,14 @@ const DefaultPricing = () => {
         })
     }
 
+    // Save the form data, whether creating or updating
     const handleSave = () => {
         const updatedJobsData = [...jobsData]
         if (editIndex !== null) {
-            updatedJobsData[editIndex] = { ...editData, price: parseFloat(editData.price) }
+            updatedJobsData[editIndex] = {
+                ...editData,
+                price: parseFloat(editData.price),
+            }
         } else {
             updatedJobsData.push({
                 ...editData,
@@ -75,11 +85,13 @@ const DefaultPricing = () => {
         setShowTable(true)
     }
 
+    // Cancel the current edit or create operation
     const handleCancel = () => {
         setEditIndex(null)
         setShowTable(true)
     }
 
+    // Form fields configuration for CreateOrUpdate component
     const fields = [
         { label: 'Enter Service Name', name: 'serviceName', required: true },
         {
@@ -94,6 +106,7 @@ const DefaultPricing = () => {
         },
     ]
 
+    // Render action buttons (Update/Delete) for each row
     const renderActionButton = (row, index) => (
         <>
             <Button
@@ -112,17 +125,18 @@ const DefaultPricing = () => {
 
     return (
         <div>
-            {showTable && (
-           <>
-            <div style={{ marginBottom: "30px" }} onClick={handleCreate}>
-                <AddParticipant children={'Add new service'} />
-            </div>
-
-            
-                <DynamicTable actionButton={renderActionButton} columns={columns} data={jobsData} />
-           </>
-            )}
-            {!showTable && (
+            {showTable ? (
+                <>
+                    <div style={{ marginBottom: '30px' }} onClick={handleCreate}>
+                        <AddParticipant children={'Add new service'} />
+                    </div>
+                    <DynamicTable
+                        actionButton={renderActionButton}
+                        columns={columns}
+                        data={jobsData}
+                    />
+                </>
+            ) : (
                 <CreateOrUpdate
                     formData={editData}
                     handleChange={handleChange}
@@ -131,7 +145,7 @@ const DefaultPricing = () => {
                     isEditMode={editIndex !== null}
                     fields={fields}
                     isPrice={true}
-                    close={()=>setShowTable(true)}
+                    close={() => setShowTable(true)}
                 />
             )}
         </div>

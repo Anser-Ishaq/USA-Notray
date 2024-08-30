@@ -7,17 +7,16 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Typography,
 } from '@mui/material';
+import Heading from '../../components/Heading/heading'
 
-const logs = []; // This would be your data array
+const logs = []; 
 
 const NotarizationLogsTable = () => {
   return (
-    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <Typography variant="h6" sx={{ padding: '16px' }}>
-        All Notarization Logs
-      </Typography>
+    <Paper sx={{ width: '100%', overflow: 'hidden', padding: 2 }}>
+      <Heading heading={'All Notarization Logs'} />
+
       <TableContainer>
         <Table stickyHeader>
           <TableHead>

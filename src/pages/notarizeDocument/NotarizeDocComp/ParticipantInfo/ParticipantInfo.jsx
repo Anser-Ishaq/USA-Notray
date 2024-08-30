@@ -1,7 +1,20 @@
-import React, { useState } from 'react';
-import QuantityInput from '../../../../components/NumberInput/NumberInput';
-import { Grid, Paper, Button, Box, Typography, TextField, RadioGroup, FormControlLabel, Radio, IconButton, Select, MenuItem } from '@mui/material';
-import { Add as AddIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import React, { useState } from 'react'
+import QuantityInput from '../../../../components/NumberInput/NumberInput'
+import {
+    Grid,
+    Paper,
+    Button,
+    Box,
+    Typography,
+    TextField,
+    RadioGroup,
+    FormControlLabel,
+    Radio,
+    IconButton,
+    Select,
+    MenuItem,
+} from '@mui/material'
+import { Add as AddIcon, Delete as DeleteIcon } from '@mui/icons-material'
 import AddParticipant from '../../../../components/DynamicButton/DynamicButton'
 
 const columns = [
@@ -11,34 +24,46 @@ const columns = [
     { id: 'Role', label: 'Role', xs: 1.5 },
     { id: 'Same Location', label: 'Same Location', xs: 2 },
     { id: 'Same Time', label: 'Same Time', xs: 2 },
-    { id: 'Action', label: 'Action', xs: 1 }
-];
+    { id: 'Action', label: 'Action', xs: 1 },
+]
 
 const ParticipantInfo = () => {
+    // State to manage signers' information
     const [signers, setSigners] = useState([
-        { name: '', email: '', phone: '', role: 'Main Signer', sameLocation: 'No', sameTime: 'No' }
-    ]);
+        { name: '', email: '', phone: '', role: 'Main Signer', sameLocation: 'No', sameTime: 'No' },
+    ])
 
+    // Handle input change for signers
     const handleChange = (index, event) => {
-        const { name, value } = event.target;
-        const newSigners = [...signers];
-        newSigners[index][name] = value;
-        setSigners(newSigners);
-    };
+        const { name, value } = event.target
+        const newSigners = [...signers]
+        newSigners[index][name] = value
+        setSigners(newSigners)
+    }
 
+    // Add a new signer row
     const handleAddRow = () => {
         setSigners([
             ...signers,
-            { name: '', email: '', phone: '', role: 'Main Signer', sameLocation: 'No', sameTime: 'No' }
-        ]);
-    };
+            {
+                name: '',
+                email: '',
+                phone: '',
+                role: 'Main Signer',
+                sameLocation: 'No',
+                sameTime: 'No',
+            },
+        ])
+    }
 
+    // Remove a specific signer row
     const handleRemoveRow = (index) => {
-        setSigners(signers.filter((_, i) => i !== index));
-    };
+        setSigners(signers.filter((_, i) => i !== index))
+    }
 
     return (
         <div style={{ marginTop: '40px' }}>
+            {/* Section for specifying the number of signers */}
             <Grid container spacing={2}>
                 <Grid
                     item
@@ -62,32 +87,22 @@ const ParticipantInfo = () => {
                         2. Are signers in different locations?
                     </span>
                     <RadioGroup row>
-                        <FormControlLabel
-                            value="Yes"
-                            control={<Radio />}
-                            label="Yes"
-                        />
-                        <FormControlLabel
-                            value="No"
-                            control={<Radio />}
-                            label="No"
-                        />
+                        <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
+                        <FormControlLabel value="No" control={<Radio />} label="No" />
                     </RadioGroup>
                 </Grid>
             </Grid>
+
+            {/* Section for displaying and managing signer information */}
             <Box marginTop={'20px'}>
-                <Box
-                    display="flex"
-                    bgcolor="#00b0ff"
-                    p={2}
-                    borderRadius="4px"
-                >
+                <Box display="flex" bgcolor="#00b0ff" p={2} borderRadius="4px">
                     <Typography variant="h6" color="white">
                         Signer Information
                     </Typography>
                 </Box>
 
                 <Paper elevation={1} style={{ padding: '5px' }}>
+                    {/* Header for the table columns */}
                     <Grid container spacing={1} style={{ fontWeight: 'bold' }}>
                         {columns.map((column) => (
                             <Grid item xs={column.xs} key={column.id}>
@@ -96,8 +111,15 @@ const ParticipantInfo = () => {
                         ))}
                     </Grid>
 
+                    {/* Dynamic rows for each signer */}
                     {signers.map((signer, index) => (
-                        <Grid container spacing={2} key={index} alignItems="center" style={{ marginTop: '10px' }}>
+                        <Grid
+                            container
+                            spacing={2}
+                            key={index}
+                            alignItems="center"
+                            style={{ marginTop: '10px' }}
+                        >
                             <Grid item xs={1.5}>
                                 <TextField
                                     name="name"
@@ -141,16 +163,8 @@ const ParticipantInfo = () => {
                                     onChange={(e) => handleChange(index, e)}
                                     style={{ display: 'flex', justifyContent: 'center' }}
                                 >
-                                    <FormControlLabel
-                                        value="Yes"
-                                        control={<Radio />}
-                                        label="Yes"
-                                    />
-                                    <FormControlLabel
-                                        value="No"
-                                        control={<Radio />}
-                                        label="No"
-                                    />
+                                    <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
+                                    <FormControlLabel value="No" control={<Radio />} label="No" />
                                 </RadioGroup>
                             </Grid>
                             <Grid item xs={2}>
@@ -160,16 +174,8 @@ const ParticipantInfo = () => {
                                     value={signer.sameTime}
                                     onChange={(e) => handleChange(index, e)}
                                 >
-                                    <FormControlLabel
-                                        value="Yes"
-                                        control={<Radio />}
-                                        label="Yes"
-                                    />
-                                    <FormControlLabel
-                                        value="No"
-                                        control={<Radio />}
-                                        label="No"
-                                    />
+                                    <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
+                                    <FormControlLabel value="No" control={<Radio />} label="No" />
                                 </RadioGroup>
                             </Grid>
                             <Grid item xs={1}>
@@ -182,16 +188,15 @@ const ParticipantInfo = () => {
                             </Grid>
                         </Grid>
                     ))}
-                    <AddParticipant
-                    icon={AddIcon}
-                    onClick={handleAddRow}
-                >
-                    Add Participant
-                </AddParticipant>
+
+                    {/* Button to add a new signer */}
+                    <AddParticipant icon={AddIcon} onClick={handleAddRow}>
+                        Add Participant
+                    </AddParticipant>
                 </Paper>
             </Box>
         </div>
-    );
-};
+    )
+}
 
-export default ParticipantInfo;
+export default ParticipantInfo

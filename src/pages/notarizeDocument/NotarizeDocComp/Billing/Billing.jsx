@@ -2,6 +2,7 @@ import React from 'react'
 import BillingDetails from '../../../../components/BillingDetail/BillingDetail'
 import { Box } from '@mui/system'
 import { Grid, TextField, Typography } from '@mui/material'
+import Heading from '../../../../components/Heading/heading'
 
 const Billing = () => {
     const Billing1 = [
@@ -39,9 +40,8 @@ const Billing = () => {
                     marginBottom: '20px',
                 }}
             >
-                <Typography variant="h6" gutterBottom fontWeight="bold" color="primary">
-                    Payment
-                </Typography>
+                <Heading heading={'Payment'} />
+
                 <Grid container spacing={2} style={{ display: 'flex', flexDirection: 'column' }}>
                     <Grid item sm={6}>
                         <TextField

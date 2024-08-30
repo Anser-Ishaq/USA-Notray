@@ -5,6 +5,7 @@ import {
 import { useTheme } from '@mui/material/styles';
 import { BackButton } from '../../components/DynamicButton/DynamicButton';
 import { stateOptions, timeZones } from './data';
+import Heading from '../../components/Heading/heading'
 
 const UserForm = ({ formData, setFormData, roles, privileges, handleSubmit, handleClose }) => {
   const theme = useTheme();
@@ -45,8 +46,9 @@ const UserForm = ({ formData, setFormData, roles, privileges, handleSubmit, hand
 
         </Grid>
         <Grid item xs={12}>
-          <Typography variant="h6">Title Company Information</Typography>
+        <Heading heading={'Title Company Information'} />
         </Grid>
+
 
         <Grid item xs={12} md={6}>
           <TextField
@@ -184,7 +186,7 @@ const UserForm = ({ formData, setFormData, roles, privileges, handleSubmit, hand
     
   <Grid item xs={12} md={2}>
     <FormControl fullWidth variant="outlined" required>
-      <InputLabel>--select--</InputLabel>
+      <InputLabel>Time Zone</InputLabel>
       <Select
         label="Time Zone"
         name="timeZone"
@@ -243,7 +245,7 @@ const UserForm = ({ formData, setFormData, roles, privileges, handleSubmit, hand
 
         <Grid item xs={12} md={2}>
     <FormControl fullWidth variant="outlined" required>
-      <InputLabel>--select--</InputLabel>
+      <InputLabel>Time Zone</InputLabel>
       <Select
         label="Time Zone"
         name="timeZone"
@@ -302,7 +304,7 @@ const UserForm = ({ formData, setFormData, roles, privileges, handleSubmit, hand
         
         <Grid item xs={12} md={2}>
     <FormControl fullWidth variant="outlined" required>
-      <InputLabel>--select--</InputLabel>
+      <InputLabel>Time Zone</InputLabel>
       <Select
         label="Time Zone"
         name="timeZone"
@@ -362,7 +364,7 @@ const UserForm = ({ formData, setFormData, roles, privileges, handleSubmit, hand
         
         <Grid item xs={12} md={2}>
     <FormControl fullWidth variant="outlined" required>
-      <InputLabel>--select--</InputLabel>
+      <InputLabel>Time Zone</InputLabel>
       <Select
         label="Time Zone"
         name="timeZone"

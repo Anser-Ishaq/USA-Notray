@@ -5,8 +5,11 @@ import DynamicTable from '../../components/dynamicTable/dynamicTable2'
 import CreateOrUpdate from '../../components/CreateOrUpdate/CreateOrUpdate'
 import FileModal from './Modal/Modal'
 import menuData from './data'
+import Heading from '../../components/Heading/heading'
+import Search from '../../components/Search/search'
 
 const MenuManagement = () => {
+    // State management
     const [openFileModal, setOpenFileModal] = useState(false)
     const [selectedNotary, setSelectedNotary] = useState(null)
     const [searchQuery, setSearchQuery] = useState('')
@@ -21,24 +24,29 @@ const MenuManagement = () => {
 
     const [notaryData, setNotaryData] = useState(menuData)
 
+    // Handle removing an entry
     const handleRemove = (id) => {
         setNotaryData(notaryData.filter((notary) => notary.id !== id))
     }
 
+    // Open modal for file operations
     const handleOpenFileModal = (id) => {
         const item = notaryData.find((notary) => notary.id === id)
         setSelectedNotary(item)
         setOpenFileModal(true)
     }
 
+    // Handle search input change
     const handleSearchChange = (event) => {
         setSearchQuery(event.target.value)
     }
 
+    // Filtered notary data based on search query
     const filteredNotaryData = notaryData.filter((notary) => {
         return notary.name.toLowerCase().includes(searchQuery.toLowerCase())
     })
 
+    // Handle editing an entry
     const handleEdit = (id) => {
         const item = notaryData.find((notary) => notary.id === id)
         if (item) {
@@ -48,6 +56,7 @@ const MenuManagement = () => {
         }
     }
 
+    // Table columns definition
     const columns = [
         { label: 'Order', field: 'order' },
         { label: 'Name', field: 'name' },
@@ -68,6 +77,7 @@ const MenuManagement = () => {
         },
     ]
 
+    // Form fields definition
     const fields = [
         { label: 'Enter Menu Name', name: 'name', required: true },
         { label: 'Enter Menu Icon', name: 'icon', required: true },
@@ -84,6 +94,7 @@ const MenuManagement = () => {
         },
     ]
 
+    // Action buttons configuration
     const actionButtons = [
         {
             label: 'SubMenu',
@@ -102,6 +113,7 @@ const MenuManagement = () => {
         },
     ]
 
+    // Handle form input changes
     const handleChange = (e) => {
         const { name, value } = e.target
         setEditData({
@@ -110,6 +122,7 @@ const MenuManagement = () => {
         })
     }
 
+    // Handle saving data (add or update)
     const handleSave = () => {
         if (editIndex === null) {
             setNotaryData([
@@ -137,112 +150,100 @@ const MenuManagement = () => {
         setShowTable(true)
     }
 
+    // Handle canceling edit
     const handleCancel = () => {
         setEditIndex(null)
         setShowTable(true)
     }
 
     return (
-        <div>
+        <Box
+            sx={{
+                padding: 5,
+                border: '1px solid #e0e0e0',
+                borderRadius: 2,
+                boxShadow: 2,
+                width: 900,
+                margin: 'auto',
+                marginTop: '20px',
+            }}
+        >
             <Box
                 sx={{
-                    padding: 5,
-                    border: '1px solid #e0e0e0',
-                    borderRadius: 2,
-                    boxShadow: 2,
-                    width: 900,
-                    margin: 'auto',
-                    marginTop: '20px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                    width: '100%',
                 }}
             >
                 <Box
                     sx={{
                         display: 'flex',
                         alignItems: 'center',
-                        justifyContent: 'center',
-                        flexDirection: 'column',
+                        justifyContent: 'space-between',
                         width: '100%',
                     }}
                 >
-                    <div
-                        style={{
+                    <Heading heading={showTable ? 'Menu List' : 'Create Menu'} />
+                </Box>
+
+                {showTable && (
+                    <Box
+                        sx={{
                             display: 'flex',
-                            alignItems: 'center',
                             justifyContent: 'space-between',
-                            flexDirection: 'row',
                             width: '100%',
+                            flexDirection: 'column',
+                            marginTop: '20px',
                         }}
                     >
-                        <Typography variant="h6" component="div">
-                            {showTable ? 'Menu List' : 'Create Menu'}
-                        </Typography>
-                    </div>
-                    {showTable && (
-                        <div
-                            style={{
+                        <Box
+                            sx={{
                                 display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                flexDirection: 'row',
-                                width: '100%',
-                                marginTop: '20px',
+                                alignItems: 'flex-start',
+                                justifyContent: 'flex-start',
                             }}
                         >
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-between',
-                                    width: '40%',
-                                }}
-                            >
-                                <AddParticipant
-                                    children={'Create'}
-                                    onClick={() => setShowTable(false)}
-                                />
-                                <AddParticipant children={'Switch Menu Live URL'} />
-                            </div>
-
-                            <TextField
-                                size="small"
-                                placeholder="Search"
-                                onChange={handleSearchChange}
+                            <AddParticipant
+                                children={'Create'}
+                                onClick={() => setShowTable(false)}
                             />
-                        </div>
-                    )}
-                </Box>
-                {showTable && (
-                    <DynamicTable
-                        columns={columns}
-                        data={filteredNotaryData}
-                        actions={actionButtons.map((button) => ({
-                            ...button,
-                            onClick: (id) => button.onClick(id),
-                        }))}
-                    />
-                )}
-                {!showTable && (
-                    <>
-
-                        <CreateOrUpdate
-                            formData={editData}
-                            handleChange={handleChange}
-                            handleSave={handleSave}
-                            handleCancel={handleCancel}
-                            isEditMode={editIndex !== null}
-                            fields={fields}
-                            note={true}
-                            close={()=>setShowTable(true)}
-                        />
-                    </>
+                            <AddParticipant children={'Switch Menu Live URL'} />
+                        </Box>
+                        <Search handleSearch={handleSearchChange} />
+                    </Box>
                 )}
             </Box>
+
+            {showTable ? (
+                <DynamicTable
+                    columns={columns}
+                    data={filteredNotaryData}
+                    actions={actionButtons.map((button) => ({
+                        ...button,
+                        onClick: (id) => button.onClick(id),
+                    }))}
+                />
+            ) : (
+                <CreateOrUpdate
+                    formData={editData}
+                    handleChange={handleChange}
+                    handleSave={handleSave}
+                    handleCancel={handleCancel}
+                    isEditMode={editIndex !== null}
+                    fields={fields}
+                    note={true}
+                    close={() => setShowTable(true)}
+                />
+            )}
+
             <FileModal
                 open={openFileModal}
                 handleClose={() => setOpenFileModal(false)}
                 notaryItem={selectedNotary}
             />
-        </div>
+        </Box>
     )
 }
 

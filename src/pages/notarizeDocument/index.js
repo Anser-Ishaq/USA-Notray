@@ -8,7 +8,10 @@ import ScheduleAndDoc from './NotarizeDocComp/ScheduleAndDoc/ScheduleAndDoc'
 import Billing from './NotarizeDocComp/Billing/Billing'
 
 const NotarizeDocument = () => {
-    const price = 25 || useStore((state) => state.price);
+    // Retrieve price from store or default to 25
+    const price = 25 || useStore((state) => state.price)
+
+    // Define steps for the stepper component
     const steps = [
         'Client Information',
         "Participant's Information",
@@ -18,11 +21,13 @@ const NotarizeDocument = () => {
 
     return (
         <div>
+            {/* Display total price */}
             <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
                 <Typography variant="h5" gutterBottom>
                     Total Price: <span style={{ fontWeight: 'bold' }}>{`$ ${price}.00`}</span>
                 </Typography>
             </div>
+            {/* Container for the stepper component */}
             <div style={{ boxShadow: '3px 3px 20px #E6EFFF', padding: '60px' }}>
                 <Steppers
                     steps={steps}

@@ -1,4 +1,3 @@
-// src/components/UserForm.jsx
 import React from 'react'
 import {
     Button,
@@ -16,6 +15,7 @@ import {
 } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { BackButton } from '../../components/DynamicButton/DynamicButton'
+import Heading from '../../components/Heading/heading'
 
 const UserForm = ({ formData, setFormData, roles, privileges, handleSubmit, handleClose }) => {
     const theme = useTheme()
@@ -62,12 +62,9 @@ const UserForm = ({ formData, setFormData, roles, privileges, handleSubmit, hand
                 boxShadow: theme.shadows[5],
             }}
         >
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
                 <BackButton handleBack={handleClose} />
-
-                <Typography variant="h6" sx={{ flexGrow: 1 }} style={{ marginLeft: '10px' }}>
-                    User Information
-                </Typography>
+                <Heading heading={'User Information'} />
             </Box>
 
             <Box sx={{ display: 'flex', gap: 3, flexDirection: { xs: 'column', md: 'row' } }}>
