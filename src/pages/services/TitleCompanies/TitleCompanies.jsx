@@ -6,6 +6,7 @@ import { AddParticipant } from '../../../components/DynamicButton/DynamicButton'
 import { titleCompany } from '../../../Data/OptionValues'
 import DynamicTable from '../../../components/dynamicTable/dynamicTable'
 import CreateOrUpdate from '../../../components/CreateOrUpdate/CreateOrUpdate'
+import titleCompaniesData from './data'
 
 const TitleCompanies = () => {
     const [editIndex, setEditIndex] = useState(null)
@@ -16,32 +17,7 @@ const TitleCompanies = () => {
         status: '',
         dateCreated: '',
     })
-    const [jobsData, setJobsData] = useState([
-        {
-            serviceName: 'Title Closing Seller Side',
-            price: 25,
-            dateCreated: '05 Dec 23 - 03:23 PM',
-            status: 'Active',
-        },
-        {
-            serviceName: 'Single Document',
-            price: 30,
-            dateCreated: '05 Dec 23 - 03:23 PM',
-            status: 'Inactive',
-        },
-        {
-            serviceName: 'Title Closing Buyers Side With Loans',
-            price: 50,
-            dateCreated: '05 Dec 23 - 03:23 PM',
-            status: 'Inactive',
-        },
-        {
-            serviceName: 'Title Closing Buyers Side',
-            price: 100,
-            dateCreated: '05 Dec 23 - 03:23 PM',
-            status: 'Active',
-        },
-    ])
+    const [jobsData, setJobsData] = useState(titleCompaniesData)
 
     const fields = [
         { label: 'Enter Service Name', name: 'serviceName', required: true },

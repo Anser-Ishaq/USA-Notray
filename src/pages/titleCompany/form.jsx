@@ -4,6 +4,7 @@ import {
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { BackButton } from '../../components/DynamicButton/DynamicButton';
+import { stateOptions, timeZones } from './data';
 
 const UserForm = ({ formData, setFormData, roles, privileges, handleSubmit, handleClose }) => {
   const theme = useTheme();
@@ -15,60 +16,6 @@ const UserForm = ({ formData, setFormData, roles, privileges, handleSubmit, hand
       [name]: value,
     });
   };
-  const timeZones = [
-    "Pacific/Kwajalein Standard Time",
-    "Pacific/Samoa Standard Time",
-    "Pacific/Midway Standard Time",
-    "Pacific/Honolulu Standard Time",
-    "America/Juneau Standard Time",
-    "America/Los_Angeles Standard Time",
-    "America/Denver Standard Time",
-    "America/Chicago Standard Time",
-    "America/New_York Standard Time",
-    "America/Caracas Standard Time",
-    "America/St_Johns Standard Time",
-    "America/Sao_Paulo Standard Time",
-    "Atlantic/South_Georgia Standard Time",
-    "Atlantic/Azores Standard Time",
-    "Atlantic/Reykjavik Standard Time",
-    "Europe/London Standard Time",
-    "Europe/Paris Standard Time",
-    "Europe/Moscow Standard Time",
-    "Asia/Tehran Standard Time",
-    "Asia/Dubai Standard Time",
-    "Asia/Kabul Standard Time",
-    "Asia/Karachi Standard Time",
-    "Asia/Kolkata Standard Time",
-    "Asia/Kathmandu Standard Time",
-    "Asia/Dhaka Standard Time",
-    "Asia/Yangon Standard Time",
-    "Asia/Bangkok Standard Time",
-    "Asia/Hong_Kong Standard Time",
-    "Australia/Eucla Standard Time",
-    "Asia/Tokyo Standard Time",
-    "Australia/Adelaide Standard Time",
-    "Australia/Sydney Standard Time",
-    "Australia/Lord_Howe Standard Time",
-    "Pacific/Noumea Standard Time",
-    "Pacific/Norfolk Standard Time",
-    "Pacific/Auckland Standard Time",
-    "Pacific/Chatham Standard Time",
-    "Pacific/Tongatapu Standard Time",
-    "Pacific/Kiritimati Standard Time"
-  ];
-  
-  const stateOptions = [
-    "Alabama", "Alaska", "Arizona", "Arkansas", "California",
-    "Colorado", "Connecticut", "Delaware", "Florida", "Georgia",
-    "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa",
-    "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland",
-    "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri",
-    "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey",
-    "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio",
-    "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina",
-    "South Dakota", "Tennessee", "Texas", "Utah", "Vermont",
-    "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"
-  ];
 
   const handleFormSubmit = (e) => {
     e.preventDefault();

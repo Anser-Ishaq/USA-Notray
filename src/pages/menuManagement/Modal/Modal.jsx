@@ -243,8 +243,6 @@ const FileModal = ({ open, handleClose, notaryItem }) => {
                                 Create Menu
                             </Typography>
                         </div>
-                        {/* <BackButton handleBack={()=>setShowTable(true)} /> */}
-
                             <CreateOrUpdate
                                 formData={editData}
                                 handleChange={handleChange}

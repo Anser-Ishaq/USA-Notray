@@ -8,35 +8,14 @@ import AddParticipant from '../../components/DynamicButton/DynamicButton';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import PaymentsIcon from '@mui/icons-material/Payments';
 import UserForm from './form';
+import { jobsdata } from './data';
 
 const TitleCompany = () => {
   const [editIndex, setEditIndex] = useState(null);
   const [showTable, setShowTable] = useState(true);
   const [filterStatus, setFilterStatus] = useState('Approved');
   const [searchQuery, setSearchQuery] = useState(''); 
-  const [jobsData, setJobsData] = useState([
-    {
-      CompanyName: 'SoftMark Solutions',
-      ContactName: 'Abdul',
-      Email: 'abc@gmail.com',
-      City: 'Karachi',
-      status: 'Approved',
-    },
-    {
-      CompanyName: 'SoftMark Solutions',
-      ContactName: 'John Doe',
-      Email: 'john@gmail.com',
-      City: 'Lahore',
-      status: 'Pending',
-    },
-    {
-      CompanyName: 'SoftMark Solutions',
-      ContactName: 'Jane Doe',
-      Email: 'jane@gmail.com',
-      City: 'Islamabad',
-      status: 'Pending',
-    },
-  ]);
+  const [jobsData, setJobsData] = useState(jobsdata);
 
   const columns = [
     { id: 'CompanyName', label: 'Company Name' },

@@ -3,6 +3,7 @@ import DynamicTable from '../../../components/dynamicTable/dynamicTable'
 import CreateOrUpdate from '../../../components/CreateOrUpdate/CreateOrUpdate'
 import { Button } from '@mui/material'
 import { AddParticipant } from '../../../components/DynamicButton/DynamicButton'
+import defaultPricingData from './data'
 
 const DefaultPricing = () => {
     const [editIndex, setEditIndex] = useState(null)
@@ -13,32 +14,7 @@ const DefaultPricing = () => {
         status: '',
         dateCreated: '',
     })
-    const [jobsData, setJobsData] = useState([
-        {
-            serviceName: 'Title Closing Seller Side', 
-            price: 25,
-            dateCreated: '05 Dec 23 - 03:23 PM',
-            status: 'Active',
-        },
-        {
-            serviceName: 'Single Document',
-            price: 30,
-            dateCreated: '05 Dec 23 - 03:23 PM',
-            status: 'Inactive',
-        },
-        {
-            serviceName: 'Title Closing Buyers Side With Loans',
-            price: 50,
-            dateCreated: '05 Dec 23 - 03:23 PM',
-            status: 'Inactive',
-        },
-        {
-            serviceName: 'Title Closing Buyers Side',
-            price: 100,
-            dateCreated: '05 Dec 23 - 03:23 PM',
-            status: 'Active',
-        },
-    ])
+    const [jobsData, setJobsData] = useState(defaultPricingData)
 
     const columns = [
         { id: 'serviceName', label: 'Service Name' },

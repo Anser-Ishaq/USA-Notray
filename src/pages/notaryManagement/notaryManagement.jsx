@@ -1,86 +1,31 @@
 import React, { useState } from 'react'
-import {
-    Box,
-    Typography,
-    Select,
-    MenuItem,
-    FormControl,
-    InputLabel,
-    Chip,
-    TextField,
-} from '@mui/material'
+import { Box, Typography, Select, MenuItem, FormControl, Chip, InputLabel } from '@mui/material'
 import AddParticipant from '../../components/DynamicButton/DynamicButton'
 import NotaryInformation from './notaryInformation/notaryInformation'
 import FileModal from './fileModal/fileModal'
 import DynamicTable from '../../components/dynamicTable/dynamicTable2'
+import notaryInfo from './data'
+import Search from '../../components/Search/search'
+import Heading from '../../components/Heading/heading'
 
 const NotaryManagement = () => {
+    // State management
     const [showTable, setShowTable] = useState(true)
     const [openFileModal, setOpenFileModal] = useState(false)
     const [selectedNotaryId, setSelectedNotaryId] = useState(null)
     const [selectedFilter, setSelectedFilter] = useState('All Notaries')
     const [searchQuery, setSearchQuery] = useState('')
-    const [notaryData, setNotaryData] = useState([
-        {
-            id: 'ANDPET01',
-            fullName: 'Peta-Gaye Anderson',
-            email: 'petagaye@pglservices.net',
-            city: 'sunrise',
-            certified: true,
-            status: 'Enabled',
-        },
-        {
-            id: 'ARNPAT08',
-            fullName: 'Patricia Arnaiz Chipoco',
-            email: 'patricia.arnaiz1@gmail.com',
-            city: 'Palm Bay',
-            certified: false,
-            status: 'Disabled',
-        },
-        {
-            id: 'FEADAL05',
-            fullName: 'Dalarrion featherston',
-            email: 'dalarrionf@gmail.com',
-            city: 'hampton',
-            certified: true,
-            status: 'Enabled',
-        },
-        {
-            id: 'KARSUS07',
-            fullName: 'Susan Karen Oliveira',
-            email: 'susan@oliveriamobilenotary.com',
-            city: 'Palm Bay',
-            certified: false,
-            status: 'Disabled',
-        },
-        {
-            id: 'LEHBRI10',
-            fullName: 'Brian Lehman',
-            email: 'brianlehman97@gmail.com',
-            city: '..',
-            certified: true,
-            status: 'Enabled',
-        },
-        {
-            id: 'MCCVAN04',
-            fullName: 'Vanessa McCarsky',
-            email: 'enotaryrva@gmail.com',
-            city: 'Henrico',
-            certified: true,
-            status: 'Enabled',
-        },
-        {
-            id: 'N-1-a5d25',
-            fullName: 'Muhammad Umer',
-            email: 'm.umer@softvira.com',
-            city: 'Ashland',
-            certified: false,
-            status: 'Disabled',
-        },
-    ])
+    const [notaryData, setNotaryData] = useState(notaryInfo)
 
-    const notaries = ['All Notaries', 'Enabled Notaries', 'Disabled Notaries', 'Pending Notaries']
+    // Filter options
+    const notaryFilterOptions = [
+        'All Notaries',
+        'Enabled Notaries',
+        'Disabled Notaries',
+        'Pending Notaries',
+    ]
 
+    // Event Handlers
     const handleRemove = (id) => {
         setNotaryData(notaryData.filter((notary) => notary.id !== id))
     }
@@ -103,6 +48,7 @@ const NotaryManagement = () => {
         setSearchQuery(event.target.value)
     }
 
+    // Filtered Data
     const filteredNotaryData = notaryData.filter((notary) => {
         const matchesFilter =
             selectedFilter === 'All Notaries' ||
@@ -118,6 +64,7 @@ const NotaryManagement = () => {
         return matchesFilter && matchesSearch
     })
 
+    // Table Columns Definition
     const columns = [
         { label: 'ID', field: 'id' },
         { label: 'Full Name', field: 'fullName' },
@@ -152,6 +99,7 @@ const NotaryManagement = () => {
         },
     ]
 
+    // Action Buttons Definition
     const actionButtons = [
         {
             label: 'Files',
@@ -177,14 +125,14 @@ const NotaryManagement = () => {
 
     return (
         <div>
-            {showTable && (
+            {showTable ? (
                 <Box
                     sx={{
-                        padding: 5,
                         border: '1px solid #e0e0e0',
                         borderRadius: 2,
                         boxShadow: 2,
                         width: 900,
+                        // maxWidth: 'auto',
                         margin: 'auto',
                         marginTop: '20px',
                     }}
@@ -192,74 +140,60 @@ const NotaryManagement = () => {
                     <Box
                         sx={{
                             display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
                             flexDirection: 'column',
                             width: '100%',
+                            padding: 2,
                         }}
                     >
-                        <div
-                            style={{
+                        {/* Header Section */}
+                            <Heading heading={'All Notaries'}/>
+                            
+                        {/* Action and Search Section */}
+                        <Box
+                            sx={{
                                 display: 'flex',
-                                alignItems: 'center',
                                 justifyContent: 'space-between',
-                                flexDirection: 'row',
-                                width: '100%',
+                                alignItems: 'center',
+                                marginTop: 2,
                             }}
                         >
-                            <Typography variant="h6" component="div">
-                                All Notaries
-                            </Typography>
-                            <FormControl
-                                variant="outlined"
-                                size="small"
-                                sx={{ width: '200px', mb: 1 }}
-                            >
+                            <AddParticipant onClick={() => setShowTable(false)}>
+                                Create
+                            </AddParticipant>
+                        </Box>
+                        <Box  display={'flex'} flexDirection={'column'} alignItems={'flex-end'} justifyContent={'center'} gap={1}>
+                        <FormControl variant="outlined" size="small" sx={{ width: '200px' }}>
                                 <InputLabel id="notary-filter-label"></InputLabel>
                                 <Select
-                                    style={{ backgroundColor: '#6393e6', color: 'white' }}
+                                    value={selectedFilter}
                                     onChange={handleFilterChange}
+                                    label="Filter"
+                                    sx={{ backgroundColor: '#6393e6', color: 'white' }}
                                 >
-                                    {notaries.map((notary, index) => (
-                                        <MenuItem key={index} value={notary}>
-                                            {notary}
+                                    {notaryFilterOptions.map((option, index) => (
+                                        <MenuItem key={index} value={option}>
+                                            {option}
                                         </MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>
-                        </div>
-                        <div
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                flexDirection: 'row',
-                                width: '100%',
-                                marginTop: '20px',
-                            }}
-                        >
-                            <AddParticipant
-                                children={'Create'}
-                                onClick={() => setShowTable(false)}
-                            />
+                            <Search handleSearch={handleSearchChange} />
+                        </Box>
 
-                            <TextField
-                                size="small"
-                                placeholder="Search"
-                                onChange={handleSearchChange}
-                            />
-                        </div>
+                        {/* Dynamic Table */}
+                        <DynamicTable
+                            columns={columns}
+                            data={filteredNotaryData}
+                            actions={actionButtons}
+                            sx={{ marginTop: 2 }}
+                        />
                     </Box>
-
-                    <DynamicTable
-                        columns={columns}
-                        data={filteredNotaryData}
-                        actions={actionButtons}
-                    />
                 </Box>
+            ) : (
+                <NotaryInformation handleBack={() => setShowTable(true)} />
             )}
-            {!showTable && <NotaryInformation handleBack={() => setShowTable(true)} />}
 
+            {/* File Modal */}
             <FileModal open={openFileModal} handleClose={handleCloseFileModal} />
         </div>
     )
