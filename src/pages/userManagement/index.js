@@ -164,7 +164,7 @@ const UserManagement = () => {
     );
 
     return (
-        <Box sx={{ margin: 'auto', marginTop: '20px', maxWidth: 900 }}>
+        <Box sx={{ margin: 'auto', marginTop: '20px', maxWidth: 1000 ,}}>
             {showForm ? (
                 <UserForm
                     formData={formData}

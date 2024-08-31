@@ -160,10 +160,10 @@ const MenuManagement = () => {
         <Box
             sx={{
                 padding: 5,
-                border: '1px solid #e0e0e0',
+                // border: '1px solid #e0e0e0',
                 borderRadius: 2,
                 boxShadow: 2,
-                width: 900,
+                width: 1000,
                 margin: 'auto',
                 marginTop: '20px',
             }}

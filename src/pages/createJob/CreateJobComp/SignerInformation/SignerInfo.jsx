@@ -42,7 +42,7 @@ const SignerInfo = () => {
                         justifyContent="space-between"
                         alignItems="center"
                         bgcolor="#00b0ff"
-                        p={2}
+                        p={3}
                         flexDirection={{ xs: 'column', sm: 'row' }}
                         borderRadius="4px"
                     >

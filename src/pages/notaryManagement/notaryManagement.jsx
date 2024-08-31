@@ -128,10 +128,10 @@ const NotaryManagement = () => {
             {showTable ? (
                 <Box
                     sx={{
-                        border: '1px solid #e0e0e0',
+                        // border: '1px solid #e0e0e0',
                         borderRadius: 2,
-                        boxShadow: 2,
-                        width: 900,
+                        boxShadow: 1,
+                        width: 1000,
                         // maxWidth: 'auto',
                         margin: 'auto',
                         marginTop: '20px',

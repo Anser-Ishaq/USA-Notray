@@ -96,6 +96,7 @@ const FileModal = ({ open, handleClose, notaryItem }) => {
         const updatedSubMenuData = subMenuData.filter((_, i) => i !== index)
         setSubMenuData(updatedSubMenuData)
     }
+  
 
     // Handle form input changes
     const handleChange = (e) => {

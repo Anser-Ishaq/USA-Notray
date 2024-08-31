@@ -18,9 +18,9 @@ import { Add as AddIcon, Delete as DeleteIcon } from '@mui/icons-material'
 import AddParticipant from '../../../../components/DynamicButton/DynamicButton'
 
 const columns = [
-    { id: 'Name', label: 'Name', xs: 1.5 },
+    { id: 'Name', label: 'Name', xs: 1.76 },
     { id: 'Email', label: 'Email', xs: 1.5 },
-    { id: 'Phone', label: 'Phone', xs: 1.5 },
+    { id: 'Phone', label: 'Phone', xs: 1.75 },
     { id: 'Role', label: 'Role', xs: 1.5 },
     { id: 'Same Location', label: 'Same Location', xs: 2 },
     { id: 'Same Time', label: 'Same Time', xs: 2 },
@@ -28,12 +28,10 @@ const columns = [
 ]
 
 const ParticipantInfo = () => {
-    // State to manage signers' information
     const [signers, setSigners] = useState([
         { name: '', email: '', phone: '', role: 'Main Signer', sameLocation: 'No', sameTime: 'No' },
     ])
 
-    // Handle input change for signers
     const handleChange = (index, event) => {
         const { name, value } = event.target
         const newSigners = [...signers]
@@ -41,7 +39,6 @@ const ParticipantInfo = () => {
         setSigners(newSigners)
     }
 
-    // Add a new signer row
     const handleAddRow = () => {
         setSigners([
             ...signers,
@@ -56,14 +53,12 @@ const ParticipantInfo = () => {
         ])
     }
 
-    // Remove a specific signer row
     const handleRemoveRow = (index) => {
         setSigners(signers.filter((_, i) => i !== index))
     }
 
     return (
         <div style={{ marginTop: '40px' }}>
-            {/* Section for specifying the number of signers */}
             <Grid container spacing={2}>
                 <Grid
                     item
@@ -93,7 +88,6 @@ const ParticipantInfo = () => {
                 </Grid>
             </Grid>
 
-            {/* Section for displaying and managing signer information */}
             <Box marginTop={'20px'}>
                 <Box display="flex" bgcolor="#00b0ff" p={2} borderRadius="4px">
                     <Typography variant="h6" color="white">
@@ -101,8 +95,15 @@ const ParticipantInfo = () => {
                     </Typography>
                 </Box>
 
-                <Paper elevation={1} style={{ padding: '5px' }}>
-                    {/* Header for the table columns */}
+                {/* Paper container with overflow */}
+                <Paper
+                    elevation={1}
+                    style={{
+                        padding: '5px',
+                        maxHeight: '300px', // Set a fixed or max height
+                        overflow: 'auto', // Allow scrolling when content overflows
+                    }}
+                >
                     <Grid container spacing={1} style={{ fontWeight: 'bold' }}>
                         {columns.map((column) => (
                             <Grid item xs={column.xs} key={column.id}>
@@ -111,7 +112,6 @@ const ParticipantInfo = () => {
                         ))}
                     </Grid>
 
-                    {/* Dynamic rows for each signer */}
                     {signers.map((signer, index) => (
                         <Grid
                             container
@@ -189,7 +189,6 @@ const ParticipantInfo = () => {
                         </Grid>
                     ))}
 
-                    {/* Button to add a new signer */}
                     <AddParticipant icon={AddIcon} onClick={handleAddRow}>
                         Add Participant
                     </AddParticipant>
