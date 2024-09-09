@@ -1,20 +1,31 @@
-import React, { useState } from 'react'
-import ToggleButton from '@mui/material/ToggleButton'
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
+import React, { useState, useEffect } from 'react';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
-export default function ToggleButtons() {
-    const [alignment, setAlignment] = useState('no')
+export default function ToggleButtons({ stepperData, handleStepperData }) {
+    const [alignment, setAlignment] = useState('no');
+
+    // Update local state when stepperData changes
+    useEffect(() => {
+        if (stepperData.kbaRequired) {
+            setAlignment(stepperData.kbaRequired);
+        }
+    }, [stepperData.kbaRequired]);
 
     const handleAlignment = (event, newAlignment) => {
         if (newAlignment !== null) {
-            setAlignment(newAlignment)
+            setAlignment(newAlignment);
+            handleStepperData({
+                target: { name: 'kbaRequired', value: newAlignment } // Pass updated value to handleStepperData
+            });
         }
-    }
+    };
 
     return (
         <ToggleButtonGroup
             value={alignment}
             exclusive
+            name='kbaRequired'
             onChange={handleAlignment}
             aria-label="yes or no"
         >
@@ -25,5 +36,5 @@ export default function ToggleButtons() {
                 No
             </ToggleButton>
         </ToggleButtonGroup>
-    )
+    );
 }

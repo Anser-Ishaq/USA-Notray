@@ -4,31 +4,43 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
-const AddSignerModal = ({ open, handleClose, onAddSigner }) => {
-  const [signerName, setSignerName] = useState('');
-  const [signerEmail, setSignerEmail] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [role, setRole] = useState('');
+const AddSignerModal = ({ open, handleClose, onAddSigner, stepperData, handleStepperData }) => {
+  const [signerData, setSignerData] = useState({
+    signerName: '',
+    signerEmail: '',
+    signerPhoneNumber: '',
+    signerRole: '',
+  });
   const [error, setError] = useState('');
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setSignerData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
   const handleAdd = () => {
-    if (!signerName || !signerEmail || !phoneNumber || !role) {
+    // Check for empty fields
+    if (!signerData.signerName || !signerData.signerEmail || !signerData.signerPhoneNumber || !signerData.signerRole) {
       setError('All fields are required');
       return;
     }
 
     setError('');
-    const signer = { signerName, signerEmail, phoneNumber, role };
+    onAddSigner(signerData); // Pass the new signer data to the parent
 
-    onAddSigner(signer);
-
-    setSignerName('');
-    setSignerEmail('');
-    setPhoneNumber('');
-    setRole('');
+    // Clear the form fields
+    setSignerData({
+      signerName: '',
+      signerEmail: '',
+      signerPhoneNumber: '',
+      signerRole: '',
+    });
 
     handleClose();
   };
@@ -45,81 +57,85 @@ const AddSignerModal = ({ open, handleClose, onAddSigner }) => {
       }}
     >
       <Slide direction="down" in={open} mountOnEnter unmountOnExit>
-        <Box 
-          sx={{ 
-            width: { xs: '90%', sm: 400, md: 500 }, 
-            backgroundColor: 'background.paper', 
-            borderRadius: '12px', 
-            boxShadow: 24, 
+        <Box
+          sx={{
+            width: { xs: '90%', sm: 400, md: 500 },
+            backgroundColor: 'background.paper',
+            borderRadius: '12px',
+            boxShadow: 24,
             position: 'relative',
             maxHeight: '90vh',
             display: 'flex',
             flexDirection: 'column',
           }}
         >
-          <IconButton 
-            onClick={handleClose} 
-            sx={{ 
-              position: 'absolute', 
-              top: '8px', 
-              right: '16px', 
+          <IconButton
+            onClick={handleClose}
+            sx={{
+              position: 'absolute',
+              top: '8px',
+              right: '16px',
               color: 'text.secondary'
             }}
             aria-label="close"
           >
             <CloseIcon />
           </IconButton>
-          
-          <Typography variant="h6" sx={{ backgroundColor: theme.palette.primary.main, color: 'white', padding: '12px', borderRadius: '1px', }}>
+
+          <Typography variant="h6" sx={{ backgroundColor: theme.palette.primary.main, color: 'white', padding: '12px', borderRadius: '1px' }}>
             Add Signer
           </Typography>
 
           <Box component="form" sx={{ p: 2 }}>
-            <TextField 
-              fullWidth 
-              label="Signer Name" 
-              variant="outlined" 
-              margin="normal" 
-              value={signerName}
-              onChange={(e) => setSignerName(e.target.value)}
+            <TextField
+              fullWidth
+              label="Signer Name"
+              variant="outlined"
+              margin="normal"
+              name='signerName'
+              value={signerData.signerName}
+              onChange={handleInputChange}
               required
               error={!!error}
-              helperText={error && "Please fill all required fields"}
-              sx={{ mb: 2 }} 
-            />
-
-            <TextField 
-              fullWidth 
-              label="Signer Email" 
-              variant="outlined" 
-              margin="normal" 
-              value={signerEmail}
-              onChange={(e) => setSignerEmail(e.target.value)}
-              required
-              error={!!error}
-              helperText={error && "Please fill all required fields"}
+              helperText={error && !signerData.signerName ? "Please fill all required fields" : ''}
               sx={{ mb: 2 }}
             />
 
-            <TextField 
-              fullWidth 
-              label="Phone Number" 
-              variant="outlined" 
-              margin="normal" 
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
+            <TextField
+              fullWidth
+              label="Signer Email"
+              variant="outlined"
+              margin="normal"
+              name='signerEmail'
+              value={signerData.signerEmail}
+              onChange={handleInputChange}
               required
               error={!!error}
-              helperText={error && "Please fill all required fields"}
-              sx={{ mb: 2 }} 
+              helperText={error && !signerData.signerEmail ? "Please fill all required fields" : ''}
+              sx={{ mb: 2 }}
+            />
+
+            <TextField
+              fullWidth
+              label="Phone Number"
+              variant="outlined"
+              margin="normal"
+              name='signerPhoneNumber'
+              value={signerData.signerPhoneNumber}
+              onChange={handleInputChange}
+              required
+              error={!!error}
+              helperText={error && !signerData.signerPhoneNumber ? "Please fill all required fields" : ''}
+              sx={{ mb: 2 }}
             />
 
             <FormControl fullWidth variant="outlined" margin="normal" required>
               <InputLabel>Role</InputLabel>
               <Select
                 label="Role"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
+                name='signerRole'
+                value={signerData.signerRole}
+                onChange={handleInputChange}
                 error={!!error}
                 aria-label="select-role"
               >

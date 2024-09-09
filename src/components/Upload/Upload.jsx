@@ -2,13 +2,16 @@ import React, { useState } from 'react'
 import { Button, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 
-const Upload = ({label}) => {
+const Upload = ({ label, stepperData, handleStepperData }) => {
     const [fileName, setFileName] = useState('')
 
     const handleFileChange = (event) => {
         const file = event.target.files[0]
         if (file) {
             setFileName(file.name)
+            handleStepperData({
+                target: { name: 'uploadedFile', value: file }, // Simulate an event-like object with the file
+            })
         } else {
             setFileName('')
         }
@@ -16,7 +19,7 @@ const Upload = ({label}) => {
     return (
         <div>
             <Typography variant="body1" gutterBottom>
-               {label}
+                {label}
             </Typography>
             <Button
                 variant="outlined"

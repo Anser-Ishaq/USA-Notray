@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     Grid,
     TextField,
@@ -12,16 +12,10 @@ import {
 import { titleCompanyOptions, closingTypeOptions } from '../../Data/OptionValues'
 import Switch from '../../components/Switch/Switch'
 import useStore from '../../stores/useStore'
+import axios from 'axios'
 
-const ClientInfo = ({ isClientInfo, isSwitch }) => {
-    const [titleCompany, setTitleCompany] = useState()
-    const [closingType, setClosingType] = useState()
-    const [internalReference, setInternalReference] = useState('')
-    const [propertyAddressOne, setPropertyAddressOne] = useState('')
-    const [propertyAddressTwo, setPropertyAddressTwo] = useState('')
-    const [propertyCity, setPropertyCity] = useState('')
-    const [propertyState, setPropertyState] = useState('')
-    const [propertyZipCode, setPropertyZipCode] = useState('')
+const ClientInfo = ({ isClientInfo, isSwitch, stepperData, handleStepperData }) => {
+    const [titleComanyOption, setTitleCompanyOption] = useState([])
     const [zipCodeError, setZipCodeError] = useState('')
 
     const setPrice = useStore((state) => state.setPrice)
@@ -79,6 +73,35 @@ const ClientInfo = ({ isClientInfo, isSwitch }) => {
         }
     }
 
+    const transformCompanyData = (companies) => {
+        return companies.map((company, index) => ({
+            id: index, // or you can use a unique ID if available
+            value: company.companyName, // or another property that represents the value
+            label: company.companyName, // or another property that represents the label
+        }));
+    };
+
+    const handleFetchCompanyData = async () => {
+        try {
+            const response = await axios.get(
+                `${import.meta.env.VITE_API_BASE_URL}/company/getCompany`,
+            )
+            console.log('Full response data:', response.data)
+
+            if (response.data.companies) {
+               const titleCompanies = transformCompanyData(response.data.companies)
+                setTitleCompanyOption(titleCompanies)
+            }else {
+                console.error('Unexpected response structure:', response.data)
+            }
+        } catch (error) {
+            console.error('Error fetching company data:', error)
+        }
+    }
+
+    useEffect(() => {
+        handleFetchCompanyData()
+    }, [])
     return (
         <>
             <Grid container spacing={2} style={{ marginTop: '40px' }}>
@@ -90,11 +113,12 @@ const ClientInfo = ({ isClientInfo, isSwitch }) => {
                                 labelId="title-company-label"
                                 id="title-company"
                                 label="Title Company"
-                                value={titleCompany}
-                                onChange={handleChange}
+                                name="titleCompany"
+                                value={stepperData.titleCompany}
+                                onChange={handleStepperData}
                                 required
                             >
-                                {titleCompanyOptions.map((option) => (
+                                {titleComanyOption.map((option) => (
                                     <MenuItem key={option.id} value={option.value}>
                                         {option.value}
                                     </MenuItem>
@@ -111,8 +135,9 @@ const ClientInfo = ({ isClientInfo, isSwitch }) => {
                             labelId="closing-type-label"
                             id="closing-type"
                             label="Closing Type"
-                            value={closingType || ''}
-                            onChange={(e) => closing(e.target.value)}
+                            name="closingType"
+                            value={stepperData?.closingType}
+                            onChange={handleStepperData}
                             required
                         >
                             {closingTypeOptions.map((option) => (
@@ -134,8 +159,9 @@ const ClientInfo = ({ isClientInfo, isSwitch }) => {
                         id="internal-reference"
                         label="Internal Reference"
                         variant="outlined"
-                        value={internalReference}
-                        onChange={handleChange}
+                        name="internalReference"
+                        value={stepperData?.internalReference}
+                        onChange={handleStepperData}
                         required
                     />
                 </Grid>
@@ -146,7 +172,10 @@ const ClientInfo = ({ isClientInfo, isSwitch }) => {
                             <span style={{ marginRight: '8px', fontSize: '1rem' }}>
                                 is KBA Required?
                             </span>
-                            <Switch />
+                            <Switch
+                                stepperData={stepperData}
+                                handleStepperData={handleStepperData}
+                            />
                         </Box>
                     </Grid>
                 )}
@@ -157,8 +186,9 @@ const ClientInfo = ({ isClientInfo, isSwitch }) => {
                         id="property-address-one"
                         label="Property Address One"
                         variant="outlined"
-                        value={propertyAddressOne}
-                        onChange={handleChange}
+                        name="propertyAddressOne"
+                        value={stepperData?.propertyAddressOne}
+                        onChange={handleStepperData}
                         required
                     />
                 </Grid>
@@ -169,8 +199,9 @@ const ClientInfo = ({ isClientInfo, isSwitch }) => {
                         id="property-address-two"
                         label="Property Address Two"
                         variant="outlined"
-                        value={propertyAddressTwo}
-                        onChange={handleChange}
+                        name="propertyAddressTwo"
+                        value={stepperData?.propertyAddressTwo}
+                        onChange={handleStepperData}
                     />
                 </Grid>
 
@@ -180,8 +211,9 @@ const ClientInfo = ({ isClientInfo, isSwitch }) => {
                         id="property-city"
                         label="Property City"
                         variant="outlined"
-                        value={propertyCity}
-                        onChange={handleChange}
+                        name="propertyCity"
+                        value={stepperData?.propertyCity}
+                        onChange={handleStepperData}
                         required
                     />
                 </Grid>
@@ -192,8 +224,9 @@ const ClientInfo = ({ isClientInfo, isSwitch }) => {
                         id="property-state"
                         label="Property State"
                         variant="outlined"
-                        value={propertyState}
-                        onChange={handleChange}
+                        name="propertyState"
+                        value={stepperData?.propertyState}
+                        onChange={handleStepperData}
                         required
                     />
                 </Grid>
@@ -204,8 +237,9 @@ const ClientInfo = ({ isClientInfo, isSwitch }) => {
                         id="property-zip-code"
                         label="Property Zip Code"
                         variant="outlined"
-                        value={propertyZipCode}
-                        onChange={handleChange}
+                        name="propertyZipCode"
+                        value={stepperData?.propertyZipCode}
+                        onChange={handleStepperData}
                         error={!!zipCodeError}
                         helperText={zipCodeError}
                         required

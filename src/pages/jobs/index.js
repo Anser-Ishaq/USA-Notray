@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     Box,
     Typography,
@@ -23,6 +23,7 @@ import DynamicTable from '../../components/dynamicTable/dynamicTable'
 import jobsData from './data'
 import Heading from '../../components/Heading/heading'
 import Search from '../../components/Search/search'
+import axios from 'axios'
 
 const Jobs = () => {
     // State management
@@ -30,6 +31,8 @@ const Jobs = () => {
     const [selectedJob, setSelectedJob] = useState(null)
     const [selectedFilter, setSelectedFilter] = useState('All')
     const [searchTerm, setSearchTerm] = useState('')
+    const [jobData, setJobData] = useState([])
+    const token = localStorage.getItem('token')
 
     // Filter options with corresponding icons
     const filterBtn = ['All', 'Open', 'Pending', 'Completed', 'Cancelled', 'Expired']
@@ -45,7 +48,7 @@ const Jobs = () => {
     // Table column definitions
     const columns = [
         { id: 'id', label: '#' },
-        { id: 'jobName', label: 'Job Name' },
+        { id: 'internalReference', label: 'Job Name' },
         { id: 'titleCompany', label: 'Title Company' },
         { id: 'closingType', label: 'Closing Type' },
         { id: 'schedule', label: 'Schedule' },
@@ -54,8 +57,20 @@ const Jobs = () => {
         { id: 'action', label: 'Action' },
     ]
 
+    const jobDataColumns = [
+        { id: 'id', label: '#' }, // Display row number
+        { id: 'internalReference', label: 'Job Name' },
+        { id: 'titleCompany', label: 'Title Company' },
+        { id: 'closingType', label: 'Closing Type' },
+        { id: 'schedule', label: 'Schedule' },
+        { id: 'uploadedFile', label: 'Documents' }, // Show document count or N/A
+        { id: 'JobStatus', label: 'Status' },
+        { id: 'actions', label: 'Action' },
+    ]
+
     // Handle dialog open and close
     const handleOpenDialog = (job) => {
+        console.log("selected job: " + JSON.stringify(job))
         setSelectedJob(job)
         setOpenDialog(true)
     }
@@ -75,11 +90,45 @@ const Jobs = () => {
         setSearchTerm(event.target.value)
     }
 
-    // Apply selected filters and search term
-    const filteredJobs = jobsData
-        .filter((job) => selectedFilter === 'All' || job.status === selectedFilter)
-        .filter((job) => job.id.toString().includes(searchTerm))
+    const formatSchedule = (time, date) => {
+        if (!time || !date) return 'N/A'
 
+        // Format the time
+        const [startTime, endTime] = time.split('-')
+        const formattedTime = `${startTime.trim()} - ${endTime.trim()}`
+
+        // Format the date using plain JavaScript
+        const dateObj = new Date(date)
+        const year = dateObj.getFullYear()
+        const month = String(dateObj.getMonth() + 1).padStart(2, '0') // Month is 0-based
+        const day = String(dateObj.getDate()).padStart(2, '0')
+        const formattedDate = `${year}-${month}-${day}`
+
+        return `${formattedTime} ${formattedDate}`
+    }
+
+    const fetchJobData = async () => {
+        try {
+            const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/jobs/getjobs`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            const formattedData = response.data.map((job, index) => ({
+                ...job,
+                id: index + 1,
+                schedule: formatSchedule(job.selectedTime, job.selectedDate),
+                uploadedFile: job.uploadedFile ? '1' : 'N/A',
+            }))
+            setJobData(formattedData)
+        } catch (error) {
+            console.error('Error fetching job data:', error) 
+        }
+    }
+
+    useEffect(() => {
+        fetchJobData()
+    }, [token])
     return (
         <Grid container justifyContent="center">
             <Grid item xs={12}>
@@ -105,14 +154,13 @@ const Jobs = () => {
 
                     {/* Search Field */}
                     <Box mt={2} display="flex" justifyContent="flex-end">
-                    <Search handleSearch={handleSearchChange} />
+                        <Search handleSearch={handleSearchChange} />
                     </Box>
-
 
                     {/* Dynamic Table Displaying Jobs */}
                     <DynamicTable
-                        columns={columns}
-                        data={filteredJobs}
+                        columns={jobDataColumns}
+                        data={jobData}
                         actionButton={(job) => (
                             <IconButton color="primary" onClick={() => handleOpenDialog(job)}>
                                 <VisibilityIcon />
@@ -127,7 +175,7 @@ const Jobs = () => {
                             {selectedJob ? (
                                 <Box>
                                     <Typography variant="body1">
-                                        <strong>Job Name:</strong> {selectedJob.jobName}
+                                        <strong>Job Name:</strong> {selectedJob.internalReference}
                                     </Typography>
                                     <Typography variant="body1">
                                         <strong>Title Company:</strong> {selectedJob.titleCompany}
@@ -139,10 +187,10 @@ const Jobs = () => {
                                         <strong>Schedule:</strong> {selectedJob.schedule}
                                     </Typography>
                                     <Typography variant="body1">
-                                        <strong>Documents:</strong> {selectedJob.documents}
+                                        <strong>Documents:</strong> {selectedJob.uploadedFile }
                                     </Typography>
                                     <Typography variant="body1">
-                                        <strong>Status:</strong> {selectedJob.status}
+                                        <strong>Status:</strong> {selectedJob.JobStatus}
                                     </Typography>
                                 </Box>
                             ) : (

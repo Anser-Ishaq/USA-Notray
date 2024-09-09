@@ -4,13 +4,17 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import useStore from '../../stores/useStore'
 
-const DatePickerComp = () => {
+const DatePickerComp = ({stepperData, handleStepperData}) => {
     const [dateError, setDateError] = useState('')
     const { selectedDate, setSelectedDate } = useStore()
 
     const handleDateChange = (newValue) => {
         if (newValue) {
+            console.log("handleDateChange", newValue)
             setSelectedDate(newValue)
+            handleStepperData({
+                target: { name: 'selectedDate', value: newValue }  
+            });
             setDateError('')
         } else {
             setDateError('Please select a date')
@@ -22,6 +26,7 @@ const DatePickerComp = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                         label="mm/dd/yyyy"
+                        name='selectedDate'
                         value={selectedDate}
                         onChange={handleDateChange}
                         renderInput={(params) => (

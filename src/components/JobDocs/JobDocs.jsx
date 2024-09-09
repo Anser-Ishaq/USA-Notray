@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Box, Typography, Button, Grid } from '@mui/material'
 import Upload from '../Upload/Upload'
 
-const JobDocs = () => {
+const JobDocs = ({stepperData, handleStepperData}) => {
     return (
         <Grid
             container
@@ -25,7 +25,7 @@ const JobDocs = () => {
                         boxShadow={1}
                         width="100%"
                     >
-                        <Upload label={'Select document(s) to upload.'} />
+                        <Upload label={'Select document(s) to upload.'} stepperData={stepperData} handleStepperData={handleStepperData} />
                     </Box>
                 </Box>
             </Grid>

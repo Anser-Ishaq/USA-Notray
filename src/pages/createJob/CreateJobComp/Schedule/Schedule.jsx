@@ -12,19 +12,29 @@ import {
 import { specificNotary } from '../../../../Data/OptionValues'
 import DatePickerComp from '../../../../components/DatePicker/DatePicker'
 import JobTime from '../../../../components/JobTime/JobTime'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-const Schedule = () => {
-    const [notaryOption, setNotaryOption] = useState('preferred')
-    const [selectedNotary, setSelectedNotary] = useState()
+const Schedule = ({ stepperData, handleStepperData }) => {
+    const [notaryOption, setNotaryOption] = useState(stepperData.notaryOption || 'preferred');
+    const [selectedNotary, setSelectedNotary] = useState(stepperData.selectedNotary || '');
+
+    // Update state when stepperData changes
+    useEffect(() => {
+        setNotaryOption(stepperData.notaryOption || 'preferred');
+        setSelectedNotary(stepperData.selectedNotary || '');
+    }, [stepperData]);
 
     const handleNotaryOptionChange = (event) => {
-        setNotaryOption(event.target.value)
-    }
+        const newValue = event.target.value;
+        setNotaryOption(newValue);
+        handleStepperData(event); // Update the parent state
+    };
 
     const handleNotaryChange = (event) => {
-        setSelectedNotary(event.target.value)
-    }
+        const newValue = event.target.value;
+        setSelectedNotary(newValue);
+        handleStepperData(event); // Update the parent state
+    };
 
     return (
         <div style={{ padding: 16, marginTop: '40px' }}>
@@ -33,7 +43,10 @@ const Schedule = () => {
                     <Typography variant="h6" gutterBottom>
                         Schedule
                     </Typography>
-                    <DatePickerComp />
+                    <DatePickerComp
+                        stepperData={stepperData}
+                        handleStepperData={handleStepperData}
+                    />
                 </Grid>
 
                 <Grid item xs={12} sm={4}>
@@ -41,7 +54,11 @@ const Schedule = () => {
                         <Typography variant="h6" gutterBottom>
                             Notary Assigning Option
                         </Typography>
-                        <RadioGroup value={notaryOption} onChange={handleNotaryOptionChange}>
+                        <RadioGroup
+                            name="notaryOption"
+                            value={notaryOption} // Use local state
+                            onChange={handleNotaryOptionChange}
+                        >
                             <FormControlLabel
                                 value="preferred"
                                 control={<Radio />}
@@ -67,8 +84,9 @@ const Schedule = () => {
                                     labelId="specific-notary-label"
                                     id="specific-notary"
                                     label="Specific Notary"
-                                    value={selectedNotary}
-                                    onChange={handleNotaryChange}
+                                    name="selectedNotary"
+                                    value={selectedNotary} // Use local state
+                                    onChange={handleNotaryChange} // Use local handler
                                 >
                                     {specificNotary.map((option) => (
                                         <MenuItem
@@ -92,7 +110,7 @@ const Schedule = () => {
                     <Typography variant="body1">Name: </Typography>
                     <Typography variant="body1">Email: </Typography>
                 </Grid>
-                <JobTime />
+                <JobTime stepperData={stepperData} handleStepperData={handleStepperData} />
             </Grid>
         </div>
     )

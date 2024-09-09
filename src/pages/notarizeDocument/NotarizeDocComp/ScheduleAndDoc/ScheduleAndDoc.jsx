@@ -4,7 +4,7 @@ import DatePickerComp from '../../../../components/DatePicker/DatePicker'
 import JobTime from '../../../../components/JobTime/JobTime'
 import JobDocs from '../../../../components/JobDocs/JobDocs'
 
-const ScheduleAndDoc = () => {
+const ScheduleAndDoc = ({ stepperData, handleStepperData }) => {
     return (
         <div style={{ marginTop: '40px' }}>
             {/* Container for scheduling and documentation components */}
@@ -14,10 +14,10 @@ const ScheduleAndDoc = () => {
                 </Typography>
 
                 {/* Date picker component for selecting a date */}
-                <DatePickerComp />
+                <DatePickerComp stepperData={stepperData} handleStepperData={handleStepperData} />
 
                 {/* Job time component for setting job time */}
-                <JobTime />
+                <JobTime stepperData={stepperData} handleStepperData={handleStepperData} />
 
                 <br />
                 <br />
@@ -25,7 +25,7 @@ const ScheduleAndDoc = () => {
                 <br />
 
                 {/* Job documents component for handling job-related documents */}
-                <JobDocs />
+                <JobDocs stepperData={stepperData} handleStepperData={handleStepperData} />
             </Grid>
         </div>
     )

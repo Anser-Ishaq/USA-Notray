@@ -27,7 +27,7 @@ const columns = [
     { id: 'Action', label: 'Action', xs: 1 },
 ]
 
-const ParticipantInfo = () => {
+const ParticipantInfo = ({stepperData,handleStepperData,setStepperData}) => {
     const [signers, setSigners] = useState([
         { name: '', email: '', phone: '', role: 'Main Signer', sameLocation: 'No', sameTime: 'No' },
     ])

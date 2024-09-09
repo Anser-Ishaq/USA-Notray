@@ -4,7 +4,7 @@ import { Box } from '@mui/system'
 import { Grid, TextField, Typography } from '@mui/material'
 import Heading from '../../../../components/Heading/heading'
 
-const Billing = () => {
+const Billing = ({stepperData, handleStepperData}) => {
     const Billing1 = [
         { label: 'Single Document Signing', price: '1' },
         { label: 'Number of Signers', price: '1' },
@@ -49,7 +49,10 @@ const Billing = () => {
                             id="cardHolder-name"
                             label="Enter Card Holder Name"
                             variant="outlined"
-                            required
+                            name='cardHolder'
+                            value={stepperData.cardHolder}
+                            onChange={handleStepperData}
+                            // required
                         />
                     </Grid>
                     <Grid item sm={6}>
@@ -58,7 +61,9 @@ const Billing = () => {
                             id="card-number"
                             label="Enter Card Number"
                             variant="outlined"
-                            required
+                            name='cardNumber'
+                            value={stepperData.cardNumber}
+                            onChange={handleStepperData}
                         />
                     </Grid>
                 </Grid>

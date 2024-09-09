@@ -3,7 +3,7 @@ import { Button, Grid, Typography } from '@mui/material'
 import { timeSlots } from '../../Data/OptionValues'
 import useStore from '../../stores/useStore'
 
-const JobTime = () => {
+const JobTime = ({ stepperData, handleStepperData }) => {
     const [selectedTime, setSelectedTime] = useState('')
 
     const isDate = useStore((state) => state.selectedDate)
@@ -29,9 +29,15 @@ const JobTime = () => {
                                         key={slot.value}
                                         fullWidth
                                         variant={
-                                            selectedTime === slot.value ? 'contained' : 'outlined'
-                                        }
-                                        onClick={() => handleTimeChange(slot.value)}
+                                            stepperData.selectedTime === slot.value
+                                                ? 'contained'
+                                                : 'outlined'
+                                        } // Use stepperData to determine button variant
+                                        onClick={() =>
+                                            handleStepperData({
+                                                target: { name: 'selectedTime', value: slot.value },
+                                            })
+                                        } // Use handleStepperData with a simulated event
                                         style={{ marginBottom: '10px' }}
                                     >
                                         {slot.label}

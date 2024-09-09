@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
     Button,
     TextField,
@@ -16,10 +16,20 @@ import {
 import { useTheme } from '@mui/material/styles'
 import { BackButton } from '../../components/DynamicButton/DynamicButton'
 import Heading from '../../components/Heading/heading'
-
-const UserForm = ({ formData, setFormData, roles, privileges, handleSubmit, handleClose }) => {
+import axios from 'axios'
+const UserForm = ({
+    formData,
+    setFormData,
+    roles,
+    privileges,
+    handleSubmit,
+    handleClose,
+    isUpdateMode,
+    setIsUpdateMode,
+    selectedUser,
+}) => {
     const theme = useTheme()
-
+    const [data, setData] = useState()
     const handleChange = (e) => {
         const { name, value } = e.target
         setFormData({
@@ -40,9 +50,55 @@ const UserForm = ({ formData, setFormData, roles, privileges, handleSubmit, hand
         })
     }
 
-    const handleFormSubmit = (e) => {
+    const handleFormSubmit = async (e) => {
         e.preventDefault()
         handleSubmit()
+        // const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/users/register`
+        // console.log('formdata', formData)
+        // try {
+        //     const resp = await axios.post(apiUrl, {
+        //         username: formData.username,
+        //         email: formData.email,
+        //         password: formData.password,
+        //         role: formData.role,
+        //         privileges: formData.privileges,
+        //     })
+        //     console.log('User registered:', resp.data)
+        //     alert('User registered successfully')
+        // } catch (error) {
+        //     console.error('Error registering user:', error)
+        //     alert('Error registering user')
+        // }
+
+        if (isUpdateMode) {
+            // Update user
+            try {
+                const response = await axios.post(
+                    `${import.meta.env.VITE_API_BASE_URL}/users/update/${selectedUser._id}`,
+                    formData,
+                )
+                console.log('User updated:', response.data)
+                alert("user updated", selectedUser._id)
+                setIsUpdateMode(false) // Reset mode
+            } catch (error) {
+                console.error('Error updating user:', error)
+                alert("Error updating user", selectedUser._id)
+            }
+        } else {
+            // Create user
+            try {
+                const response = await axios.post(
+                    `${import.meta.env.VITE_API_BASE_URL}/users/register`,
+                    formData,
+                )
+                console.log('User created:', response.data)
+                console.log('User Created:')
+                
+            } catch (error) {
+                console.log('Error Creating  User')
+                console.error('Error creating user:', error)
+            }
+        }
     }
 
     return (
@@ -64,7 +120,7 @@ const UserForm = ({ formData, setFormData, roles, privileges, handleSubmit, hand
         >
             <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
                 <BackButton handleBack={handleClose} />
-                <Heading heading={'User Information'} />
+                <Heading heading={isUpdateMode ? 'Update User Information' : 'User Information'} />
             </Box>
 
             <Box sx={{ display: 'flex', gap: 3, flexDirection: { xs: 'column', md: 'row' } }}>
@@ -143,11 +199,11 @@ const UserForm = ({ formData, setFormData, roles, privileges, handleSubmit, hand
                     <FormControlLabel
                         control={
                             <Checkbox
-                                checked={formData.privileges.includes('Notarize A Document')}
-                                onChange={() => handleCheckboxChange('Notarize A Document')}
+                                checked={formData.privileges.includes('Create Job')}
+                                onChange={() => handleCheckboxChange('Create Job')}
                             />
                         }
-                        label="Notarize A Document"
+                        label="Create Job"
                         sx={{ display: 'block' }}
                     />
                     <FormControlLabel
@@ -250,7 +306,7 @@ const UserForm = ({ formData, setFormData, roles, privileges, handleSubmit, hand
 
             <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
                 <Button variant="contained" color="primary" type="submit">
-                    Submit
+                    {isUpdateMode ? 'Update' : 'Submit'}
                 </Button>
             </Box>
         </Box>

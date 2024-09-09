@@ -4,14 +4,30 @@ import { TextField, Button, Box, Typography, Link } from '@mui/material';
 import { styled } from '@mui/system';
 import UsaLogo from '../../../assets/usalogo.png'
 import { useNavigate } from 'react-router-dom';
-
-const LoginPage = () => {
+import axios from 'axios';
+const LoginPage = ( ) => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const navigate = useNavigate()
-  const onSubmit = data => {
+
+  const onSubmit =async (data) => {
     console.log(data);
-    localStorage.setItem('auth', "true")
-    navigate('/dashboard');
+
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/auth/login`,
+        data,
+    )
+    console.log('User login:', response.data)
+    const {token, user,message} = response?.data;
+      localStorage.setItem('auth', "true")
+      localStorage.setItem("user", JSON.stringify(user))
+      localStorage.setItem("token", token)
+      alert(message)
+      navigate('/dashboard');
+    } catch (error) {
+      console.log(" error while login", error)
+      alert(error.response.data.message)
+    }
   };
 
   return (

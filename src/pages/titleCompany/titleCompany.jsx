@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import DynamicButton from '../../components/DynamicButton/DynamicButton'
@@ -9,7 +9,7 @@ import UserForm from './form' // Renamed to better reflect its function
 import Heading from '../../components/Heading/heading'
 import { jobsdata } from './data'
 import Search from '../../components/Search/search'
-
+import axios from 'axios'
 const TitleCompany = () => {
     // State hooks
     const [editIndex, setEditIndex] = useState(null)
@@ -17,24 +17,131 @@ const TitleCompany = () => {
     const [filterStatus, setFilterStatus] = useState('Approved')
     const [searchQuery, setSearchQuery] = useState('')
     const [jobsData, setJobsData] = useState(jobsdata)
+    const user = JSON.parse(localStorage.getItem('user'))
+    const [compData, setCompData] = useState([])
+    const [updateCompData, setUpdateCompData] = useState()
+    const [companyData, setCompanyData] = useState({
+        companyName: '',
+        preferredNotaryID: '',
+        companyAddressLine1: '',
+        companyAddressLine2: '',
+        companyCity: '',
+        companyState: '',
+        companyZIP: '',
+        primaryContactName: '',
+        primaryContactNumber: '',
+        primaryContactEmailAddress: '',
+        timeZone1: '',
+        secondaryContactName: '',
+        secondaryContactNumber: '',
+        secondaryContactEmailAddress: '',
+        timeZone2: '',
+        thirdContactName: '',
+        thirdContactNumber: '',
+        thirdContactEmailAddress: '',
+        timeZone3: '',
+        fourthContactName: '',
+        fourthContactNumber: '',
+        fourthContactEmailAddress: '',
+        timeZone4: '',
+        requireKBA: false,
+        userId: user._id,
+    })
 
-    // Columns configuration for the table
+    const handleCompanyData = (e) => {
+        const { name, type, checked, value } = e.target // Get the checked state for checkboxes
+
+        setCompanyData((prevData) => ({
+            ...prevData,
+            [name]: type === 'checkbox' ? checked : value, // Set state based on type
+        }))
+
+        console.log('company name, value', name, type === 'checkbox' ? checked : value)
+    }
+
+    const handleStoreData = async () => {
+        try {
+            if (editIndex) {
+                // Update existing company
+                await axios.put(
+                    `${import.meta.env.VITE_API_BASE_URL}/company/updateCompany/${editIndex}`,
+                    companyData,
+                )
+                console.log('Company updated successfully')
+                alert('Company updated successfully')
+            } else {
+                // Create new company
+                await axios.post(
+                    `${import.meta.env.VITE_API_BASE_URL}/company/createCompany`,
+                    companyData,
+                )
+                console.log('Company created successfully')
+                alert('Company created successfully')
+            }
+
+            setEditIndex(null)
+            setShowTable(true)
+            handleFetchCompanyData()
+        } catch (error) {
+            console.error('Error submitting form:', error)
+        }
+    }
+
+    const handleFetchCompanyData = async () => {
+        try {
+            const response = await axios.get(
+                `${import.meta.env.VITE_API_BASE_URL}/company/getCompany`,
+            )
+            console.log('Full response data:', response.data)
+
+            if (Array.isArray(response.data)) {
+                setCompData(response.data)
+            } else if (response.data.companies) {
+                setCompData(response.data.companies)
+            } else {
+                console.error('Unexpected response structure:', response.data)
+            }
+        } catch (error) {
+            console.error('Error fetching company data:', error)
+        }
+    }
+
     const columns = [
-        { id: 'CompanyName', label: 'Company Name' },
-        { id: 'ContactName', label: 'Contact Name' },
-        { id: 'Email', label: 'Email' },
-        { id: 'City', label: 'City' },
+        { id: 'companyName', label: 'Company Name' },
+        { id: 'primaryContactName', label: 'Contact Name' },
+        { id: 'primaryContactEmailAddress', label: 'Email' },
+        { id: 'companyCity', label: 'City' },
         { id: 'actions', label: 'Action' },
     ]
 
     // Handlers for actions
-    const handleRemove = (index) => {
-        setJobsData(jobsData.filter((_, i) => i !== index))
+    const handleRemove = async (id) => {
+        try {
+            await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/company/deleteCompany/${id}`)
+            console.log('Company deleted successfully')
+            alert('Company deleted successfully')
+            handleFetchCompanyData()
+        } catch (error) {
+            console.error('Error deleting company:', error)
+            alert('Error deleting company')
+        }
     }
 
-    const handleUpdate = (index) => {
-        setEditIndex(index)
-        setShowTable(false)
+    const handleUpdate = async (id) => {
+        try {
+            const response = await axios.get(
+                `${import.meta.env.VITE_API_BASE_URL}/company/companybyid/${id}`,
+            )
+            // if (Array.isArray(response.data)) {
+            setCompanyData(response.data)
+            console.log('response.data', response.data)
+
+            // }
+            setEditIndex(id)
+            setShowTable(false)
+        } catch (error) {
+            console.error('Error fetching company details:', error)
+        }
     }
 
     const handleCreate = () => {
@@ -44,6 +151,7 @@ const TitleCompany = () => {
 
     const handleSave = () => {
         setShowTable(true) // Return to table after saving
+        handleStoreData()
     }
 
     const handleCancel = () => {
@@ -56,25 +164,20 @@ const TitleCompany = () => {
             <Button
                 variant="outlined"
                 color="primary"
-                onClick={() => handleUpdate(index)}
+                onClick={() => handleUpdate(row._id)}
                 style={{ marginRight: '5px' }}
             >
                 Update
             </Button>
-            <Button variant="outlined" color="error" onClick={() => handleRemove(index)}>
+            <Button variant="outlined" color="error" onClick={() => handleRemove(row._id)}>
                 Delete
             </Button>
         </>
     )
 
-    // Filtering jobs based on status and search query
-    const filteredJobs = jobsData.filter(
-        (job) =>
-            job.status === filterStatus &&
-            [job.CompanyName, job.ContactName, job.Email, job.City].some((field) =>
-                field.toLowerCase().includes(searchQuery.toLowerCase()),
-            ),
-    )
+    useEffect(() => {
+        handleFetchCompanyData()
+    }, [])
 
     return (
         <div>
@@ -120,21 +223,15 @@ const TitleCompany = () => {
                     <DynamicTable
                         actionButton={renderActionButton}
                         columns={columns}
-                        data={filteredJobs}
+                        data={compData}
                     />
                 </>
             ) : (
                 <UserForm
-                    formData={editIndex !== null ? jobsData[editIndex] : {}}
-                    setFormData={(updatedData) => {
-                        if (editIndex !== null) {
-                            const updatedJobs = [...jobsData]
-                            updatedJobs[editIndex] = updatedData
-                            setJobsData(updatedJobs)
-                        } else {
-                            setJobsData([...jobsData, updatedData])
-                        }
-                    }}
+                    editIndex={editIndex}
+                    formData={companyData}
+                    setFormData={setCompanyData}
+                    handleCompanyData={handleCompanyData}
                     handleSubmit={handleSave}
                     handleClose={handleCancel}
                 />

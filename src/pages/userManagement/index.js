@@ -1,21 +1,15 @@
-import React, { useState } from 'react';
-import {
-    Button,
-    Typography,
-    Box,
-    Pagination,
-    Paper,
-} from '@mui/material';
-import Swal from 'sweetalert2';
-import DynamicTable from '../../components/dynamicTable/dynamicTable';
-import UserForm from './form';
-import FilterComponent from '../../components/FilterComponent/filterComponent';
-import { initialUsers } from './data';
-import Search from '../../components/Search/search';
-import Heading from '../../components/Heading/heading';
-import AddParticipant from '../../components/DynamicButton/DynamicButton';
-
-const roles = ['Admin Users', 'Title Company Users', 'Notary Users', 'Client Users'];
+import React, { useEffect, useState } from 'react'
+import { Button, Typography, Box, Pagination, Paper } from '@mui/material'
+import Swal from 'sweetalert2'
+import DynamicTable from '../../components/dynamicTable/dynamicTable'
+import UserForm from './form'
+import FilterComponent from '../../components/FilterComponent/filterComponent'
+import { initialUsers } from './data'
+import Search from '../../components/Search/search'
+import Heading from '../../components/Heading/heading'
+import AddParticipant from '../../components/DynamicButton/DynamicButton'
+import axios from 'axios'
+const roles = ['Admin Users', 'Title Company Users', 'Notary Users', 'Client Users']
 const privileges = [
     'Dashboard',
     'Notary Dashboard',
@@ -28,82 +22,116 @@ const privileges = [
     'Client Management',
     'Menu Management',
     'Notarization Logs',
-];
+]
 
 const UserManagement = () => {
     // State Management
-    const [searchQuery, setSearchQuery] = useState('');
-    const [users, setUsers] = useState(initialUsers);
-    const [selectedFilter, setSelectedFilter] = useState('All Users');
-    const [showForm, setShowForm] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('')
+    const [users, setUsers] = useState(initialUsers)
+    const [selectedFilter, setSelectedFilter] = useState('All Users')
+    const [showForm, setShowForm] = useState(false)
     const [formData, setFormData] = useState({
         username: '',
         email: '',
         password: '',
         role: '',
         privileges: [],
-    });
-    const [page, setPage] = useState(1);
-    const rowsPerPage = 10;
-
+    })
+    const [isUpdateMode, setIsUpdateMode] = useState(false)
+    const [selectedUser, setSelectedUser] = useState(null)
+    const [dynamicData, setDynamicData] = useState([])
+    const [page, setPage] = useState(dynamicData?.data?.currentPage)
+    const [totalEntries, setTotalEntries] = useState(0)
+    const [pageSize, setPageSize] = useState(5)
+    const [totalPages, setTotalPages] = useState(0)
     // Filter options
-    const roleFilters = ['All Users', ...roles];
-    const icons = ['All Users', 'Admin Users', 'Notary Users', 'Title Company Users', 'Client Users'];
+    const roleFilters = ['All Users', ...roles]
+    const icons = [
+        'All Users',
+        'Admin Users',
+        'Notary Users',
+        'Title Company Users',
+        'Client Users',
+    ]
 
     // Event Handlers
     const handleFilterChange = (event) => {
-        setSelectedFilter(event.target.value);
-        setPage(1);
-    };
+        setSelectedFilter(event.target.value)
+        setPage(1)
+    }
 
     const handlePageChange = (event, value) => {
-        setPage(value);
-    };
+        setPage(value)
+        getDynamicUsers(value)
+    }
 
     const handleSearchChange = (event) => {
-        setSearchQuery(event.target.value);
-    };
+        setSearchQuery(event.target.value)
+    }
 
-    const handleDelete = (username) => {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!',
-        }).then((result) => {
+    const handleDelete = async (id) => {
+        try {
+            const result = await Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+            })
+
             if (result.isConfirmed) {
-                setUsers(users.filter((user) => user.username !== username));
-                Swal.fire('Deleted!', 'The user has been deleted.', 'success');
+                // Make the DELETE request
+                await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/users/delete/${id}`)
+
+                // Update the UI to remove the deleted user
+                // setUsers(prevUsers => prevUsers.filter(user => user._id !== id));
+                setDynamicData((prevUsers) => prevUsers.filter((user) => user._id !== id))
+                getDynamicUsers();
+
+                // Show success alert
+                Swal.fire('Deleted!', 'The user has been deleted.', 'success')
             }
-        });
-    };
+        } catch (error) {
+            console.error('Error deleting user:', error)
+            Swal.fire('Error!', 'There was an issue deleting the user.', 'error')
+        }
+    }
+
+    const handleUpdate =  (user ) => {
+        setShowForm(true)
+        console.log("user to be updated",user)
+        setFormData({
+            username: user.username,
+            email: user.email,
+            password: '',  
+            role: user.role,
+            privileges: user.privileges,
+          });
+          setSelectedUser(user);
+          setIsUpdateMode(true);
+    }
 
     const handleCreate = () => {
-        setShowForm(true);
-    };
+        setShowForm(true)
+    }
 
     const handleSubmit = () => {
         if (!formData.username || !formData.email || !formData.role) {
-            Swal.fire('Error', 'Please fill in all required fields', 'error');
-            return;
+            Swal.fire('Error', 'Please fill in all required fields', 'error')
+            return
         }
 
         const newUser = {
             ...formData,
             status: 'Active',
             dateCreated: new Date().toLocaleString(),
-        };
-        setUsers([...users, newUser]);
-        resetForm();
-    };
-
-    const handleBack = () => {
-        resetForm();
-    };
-
+        }
+        setUsers([...users, newUser])
+        resetForm()
+    }
+    
     const resetForm = () => {
         setFormData({
             username: '',
@@ -111,35 +139,24 @@ const UserManagement = () => {
             password: '',
             role: '',
             privileges: [],
-        });
-        setShowForm(false);
-    };
+        })
+        setShowForm(false)
+    }
 
-    // Filtering and Pagination
-    const filteredUsers = users
-        .filter((user) => selectedFilter === 'All Users' || user.role === selectedFilter)
-        .filter((user) => {
-            const query = searchQuery.toLowerCase();
-            return (
-                user.username.toLowerCase().includes(query) ||
-                user.email.toLowerCase().includes(query) ||
-                user.role.toLowerCase().includes(query)
-            );
-        });
+    const handleBack = () => {
+        resetForm()
+    }
 
-    const totalEntries = filteredUsers.length;
-    const paginatedUsers = filteredUsers.slice((page - 1) * rowsPerPage, page * rowsPerPage);
-    const totalPages = Math.ceil(totalEntries / rowsPerPage);
 
     // Table Columns Definition
     const columns = [
         { id: 'username', label: 'User Name' },
         { id: 'email', label: 'Email' },
         { id: 'role', label: 'Role' },
-        { id: 'status', label: 'Status' },
-        { id: 'dateCreated', label: 'Date Created' },
+        // { id: 'status', label: 'Status' },
+        { id: 'createdAt', label: 'Date Created' },
         { id: 'actions', label: 'Actions' },
-    ];
+    ]
 
     const actionButton = (row) => (
         <Box display="flex" justifyContent="flex-end">
@@ -148,7 +165,7 @@ const UserManagement = () => {
                 color="primary"
                 size="small"
                 sx={{ marginRight: 1 }}
-                onClick={() => setShowForm(true)}
+                onClick={()=>handleUpdate(row)}
             >
                 Update
             </Button>
@@ -156,15 +173,37 @@ const UserManagement = () => {
                 variant="outlined"
                 color="error"
                 size="small"
-                onClick={() => handleDelete(row.username)}
+                onClick={() => handleDelete(row._id)}
             >
                 Delete
             </Button>
         </Box>
-    );
+    )
+
+    // get paginated users
+
+    const getDynamicUsers = async (currentPage = 1) => {
+        try {
+            const response = await axios.get(
+                `${import.meta.env.VITE_API_BASE_URL}/users/getusers?page=${currentPage}&pageSize=${pageSize}`,
+            )
+            console.log('Dynamic user', response.data.users)
+            setDynamicData(response.data.users)
+            setPage(response.data.currentPage)
+            setTotalEntries(response.data.totalUsers)
+            setPageSize(response.data.pageSize)
+            setTotalPages(response.data.totalPages)
+        } catch (error) {
+            console.log('Error fetching dynamic users', error)
+        }
+    }
+
+    useEffect(() => {
+        getDynamicUsers()
+    }, [])
 
     return (
-        <Box sx={{ margin: 'auto', marginTop: '20px', maxWidth: 1000 ,}}>
+        <Box sx={{ margin: 'auto', marginTop: '20px', maxWidth: 1000 }}>
             {showForm ? (
                 <UserForm
                     formData={formData}
@@ -173,11 +212,21 @@ const UserManagement = () => {
                     privileges={privileges}
                     handleSubmit={handleSubmit}
                     handleClose={handleBack}
+                    isUpdateMode={isUpdateMode}
+                    setIsUpdateMode={setIsUpdateMode}
+                    selectedUser={selectedUser}
                 />
             ) : (
                 <Paper elevation={3} sx={{ padding: 2 }}>
                     <Heading heading="User Management" />
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginY: 2 }}>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            marginY: 2,
+                        }}
+                    >
                         <AddParticipant onClick={handleCreate}>Create</AddParticipant>
                     </Box>
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
@@ -189,11 +238,15 @@ const UserManagement = () => {
                         />
                         <Search handleSearch={handleSearchChange} />
                     </Box>
-                    <DynamicTable columns={columns} data={paginatedUsers} actionButton={actionButton} />
+                    <DynamicTable
+                        columns={columns}
+                        data={dynamicData}
+                        actionButton={actionButton}
+                    />
                     <Box sx={{ padding: '16px', display: 'flex', justifyContent: 'space-between' }}>
                         <Typography>
-                            Showing {Math.min((page - 1) * rowsPerPage + 1, totalEntries)} to{' '}
-                            {Math.min(page * rowsPerPage, totalEntries)} of {totalEntries} entries
+                            Showing {(page - 1) * pageSize + 1} to{' '}
+                            {Math.min(page * pageSize, totalEntries)} of {totalEntries} entries
                         </Typography>
                         <Pagination
                             count={totalPages}
@@ -206,7 +259,7 @@ const UserManagement = () => {
                 </Paper>
             )}
         </Box>
-    );
-};
+    )
+}
 
-export default UserManagement;
+export default UserManagement

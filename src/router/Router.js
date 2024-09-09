@@ -16,13 +16,13 @@ import NotarizationLogsTable from '../pages/notarizationLogs/index.js';
 import MenuManagement from '../pages/menuManagement/menuManagement.jsx';
 import ClientManegment from '../pages/clientManagment/index.js'
 
-const AppRouter = () => {
+const AppRouter = ( ) => {
   return (
     <Router>
       <Routes>
         <Route path="/login" element={
           <RedirectToDashboard>
-            <LoginPage />
+            <LoginPage   />
           </RedirectToDashboard>} 
         />
         <Route
