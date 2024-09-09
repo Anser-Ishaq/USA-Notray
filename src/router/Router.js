@@ -15,6 +15,7 @@ import UserManagement from '../pages/userManagement/index.js';
 import NotarizationLogsTable from '../pages/notarizationLogs/index.js';
 import MenuManagement from '../pages/menuManagement/menuManagement.jsx';
 import ClientManegment from '../pages/clientManagment/index.js'
+import DocLayout from '../pages/jobs/JobStatus/JobStatus.jsx';
 
 const AppRouter = ( ) => {
   return (
@@ -36,6 +37,7 @@ const AppRouter = ( ) => {
           <Route path="" element={<Jobs />} />
           <Route path="dashboard" element={<Jobs />} />
           <Route path="jobs-list" element={<Jobs />} />
+          <Route path="job-view" element={<DocLayout/>} />
           <Route path="create-job" element={<CreateJob />} />
           <Route path="notarize-a-document" element={<NotarizeDocument />} />
           <Route path="title-company" element={<TitleCompany />} />
