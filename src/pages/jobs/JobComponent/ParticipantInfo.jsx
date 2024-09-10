@@ -5,7 +5,7 @@ import Search from '../../../components/Search/search'
 import DynamicTable from '../../../components/dynamicTable/dynamicTable'
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded'
 
-const ParticipantInfo = ({jobsData, renderActionButton, columns, header, filteredJobs, setSearchQuery, isAudit}) => {
+const ParticipantInfo = ({jobsData, renderActionButton, columns, header, filteredJobs, setSearchQuery, isAudit,stepperData, handleStepperData }) => {
     return (
         <Grid item xs={12} md={12}>
             <Box
@@ -74,6 +74,8 @@ const ParticipantInfo = ({jobsData, renderActionButton, columns, header, filtere
                         actionButton={renderActionButton}
                         columns={columns}
                         data={filteredJobs}
+                        stepperData={stepperData}
+                        handleStepperData={handleStepperData}
                     />
                 </Box>
             </Box>

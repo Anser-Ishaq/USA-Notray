@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
-import { FormProvider } from './FormContext/FormContext'
+
 import AppRouter from './router/Router'
 import useStore from './stores/useStore'
 import { isTokenExpired } from './Utils/TokenChecker'
+import { JobIdProvider } from './ContextHooks/JobContext/JobDetails'
 function App() {
     function checkToken() {
         const user = localStorage.getItem('user')
@@ -18,15 +19,15 @@ function App() {
         }
     }
     useEffect(() => {
-        const interval = setInterval(checkToken, 1 * 60 * 1000)
+        const interval = setInterval(checkToken, 5 * 60 * 1000)
         console.log('toekn interval', interval) // 5 minutes in milliseconds
         return () => clearInterval(interval) // Clean up on component unmount
     }, [])
     return (
         <>
-            <FormProvider>
+            <JobIdProvider>
                 <AppRouter />
-            </FormProvider>
+            </JobIdProvider>
         </>
     )
 }

@@ -5,7 +5,7 @@ import Step from '@mui/material/Step'
 import StepLabel from '@mui/material/StepLabel'
 import Button from '@mui/material/Button'
 
-const Steppers = ({ steps, Step1, Step2, Step3, Step4,handleSubmit }) => {
+const Steppers = ({ steps, Step1, Step2, Step3, Step4, handleSubmit, loading }) => {
     const [activeStep, setActiveStep] = React.useState(0)
 
     const handleNext = () => {
@@ -62,7 +62,11 @@ const Steppers = ({ steps, Step1, Step2, Step3, Step4,handleSubmit }) => {
                     }}
                     variant="contained"
                 >
-                    {activeStep === steps.length - 1 ? 'Submit' : 'Next'}
+                    {loading
+                        ? 'Submitting...'  
+                        : activeStep === steps.length - 1
+                          ? 'Submit'
+                          : 'Next'}
                 </Button>
             </Box>
         </Box>

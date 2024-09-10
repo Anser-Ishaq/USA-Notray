@@ -214,7 +214,7 @@ const ClientInfo = ({ isClientInfo, isSwitch, stepperData, handleStepperData }) 
                         name="propertyCity"
                         value={stepperData?.propertyCity}
                         onChange={handleStepperData}
-                        required
+                         
                     />
                 </Grid>
 
@@ -227,7 +227,7 @@ const ClientInfo = ({ isClientInfo, isSwitch, stepperData, handleStepperData }) 
                         name="propertyState"
                         value={stepperData?.propertyState}
                         onChange={handleStepperData}
-                        required
+                         
                     />
                 </Grid>
 

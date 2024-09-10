@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     Box,
     Typography,
@@ -12,6 +12,7 @@ import {
     FormControl,
     Chip,
 } from '@mui/material'
+import Stack from '@mui/material/Stack'
 import NotaryDetails from '../../../components/NotaryDetails/NotaryDetails'
 import DatePickerComp from '../../../components/DatePicker/DatePicker'
 import JobTime from '../../../components/JobTime/JobTime'
@@ -19,8 +20,151 @@ import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded'
 import RemoveRedEyeRoundedIcon from '@mui/icons-material/RemoveRedEyeRounded'
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded'
 import ParticipantInfo from '../JobComponent/ParticipantInfo'
+import { useId } from '../../../ContextHooks/JobContext/JobDetails'
+import axios from 'axios'
+import { alpha } from '@mui/material/styles'
+import { closingTypeOptions } from '../../../Data/OptionValues'
 
-const SchedulingInfo = ({ selectedJob, onBack }) => {
+const NotaryRefButtons = () => {
+    const [showAdditionalButtons, setShowAdditionalButtons] = useState(false)
+    const [jobStatus, setJobStatus] = useState(JSON.parse(localStorage.getItem('jobData'))?.JobStatus)
+
+    const updateJobStatus = async (JobStatus) => {
+        const job = JSON.parse(localStorage.getItem('jobData'))
+        try {
+            const response = await axios.post(
+                `${import.meta.env.VITE_API_BASE_URL}/jobs/${job._id}/updatejobstatus`,
+                { JobStatus },
+            )
+            alert(response.data.message)
+            localStorage.setItem('jobData', JSON.stringify(response.data))
+            setShowAdditionalButtons(true)
+            setJobStatus(JSON.parse(localStorage.getItem('jobData'))?.JobStatus)
+            console.log('Job status updated:', response.data)
+       
+            // Handle the response as needed (e.g., update UI)
+        } catch (error) {
+            alert(error.response.message)
+            console.error('Error updating job status:', error)
+            // Handle the error as needed (e.g., show an error message)
+        }
+    }
+    return (
+        <>
+            <Grid item xs={12} md={12}>
+                <Box
+                    sx={{
+                        mb: 2,
+                        borderRadius: '4px',
+                    }}
+                >
+                    <Box
+                        sx={{
+                            backgroundColor: '#ffffff',
+                            color: 'black',
+                            p: 2,
+                            borderRadius: '4px 4px 0 0',
+                        }}
+                    >
+                        <Typography variant="h6">Job Status: </Typography>
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                gap: 2,
+                                justifyContent: 'flex-end',
+                                marginBottom: '10px',
+                            }}
+                        >
+                            {jobStatus === 'Accepted' && showAdditionalButtons ? 
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        gap: 2,
+                                        justifyContent: 'flex-end',
+                                    }}
+                                >
+                                    <Button
+                                        variant="contained"
+                                        sx={{
+                                            backgroundColor: '#28A745',
+                                            color: 'white',
+                                            borderRadius: '4px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: 1,
+                                            '&:hover': {
+                                                backgroundColor: '#218838',
+                                            },
+                                        }}
+                                        onClick={() => alert('Starting Tagging...')}
+                                    >
+                                        <Typography variant="button">Start Tagging</Typography>
+                                    </Button>
+
+                                    <Button
+                                        variant="contained"
+                                        sx={{
+                                            backgroundColor: '#17A2B8',
+                                            color: 'white',
+                                            borderRadius: '4px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: 1,
+                                            '&:hover': {
+                                                backgroundColor: '#138496',
+                                            },
+                                        }}
+                                        onClick={() => alert('Starting Notarization...')}
+                                    >
+                                        <Typography variant="button">Start Notarization</Typography>
+                                    </Button>
+                                </Box>
+                            :
+                            <Button
+                                variant="contained"
+                                sx={{
+                                    backgroundColor: '#007BFF',
+                                    color: 'white',
+                                    borderRadius: '4px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 1,
+                                    '&:hover': {
+                                        backgroundColor: '#0056b3',
+                                    },
+                                }}
+                                onClick={() => updateJobStatus('Accepted')}
+                            >
+                                <Typography variant="button">Accpet</Typography>
+                            </Button>
+                            }
+
+                            <Button
+                                variant="contained"
+                                sx={{
+                                    backgroundColor: '#007BFF',
+                                    color: 'white',
+                                    borderRadius: '4px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 1,
+                                    '&:hover': {
+                                        backgroundColor: '#0056b3',
+                                    },
+                                }}
+                                onClick={() => updateJobStatus('Cancelled')}
+                            >
+                                <Typography variant="button">Reject</Typography>
+                            </Button>
+                        </Box>
+                    </Box>
+                </Box>
+            </Grid>
+        </>
+    )
+}
+
+const SchedulingInfo = ({ selectedJob, onBack, stepperData, handleStepperData }) => {
     return (
         <Paper elevation={3} sx={{ borderRadius: '4px' }}>
             <Box
@@ -51,7 +195,8 @@ const SchedulingInfo = ({ selectedJob, onBack }) => {
                         <TextField
                             fullWidth
                             label="Internal Reference"
-                            value={selectedJob?.internalReference || 'x'}
+                            name="internalReference"
+                            value={stepperData?.internalReference}
                             InputProps={{ readOnly: true }}
                             variant="outlined"
                             margin="normal"
@@ -64,7 +209,8 @@ const SchedulingInfo = ({ selectedJob, onBack }) => {
                         <TextField
                             fullWidth
                             label="Title Company"
-                            value={selectedJob?.titleCompany || 'x'}
+                            name="titleCompany"
+                            value={stepperData?.titleCompany}
                             InputProps={{ readOnly: true }}
                             variant="outlined"
                             margin="normal"
@@ -73,26 +219,24 @@ const SchedulingInfo = ({ selectedJob, onBack }) => {
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
-                        <FormControl fullWidth variant="outlined" margin="normal">
-                            <InputLabel id="closing-type-label">Closing Type</InputLabel>
-                            <Select
-                                labelId="closing-type-label"
-                                value={selectedJob?.closingType || ''}
-                                displayEmpty
-                                inputProps={{ 'aria-label': 'Closing Type' }}
-                                renderValue={(value) => value || 'x'}
-                                sx={{ backgroundColor: '#EAEFF4', color: '#969BAC' }}
-                            >
-                                <MenuItem value="">{selectedJob?.closingType || 'N/A'}</MenuItem>
-                            </Select>
-                        </FormControl>
+                        <TextField
+                            fullWidth
+                            label="Closing Type"
+                            name="closingType"
+                            value={stepperData?.closingType}
+                            InputProps={{ readOnly: true }}
+                            variant="outlined"
+                            margin="normal"
+                            sx={{ backgroundColor: '#EAEFF4', color: '#969BAC' }}
+                        />
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
                         <TextField
                             fullWidth
                             label="Property Address 1"
-                            value={selectedJob?.propertyAddress1 || 'x'}
+                            name="propertyAddressOne"
+                            value={stepperData?.propertyAddressOne}
                             InputProps={{ readOnly: true }}
                             variant="outlined"
                             margin="normal"
@@ -103,7 +247,8 @@ const SchedulingInfo = ({ selectedJob, onBack }) => {
                         <TextField
                             fullWidth
                             label="Property Address 2"
-                            value={selectedJob?.propertyAddress2 || 'x'}
+                            name="propertyAddressTwo"
+                            value={stepperData?.propertyAddressTwo}
                             InputProps={{ readOnly: true }}
                             variant="outlined"
                             margin="normal"
@@ -116,7 +261,8 @@ const SchedulingInfo = ({ selectedJob, onBack }) => {
                         <TextField
                             fullWidth
                             label="Property City"
-                            value={selectedJob?.propertyCity || 'x'}
+                            name="propertyCity"
+                            value={stepperData?.propertyCity}
                             InputProps={{ readOnly: true }}
                             variant="outlined"
                             margin="normal"
@@ -127,7 +273,8 @@ const SchedulingInfo = ({ selectedJob, onBack }) => {
                         <TextField
                             fullWidth
                             label="Property State"
-                            value={selectedJob?.propertyState || 'x'}
+                            name="propertyState"
+                            value={stepperData?.propertyState}
                             InputProps={{ readOnly: true }}
                             variant="outlined"
                             margin="normal"
@@ -138,7 +285,8 @@ const SchedulingInfo = ({ selectedJob, onBack }) => {
                         <TextField
                             fullWidth
                             label="Property Zip Code"
-                            value={selectedJob?.propertyZipCode || 'x'}
+                            name="propertyZipCode"
+                            value={stepperData?.propertyZipCode}
                             InputProps={{ readOnly: true }}
                             variant="outlined"
                             margin="normal"
@@ -151,87 +299,115 @@ const SchedulingInfo = ({ selectedJob, onBack }) => {
     )
 }
 
-const NotaryAndBilling = ({ selectedJob }) => {
-    return (
-        <Grid item xs={12} md={4}>
-            <Box
-                sx={{
-                    height: '45%',
-                    mb: 2,
-                    borderRadius: '4px',
-                    boxShadow: 1,
-                }}
-            >
-                <Box
-                    sx={{
-                        backgroundColor: '#5D87FF',
-                        color: 'white',
-                        p: 2,
-                        borderRadius: '4px 4px 0 0',
-                    }}
-                >
-                    <Typography variant="h6">Notary</Typography>
-                </Box>
-                <Box sx={{ mb: 2, p: 2 }}>
-                    <Typography variant="body2" py={1}>
-                        <strong>Notary:</strong>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{' '}
-                        {selectedJob?.notaryName || 'x'}
-                    </Typography>
-                    <div style={{ display: 'flex', alignItems: 'center' }} py={1}>
-                        <Typography variant="body2">
-                            <strong>Response:</strong>
-                        </Typography>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <Chip
-                            label="Accepted"
-                            sx={{
-                                backgroundColor: '#ECF2FF',
-                                color: '#5D87FF',
-                                fontWeight: 'bold',
-                            }}
-                        />
-                    </div>
-                </Box>
-            </Box>
+const NotaryAndBilling = ({ selectedJob, dynamicJob }) => {
+    const [notaryName, setNotaryName] = useState()
+    const [currentStatus, setCurrentStatus] = useState()
 
-            <Box
-                sx={{
-                    height: '45%',
-                    borderRadius: '4px',
-                    boxShadow: 1,
-                }}
-            >
+    const handelNotary = () => {
+        const jobData = JSON.parse(localStorage.getItem('jobData'))
+        console.log('job data from billing')
+        const NotaryName = jobData?.selectedNotary || dynamicJob?.selectedNotary || ''
+        const jobStatus = jobData?.JobStatus || dynamicJob?.JobStatus || ''
+        console.log('notary name from billing', NotaryName)
+        setNotaryName(NotaryName)
+        setCurrentStatus(jobStatus)
+    }
+    useEffect(() => {
+        if (dynamicJob) {
+            handelNotary()
+        }
+    }, [dynamicJob])
+
+    return (
+        <>
+            <Grid item xs={12} md={4}>
                 <Box
                     sx={{
-                        backgroundColor: '#5D87FF',
-                        color: 'white',
-                        p: 2,
-                        borderRadius: '4px 4px 0 0',
+                        height: '45%',
+                        mb: 2,
+                        borderRadius: '4px',
+                        boxShadow: 1,
                     }}
                 >
-                    <Typography variant="h6">Billing</Typography>
+                    <Box
+                        sx={{
+                            backgroundColor: '#5D87FF',
+                            color: 'white',
+                            p: 2,
+                            borderRadius: '4px 4px 0 0',
+                        }}
+                    >
+                        <Typography variant="h6">Notary</Typography>
+                    </Box>
+                    <Box sx={{ mb: 2, p: 2 }}>
+                        <Typography variant="body2" py={1}>
+                            <strong>Notary:</strong>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{' '}
+                            {notaryName || 'x'}
+                        </Typography>
+                        <div style={{ display: 'flex', alignItems: 'center' }} py={1}>
+                            <Typography variant="body2">
+                                <strong>Response:</strong>
+                            </Typography>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <Chip
+                                label={currentStatus}
+                                sx={{
+                                    backgroundColor: '#ECF2FF',
+                                    color: '#5D87FF',
+                                    fontWeight: 'bold',
+                                }}
+                            />
+                        </div>
+                    </Box>
                 </Box>
-                <Box sx={{ p: 2 }}>
-                    <Typography variant="body2" py={0.5}>
-                        <strong>Service Price:</strong>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $90.00
-                    </Typography>
-                    <Typography variant="body2" py={0.5}>
-                        <strong>Witnesses Price:</strong>&nbsp;&nbsp;&nbsp; $0.00
-                    </Typography>
-                    <Typography variant="body2" fontWeight={'bold'} py={0.5}>
-                        <strong>Total Price:</strong>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        $90.00
-                    </Typography>
+
+                <Box
+                    sx={{
+                        height: '45%',
+                        borderRadius: '4px',
+                        boxShadow: 1,
+                    }}
+                >
+                    <Box
+                        sx={{
+                            backgroundColor: '#5D87FF',
+                            color: 'white',
+                            p: 2,
+                            borderRadius: '4px 4px 0 0',
+                        }}
+                    >
+                        <Typography variant="h6">Billing</Typography>
+                    </Box>
+                    <Box sx={{ p: 2 }}>
+                        <Typography variant="body2" py={0.5}>
+                            <strong>Service Price:</strong>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $90.00
+                        </Typography>
+                        <Typography variant="body2" py={0.5}>
+                            <strong>Witnesses Price:</strong>&nbsp;&nbsp;&nbsp; $0.00
+                        </Typography>
+                        <Typography variant="body2" fontWeight={'bold'} py={0.5}>
+                            <strong>Total Price:</strong>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            $90.00
+                        </Typography>
+                    </Box>
                 </Box>
-            </Box>
-        </Grid>
+            </Grid>
+        </>
     )
 }
 
-const JobDate = () => {
+const JobDate = ({ stepperData, handleStepperData }) => {
+    const [initialSelectedDate, setInitialSelectedDate] = useState(null)
+
+    useEffect(() => {
+        const jobData = JSON.parse(localStorage.getItem('jobData'))
+        if (jobData && jobData.selectedDate) {
+            setInitialSelectedDate(jobData.selectedDate)
+        }
+    }, [])
     return (
         <Grid item xs={12} md={4}>
             <Box
@@ -255,7 +431,11 @@ const JobDate = () => {
                     <Typography variant="h6" gutterBottom>
                         Job Date
                     </Typography>
-                    <DatePickerComp />
+                    <DatePickerComp
+                        stepperData={stepperData}
+                        handleStepperData={handleStepperData}
+                        initialSelectedDate={initialSelectedDate}
+                    />
                     <br />
                     <NotaryDetails />
                 </Box>
@@ -264,7 +444,7 @@ const JobDate = () => {
     )
 }
 
-const JobTimeComp = () => {
+const JobTimeComp = ({ stepperData, handleStepperData }) => {
     return (
         <Grid item xs={12} md={8}>
             <Box
@@ -285,22 +465,37 @@ const JobTimeComp = () => {
                     <Typography variant="h6">Job Time</Typography>
                 </Box>
                 <Box sx={{ mb: 2, p: 2 }}>
-                    <JobTime isStatic={true} />
+                    <JobTime
+                        isStatic={true}
+                        stepperData={stepperData}
+                        handleStepperData={handleStepperData}
+                    />
                 </Box>
             </Box>
         </Grid>
     )
 }
 
-const ParticipantInfoComp = () => {
+const ParticipantInfoComp = ({ stepperData, handleStepperData, dynamicJob }) => {
     const [searchQuery, setSearchQuery] = useState('')
+    const [signerLocalData, setSignerLocalData] = useState([])
 
-    const jobsData = [
-        {
-            Name: 'bessie b. jones',
-            Email: 'donaldebyrdjr@aol.com',
-            Phone: '(301) 257-9529',
-            Role: 'SIGNER',
+    const signerFromLocalStorage = () => {
+        console.log('dynamicJob', dynamicJob)
+        const jobData = JSON.parse(localStorage.getItem('jobData')) || {}
+        const signers = jobData.signers || dynamicJob?.signers || []
+        console.log('jobData from localStorage', jobData)
+        if (signers.length === 0) {
+            console.log('No signers found')
+            setSignerLocalData([])
+            return
+        }
+
+        const transformedData = signers.map((signer) => ({
+            Name: signer.signerName || 'N/A',
+            Email: signer.signerEmail || 'N/A',
+            Phone: signer.signerPhoneNumber || 'N/A',
+            Role: signer.signerRole || 'N/A',
             Status: (
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <Chip
@@ -326,10 +521,13 @@ const ParticipantInfoComp = () => {
                     />
                 </div>
             ),
-        },
-    ]
+        }))
 
-    const filteredJobs = jobsData.filter((job) =>
+        console.log('Transformed data', transformedData)
+        setSignerLocalData(transformedData)
+    }
+
+    const filteredJobs = signerLocalData?.filter((job) =>
         [job.Name, job.Email, job.Role].some((field) =>
             field.toLowerCase().includes(searchQuery.toLowerCase()),
         ),
@@ -348,50 +546,80 @@ const ParticipantInfoComp = () => {
         { id: 'Status', label: 'Status' },
         { id: 'actions', label: 'Action' },
     ]
+
+    useEffect(() => {
+        if (dynamicJob) {
+            signerFromLocalStorage()
+        }
+    }, [dynamicJob])
+
     return (
         <ParticipantInfo
             setSearchQuery={setSearchQuery}
             filteredJobs={filteredJobs}
             header={"Participant's Information"}
             columns={columns}
-            jobsData={jobsData}
+            jobsData={signerLocalData}
             renderActionButton={renderActionButton}
+            stepperData={stepperData}
+            handleStepperData={handleStepperData}
         />
     )
 }
 
-const JobDocsComp = () => {
+const JobDocsComp = ({ dynamicJob }) => {
     const [searchQuery, setSearchQuery] = useState('')
+    const [jobsData, setJobsData] = useState([])
 
-    const jobsData = [
-        {
-            DocumentName: 'Notary Docs_Seller_4711 Kim Thomas.pdf',
-            DateUploaded: '2024-07-19 21:15:43',
-            Status: (
-                <>
-                    <Chip
-                        label="Completed"
-                        sx={{
-                            backgroundColor: '#F6F9FC',
-                            fontWeight: 'bold',
-                            padding: '10px',
-                            fontSize: '12px',
-                            marginRight: '5px',
-                        }}
-                    />
-                    <Chip
-                        label="Signed"
-                        sx={{
-                            backgroundColor: '#F6F9FC',
-                            fontWeight: 'bold',
-                            padding: '10px',
-                            fontSize: '12px',
-                        }}
-                    />
-                </>
-            ),
-        },
-    ]
+    const docFromLocalStorage = () => {
+        // Retrieve job data from localStorage or use the dynamicJob if available
+        const jobData = JSON.parse(localStorage.getItem('jobData')) || {}
+        const fileName =
+            jobData?.uploadedFile?.split('/').pop() ||
+            dynamicJob?.uploadedFile?.split('/').pop() ||
+            'N/A'
+        const createdAt = new Date(jobData?.createdAt || dynamicJob?.createdAt).toLocaleString()
+
+        // Check if data exists, otherwise fallback to default values
+        if (!jobData && !dynamicJob) {
+            console.log('No job data available for transformation.')
+            setJobsData([])
+            return
+        }
+
+        const transformedData = [
+            {
+                DocumentName: fileName, // Extract the file name from the file path
+                DateUploaded: createdAt, // Convert createdAt to readable format
+                Status: (
+                    <>
+                        <Chip
+                            label="Completed"
+                            sx={{
+                                backgroundColor: '#F6F9FC',
+                                fontWeight: 'bold',
+                                padding: '10px',
+                                fontSize: '12px',
+                                marginRight: '5px',
+                            }}
+                        />
+                        <Chip
+                            label="Signed"
+                            sx={{
+                                backgroundColor: '#F6F9FC',
+                                fontWeight: 'bold',
+                                padding: '10px',
+                                fontSize: '12px',
+                            }}
+                        />
+                    </>
+                ),
+            },
+        ]
+
+        // Update state with transformed data
+        setJobsData(transformedData)
+    }
 
     const renderActionButton = (row, index) => (
         <>
@@ -451,12 +679,19 @@ const JobDocsComp = () => {
     const filteredJobs = jobsData.filter((job) =>
         [job.DocumentName].some((field) => field.toLowerCase().includes(searchQuery.toLowerCase())),
     )
+
     const columns = [
         { id: 'DocumentName', label: 'Document Name' },
         { id: 'DateUploaded', label: 'Date Uploaded' },
         { id: 'Status', label: 'Status' },
         { id: 'actions', label: 'Action' },
     ]
+
+    useEffect(() => {
+        if (dynamicJob) {
+            docFromLocalStorage()
+        }
+    }, [dynamicJob])
     return (
         <ParticipantInfo
             setSearchQuery={setSearchQuery}
@@ -478,71 +713,71 @@ const AuditTrail = () => {
             name: 'Andrew Ray Yon',
             ipAddress: '172.56.3.64',
             action: 'NOTARY signature modified',
-            document: 'Notary Docs_Seller_4711 Kim Thomas.pdf'
+            document: 'Notary Docs_Seller_4711 Kim Thomas.pdf',
         },
         {
             timestamp: '2024-07-19 21:22:32',
             name: 'Andrew Ray Yon',
             ipAddress: '172.56.3.64',
             action: 'NOTARY signature modified',
-            document: 'Notary Docs_Seller_4711 Kim Thomas.pdf'
+            document: 'Notary Docs_Seller_4711 Kim Thomas.pdf',
         },
         {
             timestamp: '2024-07-19 21:22:38',
             name: 'Andrew Ray Yon',
             ipAddress: '172.56.3.64',
             action: 'NOTARY seal modified - Acknowledgment',
-            document: 'Notary Docs_Seller_4711 Kim Thomas.pdf'
+            document: 'Notary Docs_Seller_4711 Kim Thomas.pdf',
         },
         {
             timestamp: '2024-07-19 21:22:39',
             name: 'Andrew Ray Yon',
             ipAddress: '172.56.3.64',
             action: 'NOTARY seal modified',
-            document: 'Notary Docs_Seller_4711 Kim Thomas.pdf'
+            document: 'Notary Docs_Seller_4711 Kim Thomas.pdf',
         },
         {
             timestamp: '2024-07-19 21:22:40',
             name: 'Andrew Ray Yon',
             ipAddress: '172.56.3.64',
             action: 'NOTARY commission_exp_date modified',
-            document: 'Notary Docs_Seller_4711 Kim Thomas.pdf'
+            document: 'Notary Docs_Seller_4711 Kim Thomas.pdf',
         },
         {
             timestamp: '2024-07-19 21:22:41',
             name: 'Andrew Ray Yon',
             ipAddress: '172.56.3.64',
             action: 'NOTARY disclosure modified',
-            document: 'Notary Docs_Seller_4711 Kim Thomas.pdf'
+            document: 'Notary Docs_Seller_4711 Kim Thomas.pdf',
         },
         {
             timestamp: '2024-07-19 21:22:42',
             name: 'Andrew Ray Yon',
             ipAddress: '172.56.3.64',
             action: 'NOTARY disclosure modified',
-            document: 'Notary Docs_Seller_4711 Kim Thomas.pdf'
+            document: 'Notary Docs_Seller_4711 Kim Thomas.pdf',
         },
         {
             timestamp: '2024-07-19 21:22:50',
             name: 'Andrew Ray Yon',
             ipAddress: '172.56.3.64',
             action: 'NOTARY signature modified',
-            document: 'Notary Docs_Seller_4711 Kim Thomas.pdf'
+            document: 'Notary Docs_Seller_4711 Kim Thomas.pdf',
         },
         {
             timestamp: '2024-07-19 21:22:51',
             name: 'Andrew Ray Yon',
             ipAddress: '172.56.3.64',
             action: 'NOTARY signature modified',
-            document: 'Notary Docs_Seller_4711 Kim Thomas.pdf'
+            document: 'Notary Docs_Seller_4711 Kim Thomas.pdf',
         },
         {
             timestamp: '2024-07-19 21:23:03',
             name: 'Andrew Ray Yon',
             ipAddress: '172.56.3.64',
             action: 'NOTARY signature modified',
-            document: 'Notary Docs_Seller_4711 Kim Thomas.pdf'
-        }
+            document: 'Notary Docs_Seller_4711 Kim Thomas.pdf',
+        },
     ]
 
     const filteredJobs = jobsData.filter((job) =>
@@ -565,17 +800,16 @@ const AuditTrail = () => {
     ]
     return (
         <ParticipantInfo
-        isAudit={true}
+            isAudit={true}
             setSearchQuery={setSearchQuery}
             filteredJobs={filteredJobs}
-            header={"Audit Trail"}
+            header={'Audit Trail'}
             columns={columns}
             jobsData={jobsData}
             renderActionButton={renderActionButton}
         />
     )
 }
-
 
 const SessionRecording = () => {
     const [searchQuery, setSearchQuery] = useState('')
@@ -596,21 +830,21 @@ const SessionRecording = () => {
 
     const renderActionButton = (row, index) => (
         <Box
-                sx={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: 30,
-                    height: 30,
-                    borderRadius: '50%',
-                    backgroundColor: '#4DFF4D',
-                    color: 'white',
-                    margin: 1,
-                    cursor: 'pointer',
-                }}
-            >
-                <DownloadRoundedIcon fontSize="20px" />
-            </Box>
+            sx={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 30,
+                height: 30,
+                borderRadius: '50%',
+                backgroundColor: '#4DFF4D',
+                color: 'white',
+                margin: 1,
+                cursor: 'pointer',
+            }}
+        >
+            <DownloadRoundedIcon fontSize="20px" />
+        </Box>
     )
     const columns = [
         { id: 'id', label: '#' },
@@ -622,7 +856,7 @@ const SessionRecording = () => {
         <ParticipantInfo
             setSearchQuery={setSearchQuery}
             filteredJobs={filteredJobs}
-            header={"Session Recordings"}
+            header={'Session Recordings'}
             columns={columns}
             jobsData={jobsData}
             renderActionButton={renderActionButton}
@@ -631,18 +865,120 @@ const SessionRecording = () => {
 }
 
 const DocLayout = ({ selectedJob, onBack }) => {
+    const { id } = useId()
+    const user = JSON.parse(localStorage.getItem('user'))
+    const [dynamicSigner, setDynamicSigner] = useState()
+    const [roleChecker, setRoleChecker] = useState(false)
+    const JobStatus = 'Pending'
+    const [stepperData, setStepperData] = useState({
+        titleCompany: '',
+        closingType: '',
+        internalReference: '',
+        kbaRequired: '',
+        propertyAddressOne: '',
+        propertyAddressTwo: '',
+        propertyCity: '',
+        propertyState: '',
+        propertyZipCode: '',
+
+        //signer data
+        signers: [],
+
+        //user
+        userId: user._id,
+
+        //status
+        JobStatus: JobStatus,
+
+        //scheduler data
+        notaryOption: '',
+        selectedNotary: '',
+        selectedDate: '',
+        selectedTime: '',
+
+        //job docs
+        uploadedFile: '',
+    })
+
+    const handleStepperData = (e) => {
+        const { name, value } = e.target
+        console.log('name, value', name, value)
+
+        setStepperData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }))
+    }
+
+    const fetchJobById = async () => {
+        try {
+            const dynamicId = id || JSON.parse(localStorage.getItem('jobData'))?._id
+            if (!dynamicId) {
+                console.error('No valid ID found for fetching job details.')
+                alert('No valid ID found for fetching job details.')
+                return
+            }
+            const response = await axios.get(
+                `${import.meta.env.VITE_API_BASE_URL}/jobs/getjobsByid/${dynamicId}`,
+            )
+
+            const jobData = response?.data?.job
+            if (Array.isArray(jobData?.signers)) {
+                localStorage.setItem('jobData', JSON.stringify(jobData))
+                setStepperData((prevData) => ({
+                    ...prevData,
+                    ...jobData, // Assuming the job data matches the state fields
+                }))
+                setDynamicSigner(jobData)
+            }
+            localStorage.setItem('jobData', JSON.stringify(response.data.job))
+        } catch (error) {
+            console.log('error: ' + error)
+        }
+    }
+
+    const checkUserRole = () => {
+        if (user?.role === 'Notary Users') {
+            setRoleChecker(true)
+        }
+    }
+
+    useEffect(() => {
+        fetchJobById()
+        checkUserRole()
+    }, [id])
+
     return (
         <Grid container spacing={2}>
+            {roleChecker && <NotaryRefButtons />}
             <Grid item xs={12} md={8}>
-                <SchedulingInfo selectedJob={selectedJob} onBack={onBack} />
+                <SchedulingInfo
+                    selectedJob={selectedJob}
+                    onBack={onBack}
+                    handleStepperData={handleStepperData}
+                    stepperData={stepperData}
+                />
             </Grid>
-            <NotaryAndBilling selectedJob={selectedJob} />
-            <JobDate />
-            <JobTimeComp />
-            <ParticipantInfoComp />
-            <JobDocsComp />
-            <AuditTrail />
-            <SessionRecording />
+            <NotaryAndBilling
+                dynamicJob={dynamicSigner}
+                selectedJob={selectedJob}
+                handleStepperData={handleStepperData}
+                stepperData={stepperData}
+            />
+            <JobDate handleStepperData={handleStepperData} stepperData={stepperData} />
+            <JobTimeComp handleStepperData={handleStepperData} stepperData={stepperData} />
+            <ParticipantInfoComp
+                dynamicJob={dynamicSigner}
+                handleStepperData={handleStepperData}
+                stepperData={stepperData}
+            />
+            <JobDocsComp
+                dynamicJob={dynamicSigner}
+                handleStepperData={handleStepperData}
+                stepperData={stepperData}
+            />
+            <AuditTrail handleStepperData={handleStepperData} stepperData={stepperData} />
+            <SessionRecording handleStepperData={handleStepperData} stepperData={stepperData} />
         </Grid>
     )
 }

@@ -24,7 +24,9 @@ import jobsData from './data'
 import Heading from '../../components/Heading/heading'
 import Search from '../../components/Search/search'
 import axios from 'axios'
-
+import { useNavigate } from 'react-router-dom'
+import { useId } from '../../ContextHooks/JobContext/JobDetails'
+ 
 const Jobs = () => {
     // State management
     const [openDialog, setOpenDialog] = useState(false)
@@ -33,6 +35,9 @@ const Jobs = () => {
     const [searchTerm, setSearchTerm] = useState('')
     const [jobData, setJobData] = useState([])
     const token = localStorage.getItem('token')
+    const { setIdHandler } = useId();
+    const navigate = useNavigate()
+
 
     // Filter options with corresponding icons
     const filterBtn = ['All', 'Open', 'Pending', 'Completed', 'Cancelled', 'Expired']
@@ -59,20 +64,21 @@ const Jobs = () => {
 
     const jobDataColumns = [
         { id: 'id', label: '#' }, // Display row number
-        { id: 'internalReference', label: 'Job Name' },
+        { id: 'fileName', label: 'Job Name' },
         { id: 'titleCompany', label: 'Title Company' },
         { id: 'closingType', label: 'Closing Type' },
         { id: 'schedule', label: 'Schedule' },
-        { id: 'uploadedFile', label: 'Documents' }, // Show document count or N/A
+        { id: 'documentPresence', label: 'Documents' }, // Show document count or N/A
         { id: 'JobStatus', label: 'Status' },
         { id: 'actions', label: 'Action' },
     ]
 
     // Handle dialog open and close
-    const handleOpenDialog = (job) => {
-        console.log("selected job: " + JSON.stringify(job))
+    const handleOpenDialog =   (job) => {
+        console.log("selected job: " + job._id)
+        setIdHandler(job._id);
+        navigate(`/job-view/${job._id}`) 
         setSelectedJob(job)
-        setOpenDialog(true)
     }
 
     const handleCloseDialog = () => {
@@ -118,7 +124,9 @@ const Jobs = () => {
                 ...job,
                 id: index + 1,
                 schedule: formatSchedule(job.selectedTime, job.selectedDate),
-                uploadedFile: job.uploadedFile ? '1' : 'N/A',
+                uploadedFile: job.uploadedFile ? job.uploadedFile : 'N/A',
+                fileName: job.uploadedFile ? job.uploadedFile.split('/').pop() : 'N/A', 
+                documentPresence: job.uploadedFile ? '1' : 'N/A',
             }))
             setJobData(formattedData)
         } catch (error) {

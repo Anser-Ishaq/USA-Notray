@@ -37,7 +37,7 @@ const AppRouter = ( ) => {
           <Route path="" element={<Jobs />} />
           <Route path="dashboard" element={<Jobs />} />
           <Route path="jobs-list" element={<Jobs />} />
-          <Route path="job-view" element={<DocLayout/>} />
+          <Route path="job-view/:id" element={<DocLayout/>} />
           <Route path="create-job" element={<CreateJob />} />
           <Route path="notarize-a-document" element={<NotarizeDocument />} />
           <Route path="title-company" element={<TitleCompany />} />

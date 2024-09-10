@@ -9,8 +9,7 @@ import {
     Paper,
 } from '@mui/material'
 
-const DynamicTable = ({ columns, data, actionButton }) => {
-    console.log("data",columns,data)
+const DynamicTable = ({ columns, data, actionButton,stepperData, handleStepperData }) => {
     return (
         <TableContainer component={Paper} sx={{ mt: 2, width: '100%' }}>
             <Table>
@@ -22,7 +21,7 @@ const DynamicTable = ({ columns, data, actionButton }) => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {data.map((row, index) => (
+                    {data?.map((row, index) => (
                         <TableRow key={index}>
                             {columns.map((column) => (
                                 <TableCell key={column.id}>

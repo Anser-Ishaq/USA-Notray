@@ -15,26 +15,48 @@ import JobTime from '../../../../components/JobTime/JobTime'
 import { useEffect, useState } from 'react'
 
 const Schedule = ({ stepperData, handleStepperData }) => {
-    const [notaryOption, setNotaryOption] = useState(stepperData.notaryOption || 'preferred');
-    const [selectedNotary, setSelectedNotary] = useState(stepperData.selectedNotary || '');
+    const [notaryOption, setNotaryOption] = useState(stepperData.notaryOption || 'preferred')
+    const [selectedNotary, setSelectedNotary] = useState(stepperData.selectedNotary || '')
+    const [notaryName, setNotaryName] = useState('')
+
+    const handleNotaryOptionChange = (event) => {
+        const newValue = event.target.value
+        setNotaryOption(newValue)
+
+        if (newValue === 'preferred') {
+            const preferredNotary = specificNotary.find((n) => n.id === 1)
+            console.log('predefined niotea', preferredNotary)
+            setSelectedNotary(preferredNotary.value)
+            handleStepperData({ target: { name: 'selectedNotary', value: preferredNotary.value } })
+        } else if (newValue === 'random') {
+            const randomNotary = specificNotary[Math.floor(Math.random() * specificNotary.length)]
+            console.log('randomNotary', randomNotary)
+            setSelectedNotary(randomNotary.value)
+            handleStepperData({ target: { name: 'selectedNotary', value: randomNotary.value } })
+        } else {
+            setSelectedNotary('') // Clear selection for 'specific' option
+        }
+
+        handleStepperData(event) // Handle notaryOption change
+    }
+
+    const handleNotaryChange = (event) => {
+        const newValue = event.target.value
+        setSelectedNotary(newValue)
+        handleStepperData(event)
+    }
 
     // Update state when stepperData changes
     useEffect(() => {
-        setNotaryOption(stepperData.notaryOption || 'preferred');
-        setSelectedNotary(stepperData.selectedNotary || '');
-    }, [stepperData]);
+        setNotaryOption(stepperData.notaryOption || 'preferred')
+        setSelectedNotary(stepperData.selectedNotary || '')
+    }, [stepperData])
 
-    const handleNotaryOptionChange = (event) => {
-        const newValue = event.target.value;
-        setNotaryOption(newValue);
-        handleStepperData(event); // Update the parent state
-    };
-
-    const handleNotaryChange = (event) => {
-        const newValue = event.target.value;
-        setSelectedNotary(newValue);
-        handleStepperData(event); // Update the parent state
-    };
+    useEffect(() => {
+        // Find the notary name based on the selected value
+        const notary = specificNotary.find((n) => n.value === selectedNotary)
+        setNotaryName(notary ? notary.label : '')
+    }, [selectedNotary])
 
     return (
         <div style={{ padding: 16, marginTop: '40px' }}>
@@ -107,7 +129,7 @@ const Schedule = ({ stepperData, handleStepperData }) => {
                     <Typography variant="h6" gutterBottom>
                         Notary Details
                     </Typography>
-                    <Typography variant="body1">Name: </Typography>
+                    <Typography variant="body1">Name: {notaryName} </Typography>
                     <Typography variant="body1">Email: </Typography>
                 </Grid>
                 <JobTime stepperData={stepperData} handleStepperData={handleStepperData} />

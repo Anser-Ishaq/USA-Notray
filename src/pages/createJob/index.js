@@ -12,6 +12,7 @@ const createJob = () => {
     const price = useStore((state) => state.price)
     const user = JSON.parse(localStorage.getItem('user'))
     const [JobStatus, setJobStatus] = useState("Pending")
+    const [loading, setLoading] = useState(false);
     const steps = [
         'Client Information',
         'Signer Information',
@@ -61,8 +62,6 @@ const createJob = () => {
 
     const handleSubmit = async () => {
         const formData = new FormData()
-
-        // Append other fields
         Object.entries(stepperData).forEach(([key, value]) => {
             if (key === 'signers') {
                 formData.append(key, JSON.stringify(value)) // Convert array to JSON string
@@ -72,12 +71,7 @@ const createJob = () => {
                 formData.append(key, value)
             }
         })
-
-        // Logging the formData contents (for debugging purposes)
-        // for (let [key, value] of formData.entries()) {
-        //     console.log(key, value)
-        // }
-
+        setLoading(true);
         try {
             const response = await axios.post(
                 `${import.meta.env.VITE_API_BASE_URL}/jobs/createjob`,
@@ -90,6 +84,8 @@ const createJob = () => {
         } catch (error) {
             console.log('job respsonse!!!!!!!!!!!!!', error)
             alert(error.response.data.message)
+        }finally {
+            setLoading(false); // Hide the loader
         }
     }
 
@@ -102,6 +98,7 @@ const createJob = () => {
             </div>
             <div style={{ boxShadow: '3px 3px 20px #E6EFFF', padding: '60px' }}>
                 <Steppers
+                loading={loading}
                     handleSubmit={handleSubmit}
                     steps={steps}
                     Step1={
