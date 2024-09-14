@@ -78,10 +78,7 @@ const DashboardLayout = () => {
     const handleLogout = () => {
         // Handle logout logic
         // handleMenuClose();
-        localStorage.removeItem('auth')
-        localStorage.removeItem('loglevel')
-        localStorage.removeItem('user')
-        localStorage.removeItem('token')
+        localStorage.clear()
         window.location.reload()
     }
 

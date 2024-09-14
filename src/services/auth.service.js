@@ -27,6 +27,7 @@ const forgetPassword = (email) => {
 };
 
 const logout = () => {
+  localStorage.clear()
   useAuthStore.getState().logout();
 };
 

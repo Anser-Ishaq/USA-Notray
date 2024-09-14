@@ -35,14 +35,15 @@ const NotaryRefButtons = () => {
 
     const updateJobStatus = async (JobStatus) => {
         const job = JSON.parse(localStorage.getItem('jobData'))
+        let newStatus = jobStatus === 'Completed' ? 'Completed' : 'Accepted';
         try {
             const response = await axios.post(
                 `${import.meta.env.VITE_API_BASE_URL}/jobs/${job._id}/updatejobstatus`,
-                { JobStatus }
+                { JobStatus: newStatus }
                 
             )
             alert(response.data.message)
-            localStorage.setItem('jobData', JSON.stringify(response.data))
+            localStorage.setItem('jobData', JSON.stringify(response.data.job))
             setShowAdditionalButtons(true)
             setJobStatus(JSON.parse(localStorage.getItem('jobData'))?.JobStatus)
             console.log('Job status updated:', response.data)
@@ -63,7 +64,7 @@ const NotaryRefButtons = () => {
         if (jobData) {
             const url = `${import.meta.env.VITE_EDITOR_BASE_URL}/templatecreation/${jobData._id}`
             window.location.href = url
-            localStorage.setItem('jobData', JSON.stringify(jobData))
+            localStorage.setItem('jobData', JSON.stringify(jobData?.job))
         }
     }
     return (
