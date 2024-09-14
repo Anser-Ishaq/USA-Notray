@@ -25,11 +25,20 @@ const AddSignerModal = ({ open, handleClose, onAddSigner, stepperData, handleSte
   };
 
   const handleAdd = () => {
-    // Check for empty fields
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    // Check for empty fields and valid email format
     if (!signerData.signerName || !signerData.signerEmail || !signerData.signerPhoneNumber || !signerData.signerRole) {
-      setError('All fields are required');
-      return;
+        setError('All fields are required');
+        return;
     }
+
+    if (!emailPattern.test(signerData.signerEmail)) {
+      alert('Please enter a valid email address (e.g., example@gmail.com)')
+        setError('Please enter a valid email address (e.g., example@gmail.com)');
+        return;
+    }
+
 
     setError('');
     onAddSigner(signerData); // Pass the new signer data to the parent
@@ -69,6 +78,7 @@ const AddSignerModal = ({ open, handleClose, onAddSigner, stepperData, handleSte
             flexDirection: 'column',
           }}
         >
+
           <IconButton
             onClick={handleClose}
             sx={{
@@ -97,10 +107,9 @@ const AddSignerModal = ({ open, handleClose, onAddSigner, stepperData, handleSte
               onChange={handleInputChange}
               required
               error={!!error}
-              helperText={error && !signerData.signerName ? "Please fill all required fields" : ''}
+              helperText={error && !signerData.signerName ? "Name is required" : ''}
               sx={{ mb: 2 }}
             />
-
             <TextField
               fullWidth
               label="Signer Email"
@@ -110,9 +119,9 @@ const AddSignerModal = ({ open, handleClose, onAddSigner, stepperData, handleSte
               value={signerData.signerEmail}
               onChange={handleInputChange}
               required
-              error={!!error}
-              helperText={error && !signerData.signerEmail ? "Please fill all required fields" : ''}
               sx={{ mb: 2 }}
+              error={!!error}
+              helperText={error && !signerData.signerEmail  ? "Email is required" : ''}
             />
 
             <TextField
@@ -125,7 +134,7 @@ const AddSignerModal = ({ open, handleClose, onAddSigner, stepperData, handleSte
               onChange={handleInputChange}
               required
               error={!!error}
-              helperText={error && !signerData.signerPhoneNumber ? "Please fill all required fields" : ''}
+              helperText={error && !signerData.signerPhoneNumber ? "Phone Number is required" : ''}
               sx={{ mb: 2 }}
             />
 

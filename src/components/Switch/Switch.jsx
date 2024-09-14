@@ -7,10 +7,10 @@ export default function ToggleButtons({ stepperData, handleStepperData }) {
 
     // Update local state when stepperData changes
     useEffect(() => {
-        if (stepperData.kbaRequired) {
-            setAlignment(stepperData.kbaRequired);
+        if (stepperData?.kbaRequired) {
+            setAlignment(stepperData?.kbaRequired);
         }
-    }, [stepperData.kbaRequired]);
+    }, [stepperData?.kbaRequired]);
 
     const handleAlignment = (event, newAlignment) => {
         if (newAlignment !== null) {

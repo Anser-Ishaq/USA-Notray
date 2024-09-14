@@ -3,7 +3,7 @@ import { Box, Typography, Button, Grid } from '@mui/material'
 import AddSignerModal from '../SignerInformation/singerModal/singerModalForm'
 import DynamicTable from '../../../../components/dynamicTable/dynamicTable'
 
-const SignerInfo = ({stepperData,setStepperData,handleStepperData}) => {
+const SignerInfo = ({stepperData,setStepperData,handleStepperData,errors}) => {
     const [open, setOpen] = useState(false)
     const [signers, setSigners] = useState([])
 
@@ -75,6 +75,10 @@ const SignerInfo = ({stepperData,setStepperData,handleStepperData}) => {
                     >
                         <Typography variant="h6" color="white" mb={{ xs: 1, sm: 0 }}>
                             Participant's Information
+
+                            <Typography   color="red" mb={{ xs: 1, sm: 0 }}>
+                            {errors.signers ? "Add Atleast One Signer" : ""}
+                        </Typography>
                         </Typography>
                         <Button
                             variant="contained"
@@ -85,7 +89,7 @@ const SignerInfo = ({stepperData,setStepperData,handleStepperData}) => {
                             sx={{
                                 textTransform: 'none',
                                 bgcolor: 'white',
-                                color: '#ecf2ff',
+                                color:  errors.signers ? 'red' : '#49beff',
                                 width: { xs: '100%', sm: 'auto' },
                                 '&:hover': {
                                     bgcolor: 'white',

@@ -5,6 +5,10 @@ import { styled } from '@mui/system';
 import UsaLogo from '../../../assets/usalogo.png'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+// import Swal from 'sweetalert2/src/sweetalert2.js'
+import Swal from 'sweetalert2'
+
+
 const LoginPage = ( ) => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const navigate = useNavigate()
@@ -22,11 +26,18 @@ const LoginPage = ( ) => {
       localStorage.setItem('auth', "true")
       localStorage.setItem("user", JSON.stringify(user))
       localStorage.setItem("token", token)
-      alert(message)
+      Swal.fire({
+        title: "Login Successfully!",
+        icon: "success"
+      });
       navigate('/dashboard');
     } catch (error) {
       console.log(" error while login", error)
-      alert(error.response.data.message)
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text:`${error.response.data.message}`,
+      });
     }
   };
 

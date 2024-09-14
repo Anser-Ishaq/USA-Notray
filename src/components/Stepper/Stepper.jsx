@@ -5,11 +5,14 @@ import Step from '@mui/material/Step'
 import StepLabel from '@mui/material/StepLabel'
 import Button from '@mui/material/Button'
 
-const Steppers = ({ steps, Step1, Step2, Step3, Step4, handleSubmit, loading }) => {
+const Steppers = ({ steps, Step1, Step2, Step3, Step4, handleSubmit, loading,validateStep }) => {
     const [activeStep, setActiveStep] = React.useState(0)
 
     const handleNext = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1)
+        // setActiveStep((prevActiveStep) => prevActiveStep + 1)
+        if (validateStep(activeStep)) {
+            setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        }  
     }
 
     const handleBack = () => {

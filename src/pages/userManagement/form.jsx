@@ -17,6 +17,9 @@ import { useTheme } from '@mui/material/styles'
 import { BackButton } from '../../components/DynamicButton/DynamicButton'
 import Heading from '../../components/Heading/heading'
 import axios from 'axios'
+import Swal from 'sweetalert2'
+
+
 const UserForm = ({
     formData,
     setFormData,
@@ -53,23 +56,6 @@ const UserForm = ({
     const handleFormSubmit = async (e) => {
         e.preventDefault()
         handleSubmit()
-        // const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/users/register`
-        // console.log('formdata', formData)
-        // try {
-        //     const resp = await axios.post(apiUrl, {
-        //         username: formData.username,
-        //         email: formData.email,
-        //         password: formData.password,
-        //         role: formData.role,
-        //         privileges: formData.privileges,
-        //     })
-        //     console.log('User registered:', resp.data)
-        //     alert('User registered successfully')
-        // } catch (error) {
-        //     console.error('Error registering user:', error)
-        //     alert('Error registering user')
-        // }
-
         if (isUpdateMode) {
             // Update user
             try {
@@ -78,11 +64,20 @@ const UserForm = ({
                     formData,
                 )
                 console.log('User updated:', response.data)
-                alert("user updated", selectedUser._id)
+                Swal.fire({
+                    title: `${response?.data?.message}`,
+                    icon: "success"
+                  });
                 setIsUpdateMode(false) // Reset mode
             } catch (error) {
                 console.error('Error updating user:', error)
-                alert("Error updating user", selectedUser._id)
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: `${error?.response?.data}`,
+                    footer: '<a href="#">Why do I have this issue?</a>'
+                  });
+                  
             }
         } else {
             // Create user

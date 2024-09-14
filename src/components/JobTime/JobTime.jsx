@@ -3,7 +3,7 @@ import { Button, Grid, Typography } from '@mui/material'
 import { timeSlots } from '../../Data/OptionValues'
 import useStore from '../../stores/useStore'
 
-const JobTime = ({ stepperData, handleStepperData }) => {
+const JobTime = ({ stepperData, handleStepperData,errors }) => {
     const [selectedTime, setSelectedTime] = useState('')
 
     const isDate = useStore((state) => state.selectedDate)
@@ -15,7 +15,9 @@ const JobTime = ({ stepperData, handleStepperData }) => {
         <div>
             {isDate && (
                 <Grid item xs={12}>
-                    <Typography variant="h6" gutterBottom>
+                    <Typography variant="h6" gutterBottom sx={{
+                        color: errors.selectedTime ? 'red' : 'inherit', // 'inherit' keeps the default color
+                      }}>
                         Job Time
                     </Typography>
                     <Grid container spacing={2}>

@@ -14,7 +14,7 @@ import Switch from '../../components/Switch/Switch'
 import useStore from '../../stores/useStore'
 import axios from 'axios'
 
-const ClientInfo = ({ isClientInfo, isSwitch, stepperData, handleStepperData }) => {
+const ClientInfo = ({ isClientInfo, isSwitch, stepperData, handleStepperData ,errors}) => {
     const [titleComanyOption, setTitleCompanyOption] = useState([])
     const [zipCodeError, setZipCodeError] = useState('')
 
@@ -116,7 +116,8 @@ const ClientInfo = ({ isClientInfo, isSwitch, stepperData, handleStepperData }) 
                                 name="titleCompany"
                                 value={stepperData.titleCompany}
                                 onChange={handleStepperData}
-                                required
+                                error={errors.titleCompany}  // Highlight field if there's an error
+                                helperText={errors.titleCompany ? "Title Company is required" : ""}
                             >
                                 {titleComanyOption.map((option) => (
                                     <MenuItem key={option.id} value={option.value}>
@@ -138,7 +139,8 @@ const ClientInfo = ({ isClientInfo, isSwitch, stepperData, handleStepperData }) 
                             name="closingType"
                             value={stepperData?.closingType}
                             onChange={handleStepperData}
-                            required
+                            error={errors.closingType}
+                            helperText={errors.closingType ? "Closing Type is required" : ""}
                         >
                             {closingTypeOptions.map((option) => (
                                 <MenuItem
@@ -162,7 +164,7 @@ const ClientInfo = ({ isClientInfo, isSwitch, stepperData, handleStepperData }) 
                         name="internalReference"
                         value={stepperData?.internalReference}
                         onChange={handleStepperData}
-                        required
+                        error={errors.internalReference}
                     />
                 </Grid>
 

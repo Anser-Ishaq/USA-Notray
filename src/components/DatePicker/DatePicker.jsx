@@ -9,7 +9,7 @@ const DatePickerComp = ({stepperData, handleStepperData}) => {
     const { selectedDate, setSelectedDate } = useStore()
     
 
-    const handleDateChange = (newValue) => {
+    const handleDateChange = (newValue,errors) => {
         if (newValue) {
             console.log("handleDateChange", newValue)
             setSelectedDate(newValue)

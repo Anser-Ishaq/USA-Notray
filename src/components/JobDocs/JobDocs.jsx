@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Box, Typography, Button, Grid } from '@mui/material'
 import Upload from '../Upload/Upload'
 
-const JobDocs = ({stepperData, handleStepperData}) => {
+const JobDocs = ({ stepperData, handleStepperData, errors }) => {
     return (
         <Grid
             container
@@ -13,7 +13,12 @@ const JobDocs = ({stepperData, handleStepperData}) => {
             <Grid item xs={12}>
                 <Box width="100%">
                     <Box bgcolor="#00b0ff" p={2} borderRadius="8px 8px 0 0" width="100%">
-                        <Typography variant="h6" color="white">
+                        <Typography
+                            variant="h6"
+                            sx={{
+                                color: errors.uploadedFile ? 'red' : 'white', // 'inherit' keeps the default color
+                            }}
+                        >
                             Upload Document(s)
                         </Typography>
                     </Box>
@@ -25,7 +30,11 @@ const JobDocs = ({stepperData, handleStepperData}) => {
                         boxShadow={1}
                         width="100%"
                     >
-                        <Upload label={'Select document(s) to upload.'} stepperData={stepperData} handleStepperData={handleStepperData} />
+                        <Upload
+                            label={'Select document(s) to upload.'}
+                            stepperData={stepperData}
+                            handleStepperData={handleStepperData}
+                        />
                     </Box>
                 </Box>
             </Grid>

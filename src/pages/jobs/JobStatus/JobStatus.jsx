@@ -27,26 +27,43 @@ import { closingTypeOptions } from '../../../Data/OptionValues'
 
 const NotaryRefButtons = () => {
     const [showAdditionalButtons, setShowAdditionalButtons] = useState(false)
-    const [jobStatus, setJobStatus] = useState(JSON.parse(localStorage.getItem('jobData'))?.JobStatus)
+    const [jobStatus, setJobStatus] = useState(
+        JSON.parse(localStorage.getItem('jobData'))?.JobStatus,
+
+        // console.log(jobStatus)
+    )
 
     const updateJobStatus = async (JobStatus) => {
         const job = JSON.parse(localStorage.getItem('jobData'))
         try {
             const response = await axios.post(
                 `${import.meta.env.VITE_API_BASE_URL}/jobs/${job._id}/updatejobstatus`,
-                { JobStatus },
+                { JobStatus }
+                
             )
             alert(response.data.message)
             localStorage.setItem('jobData', JSON.stringify(response.data))
             setShowAdditionalButtons(true)
             setJobStatus(JSON.parse(localStorage.getItem('jobData'))?.JobStatus)
             console.log('Job status updated:', response.data)
-       
+
             // Handle the response as needed (e.g., update UI)
         } catch (error) {
             alert(error.response.message)
             console.error('Error updating job status:', error)
             // Handle the error as needed (e.g., show an error message)
+        }
+    }
+
+    const handleStartTagging = () => {
+        alert('Starting Tagging...')
+
+        const jobData = JSON.parse(localStorage.getItem('jobData'))
+
+        if (jobData) {
+            const url = `${import.meta.env.VITE_EDITOR_BASE_URL}/templatecreation/${jobData._id}`
+            window.location.href = url
+            localStorage.setItem('jobData', JSON.stringify(jobData))
         }
     }
     return (
@@ -75,7 +92,7 @@ const NotaryRefButtons = () => {
                                 marginBottom: '10px',
                             }}
                         >
-                            {jobStatus === 'Accepted' && showAdditionalButtons ? 
+                            {jobStatus === 'Accepted' || jobStatus === 'Completed' || showAdditionalButtons ? (
                                 <Box
                                     sx={{
                                         display: 'flex',
@@ -96,7 +113,7 @@ const NotaryRefButtons = () => {
                                                 backgroundColor: '#218838',
                                             },
                                         }}
-                                        onClick={() => alert('Starting Tagging...')}
+                                        onClick={handleStartTagging}
                                     >
                                         <Typography variant="button">Start Tagging</Typography>
                                     </Button>
@@ -119,25 +136,25 @@ const NotaryRefButtons = () => {
                                         <Typography variant="button">Start Notarization</Typography>
                                     </Button>
                                 </Box>
-                            :
-                            <Button
-                                variant="contained"
-                                sx={{
-                                    backgroundColor: '#007BFF',
-                                    color: 'white',
-                                    borderRadius: '4px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: 1,
-                                    '&:hover': {
-                                        backgroundColor: '#0056b3',
-                                    },
-                                }}
-                                onClick={() => updateJobStatus('Accepted')}
-                            >
-                                <Typography variant="button">Accpet</Typography>
-                            </Button>
-                            }
+                            ) : (
+                                <Button
+                                    variant="contained"
+                                    sx={{
+                                        backgroundColor: '#007BFF',
+                                        color: 'white',
+                                        borderRadius: '4px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: 1,
+                                        '&:hover': {
+                                            backgroundColor: '#0056b3',
+                                        },
+                                    }}
+                                    onClick={() => updateJobStatus('Accepted')}
+                                >
+                                    <Typography variant="button">Accpet</Typography>
+                                </Button>
+                            )}
 
                             <Button
                                 variant="contained"
@@ -399,8 +416,24 @@ const NotaryAndBilling = ({ selectedJob, dynamicJob }) => {
     )
 }
 
-const JobDate = ({ stepperData, handleStepperData }) => {
+const JobDate = ({ stepperData, handleStepperData,dynamicJob }) => {
     const [initialSelectedDate, setInitialSelectedDate] = useState(null)
+    const [notaryName, setNotaryName] = useState()
+
+
+    const handelNotary = () => {
+        const jobData = JSON.parse(localStorage.getItem('jobData'))
+        console.log('job data from billing')
+        const NotaryName = jobData?.selectedNotary || dynamicJob?.selectedNotary || ''
+        console.log('notary name from billing', NotaryName)
+        setNotaryName(NotaryName)
+ 
+    }
+    useEffect(() => {
+        if (dynamicJob) {
+            handelNotary()
+        }
+    }, [dynamicJob])
 
     useEffect(() => {
         const jobData = JSON.parse(localStorage.getItem('jobData'))
@@ -437,7 +470,7 @@ const JobDate = ({ stepperData, handleStepperData }) => {
                         initialSelectedDate={initialSelectedDate}
                     />
                     <br />
-                    <NotaryDetails />
+                    <NotaryDetails notaryName={notaryName}  />
                 </Box>
             </Box>
         </Grid>
@@ -965,7 +998,7 @@ const DocLayout = ({ selectedJob, onBack }) => {
                 handleStepperData={handleStepperData}
                 stepperData={stepperData}
             />
-            <JobDate handleStepperData={handleStepperData} stepperData={stepperData} />
+            <JobDate dynamicJob={dynamicSigner}  handleStepperData={handleStepperData} stepperData={stepperData} />
             <JobTimeComp handleStepperData={handleStepperData} stepperData={stepperData} />
             <ParticipantInfoComp
                 dynamicJob={dynamicSigner}

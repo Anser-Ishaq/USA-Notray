@@ -2,6 +2,9 @@ import React, { useState } from 'react'
 import { TextField, Button, Grid, Typography } from '@mui/material'
 import Heading from '../../components/Heading/heading'
 import axios from 'axios'
+import Swal from 'sweetalert2'
+
+
  const MyAccount = () => {
     const user = JSON.parse(localStorage.getItem('user'))
     const [username, setUserName] = useState()
@@ -20,9 +23,16 @@ import axios from 'axios'
             console.log(response.data)
             localStorage.setItem('user', JSON.stringify(response?.data?.user))
             if (response.status === 200) {
-                alert('User details updated successfully.')
+                Swal.fire({
+                    title: `${response?.data?.message}`,
+                    icon: "success"
+                  });
             } else {
-                alert('Error updating user details.')
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Error updating password.",
+                  });
             }
         } catch (error) {
             alert('Error: ' + error.response.data.message)
@@ -38,12 +48,24 @@ import axios from 'axios'
             )
 
             if (response.status === 200) {
-                alert('Password updated successfully.')
+                Swal.fire({
+                    title: `${response?.message}`,
+                    icon: "success"
+                  });
             } else {
-                alert('Error updating password.')
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Error updating password.",
+                  });
             }
-        } catch (error) {
-            alert('Error: ' + error.response.data.message)
+        } catch (error) {cmd
+        
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: `${error?.response?.data?.message}`,
+              });
         }
     }
     return (

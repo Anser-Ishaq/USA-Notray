@@ -12,6 +12,7 @@ import {
     TextField,
 } from '@mui/material'
 import VisibilityIcon from '@mui/icons-material/Visibility'
+import DownloadIcon from '@mui/icons-material/Download'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import LockOpenIcon from '@mui/icons-material/LockOpen'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
@@ -26,7 +27,7 @@ import Search from '../../components/Search/search'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { useId } from '../../ContextHooks/JobContext/JobDetails'
- 
+
 const Jobs = () => {
     // State management
     const [openDialog, setOpenDialog] = useState(false)
@@ -35,9 +36,8 @@ const Jobs = () => {
     const [searchTerm, setSearchTerm] = useState('')
     const [jobData, setJobData] = useState([])
     const token = localStorage.getItem('token')
-    const { setIdHandler } = useId();
+    const { setIdHandler } = useId()
     const navigate = useNavigate()
-
 
     // Filter options with corresponding icons
     const filterBtn = ['All', 'Open', 'Pending', 'Completed', 'Cancelled', 'Expired']
@@ -74,10 +74,10 @@ const Jobs = () => {
     ]
 
     // Handle dialog open and close
-    const handleOpenDialog =   (job) => {
-        console.log("selected job: " + job._id)
-        setIdHandler(job._id);
-        navigate(`/job-view/${job._id}`) 
+    const handleOpenDialog = (job) => {
+        console.log('selected job: ' + job._id)
+        setIdHandler(job._id)
+        navigate(`/job-view/${job._id}`)
         setSelectedJob(job)
     }
 
@@ -113,6 +113,43 @@ const Jobs = () => {
         return `${formattedTime} ${formattedDate}`
     }
 
+    const handleCompletedFileDownload = async (notarizedFile) => {
+        if (!notarizedFile || notarizedFile === 'N/A') {
+          console.error('No notarized file available for download.');
+          return;
+        }
+      
+        // Create the full URL using the base URL from the environment variables
+        const fileUrl = `${import.meta.env.VITE_BACKEND_BASE_URL}${notarizedFile}`;
+      
+        try {
+          // Fetch the file from the server
+          const response = await fetch(fileUrl);
+          if (!response.ok) {
+            throw new Error('Network response was not ok.');
+          }
+      
+          // Convert the response to a Blob
+          const blob = await response.blob();
+      
+          // Create a URL for the Blob
+          const url = window.URL.createObjectURL(blob);
+      
+          // Create a link element to download the file
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', notarizedFile.split('/').pop()); // Set the download attribute with the file name
+          document.body.appendChild(link);
+          link.click();
+      
+          // Clean up
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(link);
+        } catch (error) {
+          console.error('Error downloading file:', error);
+        }
+      };
+
     const fetchJobData = async () => {
         try {
             const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/jobs/getjobs`, {
@@ -125,12 +162,13 @@ const Jobs = () => {
                 id: index + 1,
                 schedule: formatSchedule(job.selectedTime, job.selectedDate),
                 uploadedFile: job.uploadedFile ? job.uploadedFile : 'N/A',
-                fileName: job.uploadedFile ? job.uploadedFile.split('/').pop() : 'N/A', 
+                notarizedFile: job.notarizedFile ? job.notarizedFile : 'N/A',
+                fileName: job.uploadedFile ? job.uploadedFile.split('/').pop() : 'N/A',
                 documentPresence: job.uploadedFile ? '1' : 'N/A',
             }))
             setJobData(formattedData)
         } catch (error) {
-            console.error('Error fetching job data:', error) 
+            console.error('Error fetching job data:', error)
         }
     }
 
@@ -170,11 +208,25 @@ const Jobs = () => {
                         columns={jobDataColumns}
                         data={jobData}
                         actionButton={(job) => (
-                            <IconButton color="primary" onClick={() => handleOpenDialog(job)}>
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                              <IconButton color="primary" onClick={() => handleOpenDialog(job)}>
                                 <VisibilityIcon />
-                            </IconButton>
-                        )}
-                    />
+                              </IconButton>
+                              {job.JobStatus === 'Completed' ? (
+                                <Button
+                                  variant="contained"
+                                  color="success"
+                                  onClick={() => handleCompletedFileDownload(job.notarizedFile)}
+                                  style={{ marginLeft: '8px' }} // Adjust the margin as needed
+                                >
+                                  <DownloadIcon />
+                                  Completed Document
+                                </Button>
+                              ) : (
+                                ''
+                              )}
+                            </div>
+                          )}                    />
 
                     {/* Job Details Dialog */}
                     <Dialog open={openDialog} onClose={handleCloseDialog}>
@@ -195,7 +247,7 @@ const Jobs = () => {
                                         <strong>Schedule:</strong> {selectedJob.schedule}
                                     </Typography>
                                     <Typography variant="body1">
-                                        <strong>Documents:</strong> {selectedJob.uploadedFile }
+                                        <strong>Documents:</strong> {selectedJob.uploadedFile}
                                     </Typography>
                                     <Typography variant="body1">
                                         <strong>Status:</strong> {selectedJob.JobStatus}

@@ -119,7 +119,7 @@ const UserManagement = () => {
 
     const handleSubmit = () => {
         if (!formData.username || !formData.email || !formData.role) {
-            Swal.fire('Error', 'Please fill in all required fields', 'error')
+            alert("User Name and Email and Role are required")
             return
         }
 
@@ -128,6 +128,10 @@ const UserManagement = () => {
             status: 'Active',
             dateCreated: new Date().toLocaleString(),
         }
+        Swal.fire({
+            title: "User Created Successfully",
+            icon: "success"
+          });
         setUsers([...users, newUser])
         resetForm()
     }

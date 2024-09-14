@@ -14,7 +14,7 @@ import DatePickerComp from '../../../../components/DatePicker/DatePicker'
 import JobTime from '../../../../components/JobTime/JobTime'
 import { useEffect, useState } from 'react'
 
-const Schedule = ({ stepperData, handleStepperData }) => {
+const Schedule = ({ stepperData, handleStepperData,errors }) => {
     const [notaryOption, setNotaryOption] = useState(stepperData.notaryOption || 'preferred')
     const [selectedNotary, setSelectedNotary] = useState(stepperData.selectedNotary || '')
     const [notaryName, setNotaryName] = useState('')
@@ -26,8 +26,10 @@ const Schedule = ({ stepperData, handleStepperData }) => {
         if (newValue === 'preferred') {
             const preferredNotary = specificNotary.find((n) => n.id === 1)
             console.log('predefined niotea', preferredNotary)
-            setSelectedNotary(preferredNotary.value)
-            handleStepperData({ target: { name: 'selectedNotary', value: preferredNotary.value } })
+            if (preferredNotary) {
+                setSelectedNotary(preferredNotary.value);
+                handleStepperData({ target: { name: 'selectedNotary', value: preferredNotary.value } });
+            }
         } else if (newValue === 'random') {
             const randomNotary = specificNotary[Math.floor(Math.random() * specificNotary.length)]
             console.log('randomNotary', randomNotary)
@@ -47,27 +49,41 @@ const Schedule = ({ stepperData, handleStepperData }) => {
     }
 
     // Update state when stepperData changes
+    // Update selectedNotary and notaryName based on stepperData
     useEffect(() => {
-        setNotaryOption(stepperData.notaryOption || 'preferred')
-        setSelectedNotary(stepperData.selectedNotary || '')
-    }, [stepperData])
+        setNotaryOption(stepperData.notaryOption || 'preferred');
+        if (stepperData.notaryOption === 'preferred') {
+            const preferredNotary = specificNotary.find((n) => n.id === 1);
+            if (preferredNotary) {
+                setSelectedNotary(preferredNotary.value);
+            }
+        } else {
+            setSelectedNotary(stepperData.selectedNotary || '');
+        }
+    }, [stepperData, specificNotary]);
 
+    // Update notaryName when selectedNotary changes
     useEffect(() => {
-        // Find the notary name based on the selected value
-        const notary = specificNotary.find((n) => n.value === selectedNotary)
-        setNotaryName(notary ? notary.label : '')
-    }, [selectedNotary])
+        const notary = specificNotary.find((n) => n.value === selectedNotary);
+        console.log("Notary found:", notary);
+        setNotaryName(notary ? notary.label : '');
+    }, [selectedNotary, specificNotary]);
 
     return (
         <div style={{ padding: 16, marginTop: '40px' }}>
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={4}>
-                    <Typography variant="h6" gutterBottom>
+                    <Typography 
+                     sx={{
+                        color: errors.selectedDate ? 'red' : 'inherit', // 'inherit' keeps the default color
+                      }}
+                    variant="h6" gutterBottom>
                         Schedule
                     </Typography>
                     <DatePickerComp
                         stepperData={stepperData}
                         handleStepperData={handleStepperData}
+                        errors={errors}
                     />
                 </Grid>
 
@@ -129,10 +145,14 @@ const Schedule = ({ stepperData, handleStepperData }) => {
                     <Typography variant="h6" gutterBottom>
                         Notary Details
                     </Typography>
-                    <Typography variant="body1">Name: {notaryName} </Typography>
+                    <Typography variant="body1">Name:  {notaryName || 'Not Available'} </Typography>
                     <Typography variant="body1">Email: </Typography>
                 </Grid>
-                <JobTime stepperData={stepperData} handleStepperData={handleStepperData} />
+                <JobTime
+                    stepperData={stepperData}
+                    handleStepperData={handleStepperData}
+                    errors={errors}
+                />
             </Grid>
         </div>
     )
