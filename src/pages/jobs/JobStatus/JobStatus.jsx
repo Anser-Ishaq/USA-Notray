@@ -27,34 +27,42 @@ import { closingTypeOptions } from '../../../Data/OptionValues'
 
 const NotaryRefButtons = () => {
     const [showAdditionalButtons, setShowAdditionalButtons] = useState(false)
-    const [jobStatus, setJobStatus] = useState(
-        JSON.parse(localStorage.getItem('jobData'))?.JobStatus,
-
-        // console.log(jobStatus)
-    )
+    const [jobStatus, setJobStatus] = useState('');
 
     const updateJobStatus = async (JobStatus) => {
-        const job = JSON.parse(localStorage.getItem('jobData'))
-        let newStatus = jobStatus === 'Completed' ? 'Completed' : 'Accepted';
+        const job = JSON.parse(localStorage.getItem('jobData'));
+        if (!job) {
+            alert('No job data found!');
+            return;
+        }
+    
+        let newStatus = JobStatus === 'Completed' ? 'Completed' : 'Accepted'; // Based on button click
+    
         try {
             const response = await axios.post(
                 `${import.meta.env.VITE_API_BASE_URL}/jobs/${job._id}/updatejobstatus`,
                 { JobStatus: newStatus }
-                
-            )
-            alert(response.data.message)
-            localStorage.setItem('jobData', JSON.stringify(response.data.job))
-            setShowAdditionalButtons(true)
-            setJobStatus(JSON.parse(localStorage.getItem('jobData'))?.JobStatus)
-            console.log('Job status updated:', response.data)
-
-            // Handle the response as needed (e.g., update UI)
+            );
+    
+            // alert(response.data.message);
+    
+            // Directly update local storage and jobStatus using the response data
+            const updatedJobData = response.data.job;
+            localStorage.setItem('jobData', JSON.stringify(updatedJobData));
+    
+            // Update state directly from the response to avoid delay
+            setJobStatus(updatedJobData.JobStatus);
+    
+            // Show additional buttons if needed
+            setShowAdditionalButtons(true);
+    
+            console.log('Job status updated:', response.data);
+    
         } catch (error) {
-            alert(error.response.message)
-            console.error('Error updating job status:', error)
-            // Handle the error as needed (e.g., show an error message)
+            alert(error.response?.data?.message || 'An error occurred while updating the job status');
+            console.error('Error updating job status:', error);
         }
-    }
+    };
 
     const handleStartTagging = () => {
         alert('Starting Tagging...')
@@ -67,6 +75,19 @@ const NotaryRefButtons = () => {
             localStorage.setItem('jobData', JSON.stringify(jobData?.job))
         }
     }
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            const jobData = JSON.parse(localStorage.getItem('jobData'));  // Fetch data from localStorage
+            if (jobData?.JobStatus) {
+                setJobStatus(jobData.JobStatus);  // Set the job status if available
+            }
+        }, 1000); // Run every 3 seconds
+    
+        // Cleanup function to clear interval when component unmounts
+        return () => clearInterval(intervalId);
+    }, []); 
+
     return (
         <>
             <Grid item xs={12} md={12}>

@@ -8,7 +8,7 @@ const NotaryDetails = ({notaryName}) => {
                     Notary Details
                 </Typography>
                 <Typography variant="body1">Name:{notaryName} </Typography>
-                <Typography variant="body1">Email: </Typography>
+                {/* <Typography variant="body1">Email: </Typography> */}
         </div>
     )
 }
